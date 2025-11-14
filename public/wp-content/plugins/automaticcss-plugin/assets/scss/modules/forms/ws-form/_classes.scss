@@ -1,0 +1,42 @@
+@import "tokens";
+@import "vars";
+
+// Generate Light Class
+.form--light :where([data-wsf-style-id]) {
+	// Loop through global styles
+	@each $prop, $value in $form-platform-global-styles-ws-form {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	// Loop through theme styles
+	@each $prop, $value in $form-platform-theme-styles-ws-form-light {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	--wsf-field-border: var(--f-input-border-width) var(--f-input-border-style) var(--f-light-input-border-color);
+}
+// Generate Dark Class
+.form--dark :where([data-wsf-style-id]) {
+	// Loop through global styles
+	@each $prop, $value in $form-platform-global-styles-ws-form {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	// Loop through theme styles
+	@each $prop, $value in $form-platform-theme-styles-ws-form-dark {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	--wsf-field-border: var(--f-input-border-width) var(--f-input-border-style) var(--f-dark-input-border-color);
+}
+
+
+// WS Form Specific Overrides
+@import "overrides";
+
+// Style Automatically
+@import "style-automatically";

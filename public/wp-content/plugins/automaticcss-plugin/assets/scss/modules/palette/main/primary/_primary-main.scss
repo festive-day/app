@@ -1,0 +1,86 @@
+// primary Options
+$option-primary-clr: on !default;
+$option-primary-main-trans: on !default;
+$option-primary-light-trans: on !default;
+$option-primary-dark-trans: on !default;
+$option-primary-ultra-dark-trans: on !default;
+
+// primary Vars
+$primary-hex: #e56c70 !default;
+$primary-r: 229 !default;
+$primary-g: 108 !default;
+$primary-b: 112 !default;
+$primary-h: 358 !default;
+$primary-s: 70% !default;
+$primary-l: 66% !default;
+$primary-hover-h: 358 !default;
+$primary-hover-s: 70% !default;
+$primary-hover-l: 1.15 !default;
+$primary-ultra-light-h: 358 !default;
+$primary-ultra-light-s: 70% !default;
+$primary-ultra-light-l: 95% !default;
+$primary-light-h: 358 !default;
+$primary-light-s: 70% !default;
+$primary-light-l: 85% !default;
+$primary-dark-h: 358 !default;
+$primary-dark-s: 70% !default;
+$primary-dark-l: 25% !default;
+$primary-ultra-dark-h: 358 !default;
+$primary-ultra-dark-s: 70% !default;
+$primary-ultra-dark-l: 10% !default;
+// Added in 3.0
+$primary-semi-light-h: 358 !default;
+$primary-semi-light-s: 70% !default;
+$primary-semi-light-l: 60% !default;
+$primary-semi-dark-h: 358 !default;
+$primary-semi-dark-s: 70% !default;
+$primary-semi-dark-l: 40% !default;
+
+// Primary Color Map
+$color-primary:(); // Initialize Map
+@if $option-primary-clr == on {
+  $color-primary: (
+    "main": (
+      "primary": $primary-hex,
+      "primary-hover": hsl($primary-hover-h, $primary-hover-s, $primary-hover-l),
+      "primary-ultra-light": hsl($primary-ultra-light-h, $primary-ultra-light-s, $primary-ultra-light-l),
+      "primary-light": hsl($primary-light-h, $primary-light-s, $primary-light-l),
+      "primary-semi-light": hsl($primary-semi-light-h, $primary-semi-light-s, $primary-semi-light-l),
+      "primary-semi-dark": hsl($primary-semi-dark-h, $primary-semi-dark-s, $primary-semi-dark-l),
+      "primary-dark": hsl($primary-dark-h, $primary-dark-s, $primary-dark-l),
+      "primary-ultra-dark": hsl($primary-ultra-dark-h, $primary-ultra-dark-s, $primary-ultra-dark-l),
+    ),
+    "partials": (
+      "primary-hex": $primary-hex,
+        "primary-hsl": $primary-h $primary-s $primary-l,
+        "primary-rgb": $primary-r $primary-g $primary-b,
+        "primary-r": $primary-r,
+        "primary-g": $primary-g,
+        "primary-b": $primary-b,
+        "primary-h": $primary-h,
+        "primary-s": $primary-s,
+        "primary-l": $primary-l,
+        "primary-hover-h": $primary-hover-h,
+        "primary-hover-s": $primary-hover-s,
+        "primary-hover-l": $primary-hover-l,
+        "primary-ultra-light-h": $primary-ultra-light-h,
+        "primary-ultra-light-s": $primary-ultra-light-s,
+        "primary-ultra-light-l": $primary-ultra-light-l,
+        "primary-light-h": $primary-light-h,
+        "primary-light-s": $primary-light-s,
+        "primary-light-l": $primary-light-l,
+        "primary-semi-light-h": $primary-semi-light-h,
+        "primary-semi-light-s": $primary-semi-light-s,
+        "primary-semi-light-l": $primary-semi-light-l,
+        "primary-semi-dark-h": $primary-semi-dark-h,
+        "primary-semi-dark-s": $primary-semi-dark-s,
+        "primary-semi-dark-l": $primary-semi-dark-l,
+        "primary-dark-h": $primary-dark-h,
+        "primary-dark-s": $primary-dark-s,
+        "primary-dark-l": $primary-dark-l,
+        "primary-ultra-dark-h": $primary-ultra-dark-h,
+        "primary-ultra-dark-s": $primary-ultra-dark-s,
+        "primary-ultra-dark-l": $primary-ultra-dark-l,
+    ),
+  );
+}

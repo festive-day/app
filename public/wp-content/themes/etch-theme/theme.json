@@ -1,0 +1,34 @@
+{
+	"settings": {
+		"layout": {
+			"contentSize": "745px",
+			"wideSize": "1340px"
+		},
+		"spacing": {
+			"defaultSpacingSizes": false,
+			"units": [
+				"%",
+				"px",
+				"em",
+				"rem",
+				"vh",
+				"vw"
+			],
+			"padding": false
+		},
+		"useRootPaddingAwareAlignments": false
+	},
+	"styles": {
+		"spacing": {
+			"blockGap": "0",
+			"padding": {
+				"top": "inherit",
+				"right": "inherit",
+				"bottom": "inherit",
+				"left": "inherit"
+			}
+		}
+	},
+	"version": 3,
+	"$schema": "https://schemas.wp.org/wp/6.7/theme.json"
+}

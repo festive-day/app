@@ -1,0 +1,34 @@
+// MAX WIDTH
+@mixin breakpoint($extension) {
+	$extension-value: map-get($breakpoints, $extension);
+	// Need to add 1px for min-width queries
+    $new-extension-value: $extension-value + 1px;
+	@if $option-mobile-first == off {
+		@media (max-width: map-get($breakpoints, $extension)) {
+			@content;
+		}
+	}
+	@if $option-mobile-first == on {
+		@media (min-width: $new-extension-value) {
+			@content;
+		}
+	}
+}
+
+// MIN WIDTH
+@mixin breakpoint-up($extension) {
+    $extension-value: map-get($breakpoints, $extension);
+    $new-extension-value: $extension-value + 1px;
+    @media (min-width: $new-extension-value) {
+        @content;
+    }
+}
+
+// INTERNAL: Generate code at all breakpoints
+@mixin at-each-breakpoint {
+	@each $breakpoint, $value in $breakpoints {
+		@include breakpoint($breakpoint) {
+			@content;
+		}
+	}
+}

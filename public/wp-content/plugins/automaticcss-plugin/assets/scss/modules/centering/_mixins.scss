@@ -1,0 +1,45 @@
+@mixin center($alignment: all, $output: full) {
+
+	// Output can equal "full", "core", or "tokens."
+	// "full" outputs all properties.
+	// "core" outputs only the flex properties.
+	// "tokens" outputs only the token properties.
+
+	@if ($output == "full" or $output == "tokens") and $output != "core" {
+		& {
+			@if $alignment == all {
+				--align-items: center;
+				--justify-content: center;
+				--text-align: center;
+			}
+			@if $alignment == left {
+				--align-items: flex-start;
+				--justify-content: center;
+				--text-align: left;
+			}
+			@if $alignment == right {
+				--align-items: flex-end;
+				--justify-content: center;
+				--text-align: right;
+			}
+			@if $alignment == top {
+				--align-items: center;
+				--justify-content: flex-start;
+			}
+			@if $alignment == bottom {
+				--align-items: center;
+				--justify-content: flex-end;
+			}
+		}
+	}
+
+	@if ($output == "full" or $output == "core") and $output != "tokens" {
+		& {
+			display: flex;
+			flex-direction: column;
+			align-items: var(--align-items, initial);
+			justify-content: var(--justify-content, initial);
+			text-align: var(--text-align, inherit);
+		}
+	}
+}

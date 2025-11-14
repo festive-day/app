@@ -1,0 +1,24 @@
+@if $option-alternating-grids == on {
+  /* Feat: Auto Alternating Grids */
+  @each $breakpoint, $value in $breakpoints {
+    @include breakpoint-up($breakpoint) {
+      .grid--alternate-#{$breakpoint} {
+        > .grid--2:nth-of-type(even) {
+          > *:last-child {
+            order: -1;
+          }
+        }
+      }
+      @each $grid, $value in $gridsReversed {
+        .grid--alternate-#{$breakpoint} {
+          > .grid--#{$grid}:nth-of-type(even) {
+            grid-template-columns: #{$value};
+            > *:last-child {
+              order: -1;
+            }
+          }
+        }
+      }
+    }
+  }
+}

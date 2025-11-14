@@ -1,0 +1,38 @@
+$vp-min: 36 !default;
+$vp-max: 128 !default;
+$content-width-max: $vp-max;
+$content-width-min: $vp-min;
+$content-width: $vp-max * 1rem;
+$breakpoint-xs: 360px !default;
+$breakpoint-s: 480px !default;
+$breakpoint-m: 768px !default;
+$breakpoint-l: 992px !default;
+$breakpoint-xl: 1280px !default;
+$breakpoint-xxl: 1440px !default;
+
+$option-breakpoint-xxl: off !default;
+$option-breakpoint-xs: off !default;
+$option-mobile-first: off !default;
+
+// ALERT: CHANGES TO BREAKPOINT EXTENSIONS NEED TO BE MADE
+// IN THE DASHBOARD UI JSON FILES AS WELL
+
+$breakpoints: (
+  2xl: $breakpoint-xxl,
+  xl: $breakpoint-xl,
+  lg: $breakpoint-l,
+  md: $breakpoint-m,
+  sm: $breakpoint-s,
+  xs: $breakpoint-xs,
+);
+
+// ALERT: CHANGES TO BREAKPOINT EXTENSIONS NEED TO BE MADE
+// IN THE DASHBOARD UI JSON FILES AS WELL
+
+@if $option-breakpoint-xxl == off {
+  $breakpoints: map-remove($breakpoints, xxl);
+}
+
+@if $option-breakpoint-xs == off {
+  $breakpoints: map-remove($breakpoints, xs);
+}

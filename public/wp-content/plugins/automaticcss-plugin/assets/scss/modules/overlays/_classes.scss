@@ -1,0 +1,15 @@
+@if $option-overlays == on {
+	/* Feat: Overlays */
+  [class*="overlay--"], .overlay {
+		position: relative;
+    z-index: 0;
+
+    &::#{$basic-overlay-pseudo-element} {
+      content: "";
+      background: var(--overlay-color, rgba(0, 0, 0, 0.7));
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+    }
+	}
+}

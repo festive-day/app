@@ -1,0 +1,10 @@
+@if $option-container-queries == on {
+	/* Feat: Container Queries */
+	.contain {
+		container-type: inline-size;
+	}
+
+	.contain > * {
+		container-type: inline-size;
+	}
+}

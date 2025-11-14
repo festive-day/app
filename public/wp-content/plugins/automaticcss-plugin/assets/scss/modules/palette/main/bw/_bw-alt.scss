@@ -1,0 +1,11 @@
+// Black and White Alt Map
+$color-bw-alt:(
+  "main": (
+    "white": #000,
+    "black": #fff,
+  ),
+);
+
+@if $option-bw-color-variables != on {
+	$color-bw-alt: ();
+}

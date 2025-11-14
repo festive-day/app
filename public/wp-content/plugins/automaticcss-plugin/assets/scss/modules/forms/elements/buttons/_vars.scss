@@ -1,0 +1,131 @@
+// Buttons
+$option-f-use-global-buttons: off !default;
+// Submit (Use Global)
+$f-light-submit-button-style: "primary" !default;
+$f-dark-submit-button-style: "primary" !default;
+// Secondary (Use Global)
+$f-light-secondary-button-style: "primary.btn--outline" !default;
+$f-dark-secondary-button-style: "primary.btn--outline" !default;
+// Next (Use Global)
+$f-light-next-button-style: "primary" !default;
+$f-dark-next-button-style: "primary" !default;
+// Next (Use Global)
+$f-light-next-button-style: "primary.btn--outline" !default;
+$f-dark-next-button-style: "primary.btn--outline" !default;
+// Previous (Use Global)
+$f-light-previous-button-style: "primary.btn--outline" !default;
+$f-dark-previous-button-style: "primary.btn--outline" !default;
+// Save (Use Global)
+$f-light-save-button-style: "success" !default;
+$f-dark-save-button-style: "success" !default;
+// Reset
+$f-light-reset-button-style: "neutral" !default;
+$f-dark-reset-button-style: "neutral" !default;
+// Clear
+$f-light-clear-button-style: "neutral.btn--outline" !default;
+$f-dark-clear-button-style: "neutral.btn--outline" !default;
+// Upload
+$f-light-upload-button-style: "primary" !default;
+$f-dark-upload-button-style: "primary" !default;
+
+$f-btn-border-style: solid !default;
+$f-btn-border-width: 1px !default;
+$f-btn-border-radius: var(--btn-radius) !default;
+$f-btn-text-size-min: 1.6 !default;
+$f-btn-text-size-max: 1.8 !default;
+$f-btn-text-size: fluidClamp($f-btn-text-size-min, $f-btn-text-size-max);
+$f-btn-font-weight: 400 !default;
+$f-btn-line-height: 1.1 !default;
+$f-btn-padding-y: 0.5em !default;
+$f-btn-padding-x: 1em !default;
+$f-btn-margin-top: 0 !default;
+$f-btn-text-decoration: null !default;
+$f-btn-text-transform: null !default;
+
+// Buttons Light
+$f-light-btn-background: var(--primary) !default;
+$f-light-btn-background-hover: var(--primary-hover) !default;
+$f-light-btn-border-color: var(--primary) !default;
+$f-light-btn-border-color-hover: var(--primary-hover) !default;
+$f-light-btn-text-color: var(--primary-ultra-dark) !default;
+$f-light-btn-text-color-hover: var(--primary-ultra-dark) !default;
+
+// Buttons Dark
+$f-dark-btn-background: var(--primary) !default;
+$f-dark-btn-background-hover: var(--primary-hover) !default;
+$f-dark-btn-border-color: var(--primary) !default;
+$f-dark-btn-border-color-hover: var(--primary-hover) !default;
+$f-dark-btn-text-color: var(--primary-ultra-dark) !default;
+$f-dark-btn-text-color-hover: var(--primary-ultra-dark) !default;
+
+// Buttons Light > Secondary
+$f-light-secondary-btn-background-color: var(--neutral-light) !default;
+$f-light-secondary-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-secondary-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-secondary-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Next
+$f-light-next-btn-background-color: var(--neutral-light) !default;
+$f-light-next-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-next-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-next-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Previous
+$f-light-prev-btn-background-color: var(--neutral-light) !default;
+$f-light-prev-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-prev-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-prev-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Save
+$f-light-save-btn-background-color: var(--neutral-light) !default;
+$f-light-save-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-save-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-save-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Reset
+$f-light-reset-btn-background-color: var(--neutral-light) !default;
+$f-light-reset-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-reset-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-reset-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Clear
+$f-light-clear-btn-background-color: var(--neutral-light) !default;
+$f-light-clear-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-clear-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-clear-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Light > Upload
+$f-light-upload-btn-background-color: var(--neutral-light) !default;
+$f-light-upload-btn-background-color-hover: var(--neutral-light) !default;
+$f-light-upload-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-light-upload-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+
+// Buttons Dark > Secondary
+$f-dark-secondary-btn-background-color: var(--neutral-light) !default;
+$f-dark-secondary-btn-background-color-hover: var(--neutral-light) !default;
+$f-dark-secondary-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-secondary-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Next
+$f-dark-next-btn-background-color: var(--neutral-light) !default;
+$f-dark-next-btn-background-color-hover: var(--neutral-ultra-light) !default;
+$f-dark-next-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-next-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Previous
+$f-dark-prev-btn-background-color: var(--neutral-light) !default;
+$f-dark-prev-btn-background-color-hover: var(--neutral-ultra-light) !default;
+$f-dark-prev-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-prev-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Save
+$f-dark-save-btn-background-color: var(--neutral-light) !default;
+$f-dark-save-btn-background-color-hover: var(--neutral-ultra-light) !default;
+$f-dark-save-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-save-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Reset
+$f-dark-reset-btn-background-color: var(--neutral-light) !default;
+$f-dark-reset-btn-background-color-hover: var(--neutral-ultra-light) !default;
+$f-dark-reset-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-reset-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Clear
+$f-dark-clear-btn-background-color: var(--neutral-light) !default;
+$f-dark-clear-btn-background-color-hover: var(--neutral-ultra-light) !default;
+$f-dark-clear-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-clear-btn-text-color-hover: var(--neutral-ultra-dark) !default;
+// Buttons Dark > Upload
+$f-dark-upload-btn-background-color: var(--neutral-light) !default;
+$f-dark-upload-btn-background-color-hover: var(--neutral-light) !default;
+$f-dark-upload-btn-text-color: var(--neutral-ultra-dark) !default;
+$f-dark-upload-btn-text-color-hover: var(--neutral-ultra-dark) !default;

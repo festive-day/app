@@ -1,0 +1,34 @@
+@if $option-section-padding == on {
+	/* Feat: Section Padding */
+  @each $size, $extension in $sizeExtensions {
+    .section--#{$extension} {
+      padding-block: var(--section-space-#{$extension});
+      padding-inline: var(--gutter);
+    }
+  }
+
+  .section--none {
+    padding-block: 0;
+    padding-inline: var(--gutter);
+  }
+
+  @each $breakpoint, $value in $breakpoints {
+    @include breakpoint($breakpoint) {
+      @each $size, $extension in $sizeExtensions {
+        .section--#{$breakpoint}-#{$extension} {
+          padding-block: var(--section-space-#{$extension});
+          padding-inline: var(--gutter);
+        }
+      }
+      .section--#{$breakpoint}-none {
+        padding-inline: 0 var(--gutter);
+      }
+    }
+  }
+	@each $size, $extension in $sizeExtensions {
+		.header--#{$extension} {
+			padding-block: var(--space-#{$extension});
+			padding-inline: var(--gutter);
+		}
+	}
+}

@@ -1,0 +1,20 @@
+// Radio & Checkbox -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-radio-label-font-weight: 400 !default;
+$f-radio-label-size: fluidClamp($f-option-label-font-size-min, $f-option-label-font-size-max);
+$f-radio-label-spacing: 0.5em !default; //dashboard
+
+// Radio & Checkbox Light -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-light-radio-background-color: white !default;
+$f-light-radio-accent-color: var(--primary) !default;
+$f-light-radio-border-color: var(--neutral) !default;
+$f-light-radio-button-style: "primary" !default;
+$f-light-radio-button-active: "primary-light" !default;
+
+// Radio & Checkbox Dark -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-dark-radio-background-color: white !default;
+$f-dark-radio-accent-color: var(--primary) !default;
+$f-dark-radio-border-color: var(--neutral) !default;
+$f-dark-radio-button-style: "primary" !default;
+$f-dark-radio-button-active: "primary-light" !default;
+
+// TODO Need to handle the radio button styles in the new refactoring

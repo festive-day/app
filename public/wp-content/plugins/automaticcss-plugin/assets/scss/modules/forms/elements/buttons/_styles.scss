@@ -1,0 +1,67 @@
+#{$form-selector-light} {
+	:where([type="submit"]) {
+		@include btn($f-light-submit-button-style);
+	}
+
+	:where([type="reset"]){
+		@include btn($f-light-reset-button-style);
+	}
+
+	:where([type="file"]) {
+		@include btn($f-light-upload-button-style);
+	}
+
+	:where(.btn--secondary) {
+		@include btn($f-light-secondary-button-style);
+	}
+
+	:where(.btn--next) {
+		@include btn($f-light-next-button-style);
+	}
+
+	:where(.btn--previous) {
+		@include btn($f-light-previous-button-style);
+	}
+
+	:where(.btn--save) {
+		@include btn($f-light-save-button-style);
+	}
+
+	:where(.btn--clear)	 {
+		@include btn($f-light-clear-button-style);
+	}
+}
+
+#{$form-selector-dark} {
+	:where([type="submit"]) {
+		@include btn($f-dark-submit-button-style);
+	}
+
+	:where([type="reset"]){
+		@include btn($f-dark-reset-button-style);
+	}
+
+	:where([type="file"]) {
+		@include btn($f-dark-upload-button-style);
+	}
+
+	:where(.btn--secondary) {
+		@include btn($f-dark-secondary-button-style);
+	}
+
+	:where(.btn--next) {
+		@include btn($f-dark-next-button-style);
+	}
+
+	:where(.btn--previous) {
+		@include btn($f-dark-previous-button-style);
+	}
+
+	:where(.btn--save) {
+		@include btn($f-dark-save-button-style);
+	}
+
+	:where(.btn--clear) {
+		@include btn($f-dark-clear-button-style);
+	}
+}

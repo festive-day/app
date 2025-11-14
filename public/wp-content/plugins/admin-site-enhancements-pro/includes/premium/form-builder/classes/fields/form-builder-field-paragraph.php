@@ -1,0 +1,35 @@
+<?php
+defined( 'ABSPATH' ) || die();
+
+class Form_Builder_Field_Paragraph extends Form_Builder_Field_Type {
+
+    protected $type = 'paragraph';
+
+    public function field_settings_for_type() {
+        return array(
+            'label' => false,
+            'default' => false,
+            'description' => false,
+            'label_position' => false,
+            'required' => false,
+            'content' => true,
+            'field_alignment' => true,
+        );
+    }
+
+    protected function extra_field_default_opts() {
+        return array(
+            'content' => 'Paragraph / Shortcode',
+            'text_alignment' => 'left',
+            'field_alignment' => 'left',
+        );
+    }
+
+    protected function input_html() {
+        $field = $this->get_field();
+        ?>
+        <div class="fb-paragraph-field" id="fb-field-<?php echo absint( $field['id'] ); ?>"><?php echo do_shortcode( wp_kses_post( $field['content'] ) ); ?></div>
+        <?php
+    }
+
+}

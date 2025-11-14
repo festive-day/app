@@ -1,0 +1,13 @@
+$option-bw-color-variables: on !default;
+
+// Black and White Map
+$color-bw:(
+  "main": (
+    "white": #fff,
+    "black": #000,
+  ),
+);
+
+@if $option-bw-color-variables != on {
+	$color-bw: ();
+}

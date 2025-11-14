@@ -1,0 +1,8 @@
+@if $option-opacities == on {
+	/* Feat: Opacity */
+	@each $opacity, $value in $opacities {
+	  .opacity--#{$opacity} {
+		opacity: #{$value};
+	  }
+	}
+  }

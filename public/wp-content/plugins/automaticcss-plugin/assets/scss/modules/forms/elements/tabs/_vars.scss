@@ -1,0 +1,54 @@
+// Tabs
+$f-tab-border-size: 0px !default;
+$f-tab-border-style: solid !default;
+$f-tab-border-radius: $btn-border-radius !default;
+$f-tab-text-size-pure: 1.4 !default;
+$f-tab-text-size-min: 1.6 !default;
+$f-tab-text-size-max: 1.8 !default;
+$f-tab-text-size: fluidClamp($f-tab-text-size-min, $f-tab-text-size-max);
+$f-tab-text-weight: 400 !default;
+$f-tab-text-line-height: 1 !default;
+$f-tab-text-align: center !default;
+$f-tab-text-transform: null !default;
+$f-tab-text-decoration: none !default;
+$f-tab-padding-y: 0.75em !default;
+$f-tab-padding-x: 1.5em !default;
+$f-tab-margin-x: 0 !default;
+$f-tab-width: auto !default;
+// Tabs Light
+$f-light-tab-background-color: transparent !default;
+$f-light-tab-border-color: var(--neutral-light) !default;
+$f-light-tab-border-bottom-color: var(--neutral-light) !default;
+$f-light-tab-text-color: var(--neutral-dark) !default;
+// Tabs Dark
+$f-dark-tab-background-color: transparent !default;
+$f-dark-tab-border-color: var(--neutral-light) !default;
+$f-dark-tab-border-bottom-color: var(--neutral-light) !default;
+$f-dark-tab-text-color: var(--neutral-dark) !default;
+// Tabs > Tabs Active
+$f-tab-active-border-bottom-size: 3px !default;
+$f-tab-active-text-weight: 600 !default;
+$f-tab-active-border-size: 0px !default;
+$f-tab-active-border-style: solid !default;
+// Tabs > Tabs Active Light
+$f-light-tab-active-background-color: transparent !default;
+$f-light-tab-active-border-color: var(--primary) !default;
+$f-light-tab-active-text-color: var(--neutral-dark) !default;
+$f-light-tab-inactive-text-color: var(--neutral-dark-trans-80) !default;
+// Tabs > Tabs Active Dark
+$f-dark-tab-active-background-color: transparent !default;
+$f-dark-tab-active-border-color: var(--primary) !default;
+$f-dark-tab-active-text-color: var(--neutral-light) !default;
+$f-dark-tab-inactive-text-color: var(--neutral-light-trans-80) !default;
+// Tabs > Tab Group
+$f-tab-group-padding-y: 0 !default;
+$f-tab-group-padding-x: 0 !default;
+$f-tab-group-border-bottom-size: 2px !default;
+$f-tab-group-border-bottom-style: solid !default;
+$f-tab-group-margin-bottom: 3rem !default;
+// Tabs > Tab Group Light
+$f-light-tab-group-background-color: transparent !default;
+$f-light-tab-group-border-bottom-color: var(--neutral-ultra-light) !default;
+// Tabs > Tab Group Dark
+$f-dark-tab-group-background-color: transparent !default;
+$f-dark-tab-group-border-bottom-color: var(--neutral-ultra-light) !default;

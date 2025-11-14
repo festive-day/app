@@ -1,0 +1,89 @@
+@import "automatic-imports";
+
+// Tokens
+@include if-inline-tokens-off {
+	@import "modules/tokens";
+}
+// Defaults
+@include if-layer-defaults {
+	@import "modules/reset/output";
+	@import "modules/fonts/output";
+	@import "modules/defaults/output";
+}
+
+// Anchors, Links, Buttons
+@include if-layer-anchors {
+	@import "modules/buttons-links/buttons";
+	@import "modules/buttons-links/links/external-links/output";
+}
+
+// Cards
+@include if-layer-cards {
+	@import "modules/cards/classes";
+}
+
+// Icons
+@include if-layer-icons {
+	@import "modules/icons/classes";
+}
+
+// Utilities
+@include if-layer-utilities {
+	@import "modules/overflow-detection/output";
+	@import "modules/boxed-layout/output";
+	@import "modules/scrolling/output";
+	@import "modules/color-scheme/output";
+	@import "modules/accessibility/accessibility";
+	@import "modules/accessibility/selection-styling";
+	@import "modules/focus/focus-parent";
+	@import "modules/focus/focus-styling";
+	@import "modules/focus/classes";
+	@import "modules/offset-content/offset-content";
+	@import "modules/sections/defaults";
+	@import "modules/backgrounds/classes";
+	@import "modules/surfaces/classes";
+	@import "modules/overlays/custom/classes";
+	@import "modules/contextual-colors/output";
+	@import "modules/content-grid";
+	@import "modules/color-relationships/output";
+	@import "modules/spacing/margin/classes";
+	@import "modules/spacing/padding/utilities";
+	@import "modules/sections/utilities";
+	@import "modules/overlays/classes";
+	@import "modules/text/text";
+	@import "modules/line-clamp/utilities";
+	@import "modules/opacity/classes";
+	@import "modules/box-shadow/classes";
+	@import "modules/position/classes";
+	@import "modules/position/sticky/classes";
+	@import "modules/centering/classes";
+	@import "modules/flip/classes";
+	@import "modules/object-fit/object-fit";
+	@import "modules/height/classes";
+	@import "modules/columns/columns";
+	@import "modules/grid/grid";
+	@import "modules/grid/auto-grid/classes";
+	@import "modules/flex/flex";
+	@import "modules/flex-grid/flex-grids";
+	@import "modules/order/classes";
+	@import "modules/width/width";
+	@import "modules/aspect-ratio/aspect-ratios";
+	@import "modules/z-index/classes";
+	@import "modules/lists/output";
+	@import "modules/ribbons";
+	@import "modules/visibility/classes";
+	@import "modules/display/classes";
+	@import "modules/container/classes";
+	@import "modules/spacing/gap/gaps";
+	@import "modules/borders/classes";
+	@import "modules/dividers/classes";
+	@import "modules/buttons-links/links/output";
+	@import "modules/transition/classes";
+	@import "modules/dashboard-icon-display/output";
+	@import "modules/borders/inverted-radius/utilities";
+	@import "modules/gradient-fades/classes";
+}
+
+//Other
+@import "modules/spacing/smart-spacing/smart-spacing";
+@import "modules/loom-fix";

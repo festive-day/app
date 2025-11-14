@@ -1,0 +1,92 @@
+$form-elements: (
+    form: (
+        display: grid,
+    ),
+    fieldset: (
+        display: grid,
+		gap: #{$f-fieldset-gap},
+		border-style: #{$f-fieldset-border-style},
+    ),
+	label: (
+		font-size: #{$f-label-size},
+		font-weight: #{$f-label-font-weight},
+		line-height: #{$f-label-line-height},
+		padding-block: #{$f-label-padding-y},
+		padding-inline: #{$f-label-padding-x},
+		margin-block-end: #{$f-label-margin-bottom},
+		text-transform: #{$f-label-text-transform},
+		color: (
+			light: #{$f-light-label-color},
+			dark: #{$f-dark-label-color}
+		),
+		background-color: (
+			light: #{$f-light-label-background-color},
+			dark: #{$f-dark-label-background-color}
+		),
+	),
+    input: (
+        border-style: #{$f-input-border-style},
+		border-block-width: #{$f-input-border-block-size},
+		border-inline-width: #{$f-input-border-inline-size},
+        border-radius: #{$btn-border-radius},
+        font-size: #{$f-input-size},
+        font-weight: #{$f-input-font-weight},
+        line-height: #{$f-input-line-height},
+        block-size: #{$f-input-height},
+        padding-block: #{$f-input-padding-y},
+		padding-inline: #{$f-input-padding-x},
+        background: (
+            light: #{$f-light-input-background},
+            dark: #{$f-dark-input-background}
+        ),
+        border-color: (
+            light: #{$f-light-input-border-color},
+            dark: #{$f-dark-input-border-color}
+        ),
+        color: (
+            light: #{$f-light-input-text-color},
+            dark: #{$f-dark-input-text-color}
+        ),
+        pseudo: (
+            placeholder: (
+                color: (
+                    light: #{$f-light-input-placeholder-color},
+                    dark: #{$f-dark-input-placeholder-color}
+                ),
+                opacity: (
+                    light: #{$f-light-input-placeholder-opacity},
+                    dark: #{$f-dark-input-placeholder-opacity}
+                )
+            )
+        )
+    ),
+	legend: (
+		font-weight: #{$f-legend-text-weight},
+		font-size: #{$f-legend-size},
+		margin-block-end: #{$f-legend-margin-bottom},
+		border: #{$f-legend-border},
+		line-height: #{$f-legend-line-height},
+		color: (
+			light: #{$f-light-legend-text-color},
+			dark: #{$f-dark-legend-text-color}
+		)
+	),
+	radio: (
+		selector: "input[type='radio']",
+        accent-color: (
+            light: #{$f-light-radio-accent-color},
+            dark: #{$f-dark-radio-accent-color}
+        ),
+    ),
+    help: (
+        selector: ".help-text",
+        font-weight: #{$f-help-text-weight},
+        font-size: #{$f-help-size},
+        line-height: #{$f-help-line-height},
+        margin-block: #{$f-help-margin-block},
+        color: (
+            light: #{$f-light-help-text-color},
+            dark: #{$f-dark-help-text-color}
+        )
+    )
+);

@@ -1,0 +1,82 @@
+// secondary Options
+$option-secondary-clr: on !default;
+
+// secondary Vars
+$secondary-hex: #e56c70 !default;
+$secondary-r: 229 !default;
+$secondary-g: 108 !default;
+$secondary-b: 112 !default;
+$secondary-h: 358 !default;
+$secondary-s: 70% !default;
+$secondary-l: 66% !default;
+$secondary-hover-h: 358 !default;
+$secondary-hover-s: 70% !default;
+$secondary-hover-l: 1.15 !default;
+$secondary-ultra-light-h: 358 !default;
+$secondary-ultra-light-s: 70% !default;
+$secondary-ultra-light-l: 95% !default;
+$secondary-light-h: 358 !default;
+$secondary-light-s: 70% !default;
+$secondary-light-l: 85% !default;
+$secondary-dark-h: 358 !default;
+$secondary-dark-s: 70% !default;
+$secondary-dark-l: 25% !default;
+$secondary-ultra-dark-h: 358 !default;
+$secondary-ultra-dark-s: 70% !default;
+$secondary-ultra-dark-l: 10% !default;
+// Added in 3.0
+$secondary-semi-light-h: 358 !default;
+$secondary-semi-light-s: 70% !default;
+$secondary-semi-light-l: 60% !default;
+$secondary-semi-dark-h: 358 !default;
+$secondary-semi-dark-s: 70% !default;
+$secondary-semi-dark-l: 40% !default;
+
+// Secondary Color Map
+$color-secondary:(); // Initialize Map
+@if $option-secondary-clr == on {
+  $color-secondary: (
+    "main": (
+      "secondary": $secondary-hex,
+      "secondary-hover": hsl($secondary-hover-h, $secondary-hover-s, $secondary-hover-l),
+      "secondary-ultra-light": hsl($secondary-ultra-light-h, $secondary-ultra-light-s, $secondary-ultra-light-l),
+      "secondary-light": hsl($secondary-light-h, $secondary-light-s, $secondary-light-l),
+      "secondary-semi-light": hsl($secondary-semi-light-h, $secondary-semi-light-s, $secondary-semi-light-l),
+      "secondary-semi-dark": hsl($secondary-semi-dark-h, $secondary-semi-dark-s, $secondary-semi-dark-l),
+      "secondary-dark": hsl($secondary-dark-h, $secondary-dark-s, $secondary-dark-l),
+      "secondary-ultra-dark": hsl($secondary-ultra-dark-h, $secondary-ultra-dark-s, $secondary-ultra-dark-l),
+    ),
+    "partials": (
+      "secondary-hex": $secondary-hex,
+        "secondary-hsl": $secondary-h $secondary-s $secondary-l,
+        "secondary-rgb": $secondary-r $secondary-g $secondary-b,
+        "secondary-r": $secondary-r,
+        "secondary-g": $secondary-g,
+        "secondary-b": $secondary-b,
+        "secondary-h": $secondary-h,
+        "secondary-s": $secondary-s,
+        "secondary-l": $secondary-l,
+        "secondary-hover-h": $secondary-hover-h,
+        "secondary-hover-s": $secondary-hover-s,
+        "secondary-hover-l": $secondary-hover-l,
+        "secondary-ultra-light-h": $secondary-ultra-light-h,
+        "secondary-ultra-light-s": $secondary-ultra-light-s,
+        "secondary-ultra-light-l": $secondary-ultra-light-l,
+        "secondary-light-h": $secondary-light-h,
+        "secondary-light-s": $secondary-light-s,
+        "secondary-light-l": $secondary-light-l,
+        "secondary-semi-light-h": $secondary-semi-light-h,
+        "secondary-semi-light-s": $secondary-semi-light-s,
+        "secondary-semi-light-l": $secondary-semi-light-l,
+        "secondary-semi-dark-h": $secondary-semi-dark-h,
+        "secondary-semi-dark-s": $secondary-semi-dark-s,
+        "secondary-semi-dark-l": $secondary-semi-dark-l,
+        "secondary-dark-h": $secondary-dark-h,
+        "secondary-dark-s": $secondary-dark-s,
+        "secondary-dark-l": $secondary-dark-l,
+        "secondary-ultra-dark-h": $secondary-ultra-dark-h,
+        "secondary-ultra-dark-s": $secondary-ultra-dark-s,
+        "secondary-ultra-dark-l": $secondary-ultra-dark-l,
+    ),
+  );
+}

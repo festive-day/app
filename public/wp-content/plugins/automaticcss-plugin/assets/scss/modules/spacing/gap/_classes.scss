@@ -1,0 +1,51 @@
+@if $option-gaps == on {
+	/* Feat: Gap Classes */
+	@each $size, $extension in $sizeExtensions {
+			.gap--#{$extension} {
+					gap: var(--space-#{$extension});
+					--row-gap: var(--space-#{$extension});
+					--col-gap: var(--space-#{$extension});
+					--grid-gap: var(--space-#{$extension});
+			}
+	}
+	// Load breakpoint gap classes
+	@each $breakpoint, $value in $breakpoints {
+			@include breakpoint($breakpoint) {
+					@each $size, $extension in $sizeExtensions {
+							.gap--#{$breakpoint}-#{$extension} {
+									gap: var(--space-#{$extension});
+									--row-gap: var(--space-#{$extension});
+									--col-gap: var(--space-#{$extension});
+									--grid-gap: var(--space-#{$extension});
+							}
+					}
+			}
+	}
+	.gap--none {
+    --row-gap: 0;
+    --col-gap: 0;
+    gap: 0;
+  }
+}
+
+  // Contextual Gap Classes
+@if $option-gaps == on {
+  .fr-container-gap,
+  .container-gap {
+    --row-gap: var(--container-gap);
+    --col-gap: var(--container-gap);
+    gap: var(--container-gap);
+  }
+  .fr-content-gap,
+  .content-gap {
+    --row-gap: var(--content-gap);
+    --col-gap: var(--content-gap);
+      gap: var(--content-gap);
+  }
+  .fr-grid-gap,
+  .grid-gap {
+    --row-gap: var(--grid-gap);
+    --col-gap: var(--grid-gap);
+      gap: var(--grid-gap);
+  }
+}

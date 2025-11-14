@@ -1,0 +1,82 @@
+// accent Options
+$option-accent-clr: on !default;
+
+// accent Vars
+$accent-hex: #e56c70 !default;
+$accent-r: 229 !default;
+$accent-g: 108 !default;
+$accent-b: 112 !default;
+$accent-h: 358 !default;
+$accent-s: 70% !default;
+$accent-l: 66% !default;
+$accent-hover-h: 358 !default;
+$accent-hover-s: 70% !default;
+$accent-hover-l: 1.15 !default;
+$accent-ultra-light-h: 358 !default;
+$accent-ultra-light-s: 70% !default;
+$accent-ultra-light-l: 95% !default;
+$accent-light-h: 358 !default;
+$accent-light-s: 70% !default;
+$accent-light-l: 85% !default;
+$accent-dark-h: 358 !default;
+$accent-dark-s: 70% !default;
+$accent-dark-l: 25% !default;
+$accent-ultra-dark-h: 358 !default;
+$accent-ultra-dark-s: 70% !default;
+$accent-ultra-dark-l: 10% !default;
+// Added in 3.0
+$accent-semi-light-h: 358 !default;
+$accent-semi-light-s: 70% !default;
+$accent-semi-light-l: 60% !default;
+$accent-semi-dark-h: 358 !default;
+$accent-semi-dark-s: 70% !default;
+$accent-semi-dark-l: 40% !default;
+
+// Accent Color Map
+$color-accent:(); // Initialize Map
+@if $option-accent-clr == on {
+  $color-accent: (
+    "main": (
+      "accent": $accent-hex,
+      "accent-hover": hsl($accent-hover-h, $accent-hover-s, $accent-hover-l),
+      "accent-ultra-light": hsl($accent-ultra-light-h, $accent-ultra-light-s, $accent-ultra-light-l),
+      "accent-light": hsl($accent-light-h, $accent-light-s, $accent-light-l),
+      "accent-semi-light": hsl($accent-semi-light-h, $accent-semi-light-s, $accent-semi-light-l),
+      "accent-semi-dark": hsl($accent-semi-dark-h, $accent-semi-dark-s, $accent-semi-dark-l),
+      "accent-dark": hsl($accent-dark-h, $accent-dark-s, $accent-dark-l),
+      "accent-ultra-dark": hsl($accent-ultra-dark-h, $accent-ultra-dark-s, $accent-ultra-dark-l),
+    ),
+    "partials": (
+      "accent-hex": $accent-hex,
+        "accent-hsl": $accent-h $accent-s $accent-l,
+        "accent-rgb": $accent-r $accent-g $accent-b,
+        "accent-r": $accent-r,
+        "accent-g": $accent-g,
+        "accent-b": $accent-b,
+        "accent-h": $accent-h,
+        "accent-s": $accent-s,
+        "accent-l": $accent-l,
+        "accent-hover-h": $accent-hover-h,
+        "accent-hover-s": $accent-hover-s,
+        "accent-hover-l": $accent-hover-l,
+        "accent-ultra-light-h": $accent-ultra-light-h,
+        "accent-ultra-light-s": $accent-ultra-light-s,
+        "accent-ultra-light-l": $accent-ultra-light-l,
+        "accent-light-h": $accent-light-h,
+        "accent-light-s": $accent-light-s,
+        "accent-light-l": $accent-light-l,
+        "accent-semi-light-h": $accent-semi-light-h,
+        "accent-semi-light-s": $accent-semi-light-s,
+        "accent-semi-light-l": $accent-semi-light-l,
+        "accent-semi-dark-h": $accent-semi-dark-h,
+        "accent-semi-dark-s": $accent-semi-dark-s,
+        "accent-semi-dark-l": $accent-semi-dark-l,
+        "accent-dark-h": $accent-dark-h,
+        "accent-dark-s": $accent-dark-s,
+        "accent-dark-l": $accent-dark-l,
+        "accent-ultra-dark-h": $accent-ultra-dark-h,
+        "accent-ultra-dark-s": $accent-ultra-dark-s,
+        "accent-ultra-dark-l": $accent-ultra-dark-l,
+    ),
+  );
+}

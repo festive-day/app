@@ -1,0 +1,40 @@
+// Make entire cards clickable
+// Some builders require separate instructions
+// to remove the effect from the builder canvas
+
+@if $option-accessibility-classes == on {
+
+	.clickable-parent:not(a) {
+        position: static;
+
+        a {
+          position: static;
+        }
+
+        > a::after {
+          content: "";
+          position: absolute;
+          inset: 0;
+          cursor: pointer !important;
+          display: flex;
+        }
+      }
+
+	a.clickable-parent {
+		position: static;
+
+		&::after {
+			content: "";
+			position: absolute;
+			inset: 0;
+			cursor: pointer !important;
+			display: flex;
+		}
+	}
+
+	@if $option-bricks == on {
+		// Clickable Parent in Bricks Builder
+		@include load-clickable-parent(".bricks-area");
+	}
+
+} // End options check

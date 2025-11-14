@@ -1,0 +1,8 @@
+@if $option-focus-classes == on {
+	/* Feat: Focus Classes */
+	@each $color, $value in $main-colors {
+		.focus--#{$color} {
+			--focus-color: var(--#{$color});
+		}
+	}
+}

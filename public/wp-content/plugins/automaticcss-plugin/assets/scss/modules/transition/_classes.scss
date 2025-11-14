@@ -1,0 +1,5 @@
+@if $option-classless != on {
+	.transition {
+		transition: var(--transition);
+	}
+}

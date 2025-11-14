@@ -1,0 +1,39 @@
+@if $option-granular-gaps == on {
+	/* Feat: Granular Gap Classes */
+	// Load col-gap classes
+	@each $size, $extension in $sizeExtensions {
+		.col-gap--#{$extension}.col-gap--#{$extension} {
+			column-gap: var(--space-#{$extension});
+			--col-gap: var(--space-#{$extension});
+		}
+	}
+	// Load col-gap breakpoint classes
+	@each $breakpoint, $value in $breakpoints {
+		@include breakpoint($breakpoint) {
+			@each $size, $extension in $sizeExtensions {
+				.col-gap--#{$breakpoint}-#{$extension}.col-gap--#{$breakpoint}-#{$extension} {
+					column-gap: var(--space-#{$extension});
+					--col-gap: var(--space-#{$extension});
+				}
+			}
+		}
+	}
+	// Load row-gap classes
+	@each $size, $extension in $sizeExtensions {
+		.row-gap--#{$extension}.row-gap--#{$extension} {
+			row-gap: var(--space-#{$extension});
+			--row-gap: var(--space-#{$extension});
+		}
+	}
+	// Load row-gap breakpoint classes
+	@each $breakpoint, $value in $breakpoints {
+		@include breakpoint($breakpoint) {
+			@each $size, $extension in $sizeExtensions {
+				.row-gap--#{$breakpoint}-#{$extension}.row-gap--#{$breakpoint}-#{$extension} {
+					row-gap: var(--space-#{$extension});
+					--row-gap: var(--space-#{$extension});
+				}
+			}
+		}
+	}
+}

@@ -1,0 +1,80 @@
+// Mixin to load gap classes
+@mixin load-gap {
+    @if $option-gaps == on {
+        // Load gap classes
+        @each $size, $extension in $sizeExtensions {
+            .gap--#{$extension} {
+                gap: var(--space-#{$extension});
+                --row-gap: var(--space-#{$extension});
+                --col-gap: var(--space-#{$extension});
+                --grid-gap: var(--space-#{$extension});
+            }
+        }
+        // Load breakpoint gap classes
+        @each $breakpoint, $value in $breakpoints {
+            @include breakpoint($breakpoint) {
+                @each $size, $extension in $sizeExtensions {
+                    .gap--#{$breakpoint}-#{$extension} {
+                        gap: var(--space-#{$extension});
+                        --row-gap: var(--space-#{$extension});
+                        --col-gap: var(--space-#{$extension});
+                        --grid-gap: var(--space-#{$extension});
+                    }
+                }
+            }
+        }
+        // Load col-gap classes
+        @each $size, $extension in $sizeExtensions {
+            .col-gap--#{$extension} {
+                column-gap: var(--space-#{$extension});
+                --col-gap: var(--space-#{$extension});
+            }
+        }
+        // Load col-gap breakpoint classes
+        @each $breakpoint, $value in $breakpoints {
+            @include breakpoint($breakpoint) {
+                @each $size, $extension in $sizeExtensions {
+                    .col-gap--#{$breakpoint}-#{$extension} {
+                        column-gap: var(--space-#{$extension});
+                        --col-gap: var(--space-#{$extension});
+                    }
+                }
+            }
+        }
+        // Load row-gap classes
+        @each $size, $extension in $sizeExtensions {
+            .row-gap--#{$extension} {
+                row-gap: var(--space-#{$extension});
+                --row-gap: var(--space-#{$extension});
+            }
+        }
+        // Load row-gap breakpoint classes
+        @each $breakpoint, $value in $breakpoints {
+            @include breakpoint($breakpoint) {
+                @each $size, $extension in $sizeExtensions {
+                    .row-gap--#{$breakpoint}-#{$extension} {
+                        row-gap: var(--space-#{$extension});
+                        --row-gap: var(--space-#{$extension});
+                    }
+                }
+            }
+        }
+    } // End option check
+} // End Mixin
+
+// Mixins for Auto Gap Spacing
+
+@mixin auto-contextual-spacing($selector:null, $gap:null, $alignment:null) {
+    #{$selector}:where(:not(.bricks-shape-divider)) {
+        display: flex;
+        flex-direction: column;
+        align-items: #{$alignment};
+        gap: #{$gap};
+    }
+}
+
+@mixin auto-contextual-block-spacing($selector:null, $gap:null) {
+    :where(#{$selector}) {
+        gap: #{$gap};
+    }
+}

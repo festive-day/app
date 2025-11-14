@@ -1,0 +1,62 @@
+@if $option-grid-spans-starts == on {
+	/* Feat: Grid Spans & Starts */
+	@each $column, $value in $gridColumns {
+		.row-span--#{$column} {
+		  grid-row-end: span #{$value};
+		}
+		.col-span--#{$column} {
+		  grid-column-end: span #{$value};
+		}
+		.row-start--#{$column} {
+		  grid-row-start: #{$value};
+		}
+		.row-end--#{$column} {
+		  grid-row-end: #{$value};
+		}
+		.col-start--#{$column} {
+		  grid-column-start: #{$value};
+		}
+		.col-end--#{$column} {
+		  grid-column-end: #{$value};
+		}
+	  }
+
+	  @each $breakpoint, $value in $breakpoints {
+		@include breakpoint($breakpoint) { // Added in 2.4
+		  @each $column, $colValue in $gridColumns {
+			.row-span--#{$column}-#{$breakpoint} {
+			  grid-row: span #{$colValue};
+			}
+			.col-span--#{$column}-#{$breakpoint} {
+			  grid-column: span #{$colValue};
+			}
+			.row-start--#{$column}-#{$breakpoint} {
+			  grid-row-start: #{$colValue};
+			}
+			.row-end--#{$column}-#{$breakpoint} {
+			  grid-row-end: #{$colValue};
+			}
+			.col-start--#{$column}-#{$breakpoint} {
+			  grid-column-start: #{$colValue};
+			}
+			.col-end--#{$column}-#{$breakpoint} {
+			  grid-column-end: #{$colValue};
+			}
+		  }
+		}
+	  }
+
+	  // Span All
+
+	  .col-span--all {
+		grid-column: 1 / -1;
+	  }
+
+	  @each $breakpoint, $value in $breakpoints {
+		@include breakpoint($breakpoint) { // Added in 2.4
+		  .col-span--all-#{$breakpoint} {
+			grid-column: 1 / -1;
+		  }
+		}
+	  }
+}

@@ -1,0 +1,128 @@
+$form-platform-global-styles-sureforms: (
+  srfm-input-field-font-size: var(--f-input-font-size),
+  srfm-input-field-font-weight: var(--f-input-font-weight),
+  srfm-input-field-padding: var(--f-input-padding),
+  srfm-input-field-line-height: var(--f-input-line-height),
+  srfm-input-field-border-radius: var(--f-input-border-radius),
+  srfm-input-height: var(--f-input-height),
+  srfm-input-field-margin: var(--f-field-gap),
+  srfm-btn-padding: var(--btn-padding-block) var(--btn-padding-inline),
+  srfm-btn-font-size: var(--btn-font-size),
+  srfm-btn-line-height: var(--btn-line-height),
+  srfm-label-font-size: var(--f-label-font-size),
+  srfm-label-line-height: var(--f-label-line-height),
+  srfm-label-font-weight: var(--f-label-font-weight),
+);
+
+$form-platform-theme-styles-sureforms: (
+  srfm-color-input-background: (var(--f-light-input-background), var(--f-dark-input-background)),
+  srfm-color-input-text: (var(--f-light-input-text-color), var(--f-dark-input-text-color)),
+  srfm-color-input-border: (var(--f-light-input-border-color), var(--f-dark-input-border-color)),
+  srfm-color-input-placeholder: (
+    var(--f-light-input-placeholder-color),
+    var(--f-dark-input-placeholder-color)
+  )
+);
+
+$form-platform-theme-styles-sureforms-light: get-nth-map-values($form-platform-theme-styles-sureforms, 1);
+$form-platform-theme-styles-sureforms-dark: get-nth-map-values($form-platform-theme-styles-sureforms, 2);
+
+// Sureforms currently uses "color-scheme-primary" to color a lot of things simultaneously.
+// This is a bit incompatible with granular form styling the way we do it.
+// I'm seeing if they can change this.
+
+// --srfm-color-scheme-primary: #0C78FB;
+// --srfm-color-scheme-text-on-primary: #FFFFFF;
+// --srfm-color-scheme-text: #1E1E1E;
+// --srfm-color-input-label: #1E1E1E;
+// --srfm-color-input-description: hsl( from #1E1E1E h s l / 0.65 );
+// --srfm-color-input-placeholder: hsl( from #1E1E1E h s l / 0.5 );
+// --srfm-color-input-text: #1E1E1E;
+// --srfm-color-input-prefix: hsl( from #1E1E1E h s l / 0.65 );
+// --srfm-color-input-background: hsl( from #1E1E1E h s l / 0.02 );
+// --srfm-color-input-background-hover: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-color-input-background-disabled: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-color-input-border: hsl( from #1E1E1E h s l / 0.25 );
+// --srfm-color-input-border-disabled: hsl( from #1E1E1E h s l / 0.15 );
+// --srfm-color-multi-choice-svg: hsl( from #1E1E1E h s l / 0.7 );
+// --srfm-color-input-border-hover: hsl( from #0C78FB h s l / 0.65 );
+// --srfm-color-input-border-focus-glow: hsl( from #0C78FB h s l / 0.15 );
+// --srfm-color-input-selected: hsl( from #0C78FB h s l / 0.1 );
+// --srfm-btn-color-hover: hsl( from #0C78FB h s l / 0.9 );
+// --srfm-btn-color-disabled: hsl( from #0C78FB h s l / 0.25 );
+// --srfm-dropdown-input-background-hover: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-dropdown-option-background-hover: hsl( from #1E1E1E h s l / 0.10 );
+// --srfm-dropdown-option-background-selected: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-dropdown-option-selected-icon: hsl( from #1E1E1E h s l / 0.65 );
+// --srfm-dropdown-option-text-color: hsl( from #1E1E1E h s l / 0.80 );
+// --srfm-dropdown-option-selected-text: #1E1E1E;
+// --srfm-dropdown-badge-background: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-dropdown-badge-background-hover: hsl( from #1E1E1E h s l / 0.10 );
+// --srfm-dropdown-menu-border-color: hsl( from #1E1E1E h s l / 0.10 );
+// --srfm-dropdown-placeholder-color: hsl( from #1E1E1E h s l / 0.50 );
+// --srfm-dropdown-icon-color: hsl( from #1E1E1E h s l / 0.65 );
+// --srfm-dropdown-icon-disabled: hsl( from #1E1E1E h s l / 0.25 );
+// --srfm-row-gap-between-blocks: 18px;
+// --srfm-col-gap-between-fields: 16px;
+// --srfm-row-gap-between-fields: 16px;
+// --srfm-gap-below-address-label: 14px;
+// --srfm-dropdown-font-size: 14px;
+// --srfm-dropdown-gap-between-input-menu: 4px;
+// --srfm-dropdown-badge-padding: 2px 6px;
+// --srfm-dropdown-multiselect-font-size: 12px;
+// --srfm-dropdown-multiselect-line-height: 16px;
+// --srfm-dropdown-padding-right: 12px;
+// --srfm-dropdown-padding-right-icon: calc( var( --srfm-dropdown-padding-right ) + 20px );
+// --srfm-dropdown-multiselect-padding: 8px var( --srfm-dropdown-padding-right-icon ) 8px 8px;
+// --srfm-input-height: 44px;
+// --srfm-input-field-padding: 10px 12px;
+// --srfm-input-field-font-size: 16px;
+// --srfm-input-field-line-height: 24px;
+// --srfm-input-field-margin: 6px 0;
+// --srfm-check-ctn-width: 16px;
+// --srfm-check-ctn-height: 16px;
+// --srfm-check-svg-size: 10px;
+// --srfm-checkbox-margin-top-frontend: 4px;
+// --srfm-checkbox-margin-top-editor: 6px;
+// --srfm-check-gap: 8px;
+// --srfm-checkbox-description-margin-left: 24px;
+// --srfm-flag-section-padding: 10px 0 10px 12px;
+// --srfm-gap-between-icon-text: 8px;
+// --srfm-label-font-size: 16px;
+// --srfm-label-line-height: 24px;
+// --srfm-description-font-size: 14px;
+// --srfm-description-line-height: 20px;
+// --srfm-btn-padding: 10px 14px;
+// --srfm-btn-font-size: 16px;
+// --srfm-btn-line-height: 24px;
+// --srfm-multi-choice-horizontal-padding: 20px;
+// --srfm-multi-choice-vertical-padding: 20px;
+// --srfm-multi-choice-internal-option-gap: 8px;
+// --srfm-multi-choice-vertical-svg-size: 40px;
+// --srfm-multi-choice-horizontal-image-size: 24px;
+// --srfm-multi-choice-vertical-image-size: 120px;
+// --srfm-multi-choice-outer-padding: 2px;
+// --srfm-upload-vertical-padding: 28px;
+// --srfm-upload-inner-gap: 12px;
+// --srfm-upload-text-line-height: 24px;
+// --srfm-upload-file-margin-top: 16px;
+// --srfm-upload-preview-size: 42px;
+// --srfm-slider-label-font-size: 12px;
+// --srfm-slider-label-line-height: 16px;
+// --srfm-slider-label-top-padding: 8px;
+// --srfm-slider-error-gap: 6px;
+// --srfm-page-break-row-gap: 28px;
+// --srfm-rating-icon-size: 28px;
+// --srfm-rating-icon-gap: 6px;
+// --srfm-datepicker-dropdown-input-gap: 4px;
+// --srfm-page-break-back-btn-text-color: hsl( from #1E1E1E h s l / 0.80 );
+// --srfm-page-break-back-btn-background: hsl( from #1E1E1E h s l / 0.05 );
+// --srfm-page-break-unfilled-progress: hsl( from #1E1E1E h s l / 0.15 );
+// --srfm-page-break-indicator-text-color: hsl( from #1E1E1E h s l / 0.50 );
+// --srfm-page-break-connector-checked: hsl( from #1E1E1E h s l / 0.15 );
+// --srfm-page-break-connector-pending: hsl( from #1E1E1E h s l / 0.25 );
+// --srfm-page-break-connector-active: hsl( from #0C78FB h s l / 0.50 );
+// --srfm-page-break-steps-unfilled: hsl( from #1E1E1E h s l / 0.50 );
+// --srfm-page-break-steps-filled: hsl( from #1E1E1E h s l / 0.25 );
+// --srfm-page-break-steps-progress: hsl( from #1E1E1E h s l / 0.15 );
+// --srfm-page-break-steps-pending-text-color: hsl( from #1E1E1E h s l / 0.80 );
