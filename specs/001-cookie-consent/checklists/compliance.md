@@ -16,24 +16,24 @@
 
 ## Requirement Clarity
 
-- [ ] CHK006 Is the term “non-essential cookie” defined with objective criteria or examples so implementers know which scripts must be blocked? [Clarity, Spec §FR-003]
-- [ ] CHK007 Is “permanently dismissed” quantified (timeframe, storage TTL) to avoid ambiguity about reappearance timing? [Clarity, Spec §User Story 1]
+- [ ] CHK006 Is the term "non-essential cookie" defined with objective criteria or examples so implementers know which scripts must be blocked? [Clarity, Spec §FR-003]
+- [ ] CHK007 Is "permanently dismissed" quantified (timeframe, storage TTL) to avoid ambiguity about reappearance timing? [Clarity, Spec §User Story 1]
 - [ ] CHK008 Are cookie category descriptions standardized (tone, length, legal phrasing) to ensure consistent transparency messaging? [Clarity, Spec §FR-005]
-- [ ] CHK009 Is the “noticeable without blocking content” banner requirement translated into measurable layout specs (height, contrast, spacing) for designers? [Clarity, Spec §FR-015]
+- [ ] CHK009 Is the "noticeable without blocking content" banner requirement translated into measurable layout specs (height, contrast, spacing) for designers? [Clarity, Spec §FR-015]
 
 ## Requirement Consistency
 
-- [ ] CHK010 Do blocking requirements stay consistent between FR-003’s script wrapper approach and Edge Case guidance for JavaScript-disabled visitors? [Consistency, Spec §FR-003 & Edge Cases]
+- [ ] CHK010 Do blocking requirements stay consistent between FR-003's script wrapper approach and Edge Case guidance for JavaScript-disabled visitors? [Consistency, Spec §FR-003 & Edge Cases]
 - [ ] CHK011 Are storage mechanism descriptions (localStorage + cookie identifier) aligned between FR-004, Key Entities, and Success Criteria without conflicting persistence rules? [Consistency, Spec §FR-004 & Key Entities]
 - [ ] CHK012 Is the re-prompt expectation in User Story 3 Scenario 5 aligned with FR-014 so users are not over/under-prompted? [Consistency, Spec §User Story 3 & §FR-014]
-- [ ] CHK013 Does the “no re-prompt for 12 months” success metric (SC-003) coexist logically with change-driven re-prompts, and is precedence stated? [Consistency, Spec §SC-003 & §FR-014]
+- [ ] CHK013 Does the "no re-prompt for 12 months" success metric (SC-003) coexist logically with change-driven re-prompts, and is precedence stated? [Consistency, Spec §SC-003 & §FR-014]
 
 ## Acceptance Criteria Quality
 
 - [ ] CHK014 Are acceptance scenarios for each user story linked to measurable signals (e.g., cookie counts blocked, state persistence) instead of qualitative statements? [Acceptance Criteria, Spec §User Stories]
-- [ ] CHK015 Do success criteria specify how to measure timings such as “decision in under 10 seconds” and “banner loads within 1 second” (tooling, sampling, environments)? [Acceptance Criteria, Spec §SC-002 & §SC-006]
-- [ ] CHK016 Is “consent persists 12 months” backed by explicit storage expiration rules and validation steps? [Acceptance Criteria, Spec §SC-003]
-- [ ] CHK017 Are audit-log verification steps defined so “100% of consent events captured” can be proven (e.g., reconciliation process)? [Acceptance Criteria, Spec §SC-010]
+- [ ] CHK015 Do success criteria specify how to measure timings such as "decision in under 10 seconds" and "banner loads within 1 second" (tooling, sampling, environments)? [Acceptance Criteria, Spec §SC-002 & §SC-006]
+- [ ] CHK016 Is "consent persists 12 months" backed by explicit storage expiration rules and validation steps? [Acceptance Criteria, Spec §SC-003]
+- [ ] CHK017 Are audit-log verification steps defined so "100% of consent events captured" can be proven (e.g., reconciliation process)? [Acceptance Criteria, Spec §SC-010]
 
 ## Scenario Coverage
 
@@ -47,7 +47,7 @@
 - [ ] CHK022 Is the JavaScript-disabled fallback detailed enough (UI content, localization, essential-cookie list) for implementation? [Edge Case Coverage, Spec §Edge Cases]
 - [ ] CHK023 Are scenarios for cleared browser data or private browsing sessions defined so consent state resets behave consistently? [Edge Case Coverage, Spec §Edge Cases]
 - [ ] CHK024 Are rules for embedded third-party content (iframes, widgets) described, including how blocked content is communicated prior to consent? [Edge Case Coverage, Spec §Edge Cases]
-- [ ] CHK025 Is there guidance for conflicts when a cookie’s purpose or category changes mid-session (retroactive consent, user notification)? [Edge Case Coverage, Spec §Edge Cases]
+- [ ] CHK025 Is there guidance for conflicts when a cookie's purpose or category changes mid-session (retroactive consent, user notification)? [Edge Case Coverage, Spec §Edge Cases]
 
 ## Non-Functional Requirements
 
@@ -65,8 +65,8 @@
 ## Ambiguities & Conflicts
 
 - [ ] CHK033 Is precedence defined between consent persistence guarantees (12 months) and change-triggered re-prompts to avoid stakeholder disputes? [Conflict, Spec §SC-003 & §FR-014]
-- [ ] CHK034 Is “immediately” (preference save effects) quantified with technical constraints (latency, async processing) to prevent subjective interpretations? [Ambiguity, Spec §User Story 3]
-- [ ] CHK035 Is “noticeable without blocking content” reconciled with accessibility contrast requirements to avoid conflicting design directions? [Ambiguity, Spec §FR-015 & §SC-009]
+- [ ] CHK034 Is "immediately" (preference save effects) quantified with technical constraints (latency, async processing) to prevent subjective interpretations? [Ambiguity, Spec §User Story 3]
+- [ ] CHK035 Is "noticeable without blocking content" reconciled with accessibility contrast requirements to avoid conflicting design directions? [Ambiguity, Spec §FR-015 & §SC-009]
 
 ## Notes
 

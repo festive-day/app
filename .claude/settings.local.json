@@ -3,7 +3,11 @@
     "allow": [
       "Bash(git -C /Users/david_atlarge/Local Sites/speckit-eval/app log --oneline -5)",
       "Bash(cat:*)",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
+      "Bash(git rev-parse:*)",
+      "Bash(wp db query:*)",
+      "Bash(php -r:*)"
     ],
     "deny": [],
     "ask": []

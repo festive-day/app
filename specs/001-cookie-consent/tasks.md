@@ -20,15 +20,15 @@
 
 **Purpose**: WordPress plugin initialization and basic structure
 
-- [ ] T001 Create plugin directory structure at public/wp-content/plugins/cookie-consent-manager/ per plan.md
-- [ ] T002 Create main plugin file cookie-consent-manager.php with WordPress plugin headers
-- [ ] T003 [P] Create includes/ directory with class stubs (class-cookie-manager.php, class-consent-logger.php, class-cookie-blocker.php, class-storage-handler.php, class-admin-interface.php)
-- [ ] T004 [P] Create admin/ directory structure (views/, css/, js/)
-- [ ] T005 [P] Create public/ directory structure (js/, css/, templates/)
-- [ ] T006 [P] Create database/ directory with migrations/ subdirectory
-- [ ] T007 [P] Create tests/ directory with integration/ subdirectory and bootstrap.php
-- [ ] T008 Setup PHPUnit configuration for WordPress test suite in tests/bootstrap.php
-- [ ] T009 Register plugin activation/deactivation hooks in cookie-consent-manager.php
+- [X] T001 Create plugin directory structure at public/wp-content/plugins/cookie-consent-manager/ per plan.md
+- [X] T002 Create main plugin file cookie-consent-manager.php with WordPress plugin headers
+- [X] T003 [P] Create includes/ directory with class stubs (class-cookie-manager.php, class-consent-logger.php, class-cookie-blocker.php, class-storage-handler.php, class-admin-interface.php)
+- [X] T004 [P] Create admin/ directory structure (views/, css/, js/)
+- [X] T005 [P] Create public/ directory structure (js/, css/, templates/)
+- [X] T006 [P] Create database/ directory with migrations/ subdirectory
+- [X] T007 [P] Create tests/ directory with integration/ subdirectory and bootstrap.php
+- [X] T008 Setup PHPUnit configuration for WordPress test suite in tests/bootstrap.php
+- [X] T009 Register plugin activation/deactivation hooks in cookie-consent-manager.php
 
 ---
 
@@ -38,19 +38,19 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [ ] T010 Create database schema SQL in database/schema.sql (all 3 tables: categories, cookies, events)
-- [ ] T011 Create up migration database/migrations/001-create-tables-up.sql per data-model.md
-- [ ] T012 Create down migration database/migrations/001-create-tables-down.sql per data-model.md
-- [ ] T013 Implement database migration execution in plugin activation hook (run 001-create-tables-up.sql)
-- [ ] T014 Insert default cookie categories (essential, functional, analytics, marketing) on plugin activation
-- [ ] T015 Implement core cookie manager class includes/class-cookie-manager.php (singleton pattern, WordPress hooks registration)
-- [ ] T016 [P] Implement consent logger class includes/class-consent-logger.php (record_event, generate visitor_id hash)
-- [ ] T017 [P] Implement storage handler class includes/class-storage-handler.php (localStorage sync, cookie management, generate_cookie_hash)
-- [ ] T018 Register WordPress AJAX actions for all frontend endpoints (ccm_get_banner_config, ccm_record_consent, ccm_check_dnt)
-- [ ] T019 Register WordPress AJAX actions for all admin endpoints (ccm_list_categories through ccm_export_logs per admin-api.md)
-- [ ] T020 Setup WordPress Settings API page at Settings → Cookie Consent in includes/class-admin-interface.php
-- [ ] T021 Implement nonce verification and capability checks (manage_options) for all admin endpoints
-- [ ] T022 Setup daily cron job for 3-year audit log retention cleanup (wp_cookie_consent_cleanup hook)
+- [X] T010 Create database schema SQL in database/schema.sql (all 3 tables: categories, cookies, events)
+- [X] T011 Create up migration database/migrations/001-create-tables-up.sql per data-model.md
+- [X] T012 Create down migration database/migrations/001-create-tables-down.sql per data-model.md
+- [X] T013 Implement database migration execution in plugin activation hook (run 001-create-tables-up.sql)
+- [X] T014 Insert default cookie categories (essential, functional, analytics, marketing) on plugin activation
+- [X] T015 Implement core cookie manager class includes/class-cookie-manager.php (singleton pattern, WordPress hooks registration)
+- [X] T016 [P] Implement consent logger class includes/class-consent-logger.php (record_event, generate visitor_id hash)
+- [X] T017 [P] Implement storage handler class includes/class-storage-handler.php (localStorage sync, cookie management, generate_cookie_hash)
+- [X] T018 Register WordPress AJAX actions for all frontend endpoints (ccm_get_banner_config, ccm_record_consent, ccm_check_dnt)
+- [X] T019 Register WordPress AJAX actions for all admin endpoints (ccm_list_categories through ccm_export_logs per admin-api.md)
+- [X] T020 Setup WordPress Settings API page at Settings → Cookie Consent in includes/class-admin-interface.php
+- [X] T021 Implement nonce verification and capability checks (manage_options) for all admin endpoints
+- [X] T022 Setup daily cron job for 3-year audit log retention cleanup (wp_cookie_consent_cleanup hook)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 

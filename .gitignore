@@ -1,0 +1,37 @@
+# WordPress Core
+/public/wp-admin/
+/public/wp-includes/
+/public/wp-*.php
+/public/xmlrpc.php
+/public/wp-content/upgrade/
+/public/wp-content/uploads/
+/public/wp-content/cache/
+/public/wp-content/backup*/
+/public/wp-content/backups/
+/public/wp-content/advanced-cache.php
+/public/wp-content/wp-cache-config.php
+
+# PHP
+vendor/
+*.log
+*.cache
+*.env
+.env.local
+.env.*.local
+
+# Local development
+.DS_Store
+Thumbs.db
+*.tmp
+*.swp
+.vscode/
+.idea/
+
+# Composer
+composer.phar
+/vendor/
+
+# Logs
+*.log
+error_log
+access_log
