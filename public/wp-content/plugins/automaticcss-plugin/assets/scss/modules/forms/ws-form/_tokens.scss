@@ -1,0 +1,44 @@
+$form-platform-global-styles-ws-form: (
+	// Input
+	wsf-field-padding-horizontal: var(--f-input-padding),
+	wsf-field-padding-vertical: var(--f-input-padding),
+	wsf-field-font-weight: var(--f-input-font-weight),
+	wsf-field-font-size: var(--$f-input-size),
+	wsf-field-line-height: var(--f-input-line-height),
+	wsf-field-border-radius: var(--f-input-border-radius),
+	wsf-field-border-width: var(--f-input-border-top-size) var(--f-input-border-right-size) var(--f-input-border-bottom-size) var(--f-input-border-left-size),
+	wsf-field-border-style: var(--f-input-border-style),
+	wsf-field-height: var(--f-input-height),
+	// Fieldset
+	wsf-field-fieldset-legend-font-size: var(--f-legend-size),
+	wsf-field-fieldset-legend-font-weight: var(--f-legend-text-weight),
+	wsf-field-fieldset-legend-line-height: var(--f-legend-line-height),
+	// Help
+	wsf-field-help-font-size: var(--f-help-size),
+	wsf-field-help-font-weight: var(--f-help-text-weight),
+	wsf-field-help-gap: null,
+	// Label
+	wsf-field-label-font-size: var(--f-label-size),
+	wsf-field-label-font-weight: var(--f-label-font-weight),
+	wsf-field-label-line-height: var(--f-label-line-height),
+	// Label Inside
+	wsf-field-label-inside-offset: null,
+	wsf-field-label-inside-scale: null,
+);
+$form-platform-theme-styles-ws-form: (
+	// Input
+	wsf-field-color-background: (var(--f-light-input-background-color), var(--f-dark-input-background-color)),
+	wsf-field-border-color: (var(--f-light-input-border-color), var(--f-dark-input-border-color)),
+	// Fieldset
+	wsf-field-fieldset-legend-color: (var(--f-light-legend-text-color), var(--f-dark-legend-text-color)),
+	// Help
+	wsf-field-help-color: (var(--f-light-help-text-color), var(--f-dark-help-text-color)),
+	// Label
+	wsf-field-label-color-background: (var(--f-light-label-background-color), var(--f-dark-label-background-color)),
+	wsf-field-label-color: (var(--f-light-label-text-color), var(--f-dark-label-text-color)),
+	// Placeholder
+	wsf-field-color-placeholder: (var(--f-light-input-placeholder-color), var(--f-dark-input-placeholder-color)),
+);
+
+$form-platform-theme-styles-ws-form-light: get-nth-map-values($form-platform-theme-styles-ws-form, 1);
+$form-platform-theme-styles-ws-form-dark: get-nth-map-values($form-platform-theme-styles-ws-form, 2);

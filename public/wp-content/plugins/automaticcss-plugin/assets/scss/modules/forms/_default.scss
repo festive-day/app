@@ -1,0 +1,126 @@
+/* Feat: Form Styling */
+
+@if $option-forms ==on {
+// Generate All Custom Property Tokens in :root
+:root {
+    @each $element, $style-group in $form-elements {
+        @each $prop, $value in $style-group {
+            @if $prop != "selector" {
+                @if type-of($value) == map {
+                    @if $prop == "pseudo" {
+                        @each $pseudo-key, $pseudo-value in $value {
+                            @each $sub-prop, $sub-value in $pseudo-value {
+                                @each $theme, $theme-value in $sub-value {
+                                    @if $theme-value != null and $theme-value != "" {
+                                        --f-#{$theme}-#{$element}-#{$pseudo-key}-#{$sub-prop}: #{$theme-value};
+                                    } @else {
+                                        @warn "Empty or undefined value for variable in --f-#{$theme}-#{$element}-#{$pseudo-key}-#{$sub-prop}";
+                                    }
+                                }
+                            }
+                        }
+                    } @else {
+                        @each $theme, $theme-value in $value {
+                            @if $theme-value != null and $theme-value != "" {
+                                --f-#{$theme}-#{$element}-#{$prop}: #{$theme-value};
+                            } @else {
+                                @warn "Empty or undefined value for variable in --f-#{$theme}-#{$element}-#{$prop}";
+                            }
+                        }
+                    }
+                } @else {
+                    @if $value != null and $value != "" {
+                        --f-#{$element}-#{$prop}: #{$value};
+                    } @else {
+                        @warn "Empty or undefined value for variable in --f-#{$element}-#{$prop}";
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Define Locally Scoped Theme Variables for Light Theme
+#{$form-selector-light} {
+    @each $element, $style-group in $form-elements {
+        @each $prop, $value in $style-group {
+            @if $prop != "selector" {
+                @if type-of($value) == map {
+                    @if $prop == "pseudo" {
+                        @each $pseudo-key, $pseudo-value in $value {
+                            @each $sub-prop, $sub-value in $pseudo-value {
+                                @if map-get($sub-value, light) != null and map-get($sub-value, light) != "" {
+                                    --f-#{$element}-#{$pseudo-key}-#{$sub-prop}: var(--f-light-#{$element}-#{$pseudo-key}-#{$sub-prop});
+                                }
+                            }
+                        }
+                    } @else {
+                        @if map-get($value, light) != null and map-get($value, light) != "" {
+                            --f-#{$element}-#{$prop}: var(--f-light-#{$element}-#{$prop});
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Define Locally Scoped Theme Variables for Dark Theme
+#{$form-selector-dark} {
+    @each $element, $style-group in $form-elements {
+        @each $prop, $value in $style-group {
+            @if $prop != "selector" {
+                @if type-of($value) == map {
+                    @if $prop == "pseudo" {
+                        @each $pseudo-key, $pseudo-value in $value {
+                            @each $sub-prop, $sub-value in $pseudo-value {
+                                @if map-get($sub-value, dark) != null and map-get($sub-value, dark) != "" {
+                                    --f-#{$element}-#{$pseudo-key}-#{$sub-prop}: var(--f-dark-#{$element}-#{$pseudo-key}-#{$sub-prop});
+                                }
+                            }
+                        }
+                    } @else {
+                        @if map-get($value, dark) != null and map-get($value, dark) != "" {
+                            --f-#{$element}-#{$prop}: var(--f-dark-#{$element}-#{$prop});
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+// Apply All Properties Using Custom Properties
+#{$form-selectors} {
+    @each $element, $style-group in $form-elements {
+        $selector: if(map-has-key($style-group, "selector"), map-get($style-group, "selector"), $element);
+        :where(#{$selector}) {
+            @each $prop, $value in $style-group {
+                @if $prop != "selector" {
+                    @if $prop == "pseudo" {
+                        @each $pseudo-key, $pseudo-value in $value {
+                            @if $pseudo-key == "placeholder" {
+                                &::placeholder {
+                                    @each $sub-prop, $sub-value in $pseudo-value {
+                                        #{$sub-prop}: var(--f-#{$element}-#{$pseudo-key}-#{$sub-prop});
+                                    }
+                                }
+                            }
+                        }
+                    } @else {
+                        #{$prop}: var(--f-#{$element}-#{$prop});
+                    }
+                }
+            }
+        }
+    }
+}
+
+// // Custom Shared Styles
+// #{$form-selectors} {
+// 	@import "elements/radio/styles";
+// }
+
+// // Custom Theme Styles
+// @import "elements/buttons/styles";
+// }

@@ -1,0 +1,84 @@
+// tertiary Options
+$option-tertiary-clr-alt: off !default;
+
+// tertiary Alt Vars
+$tertiary-alt-hex: #e56c70 !default;
+$tertiary-r-alt: 229 !default;
+$tertiary-g-alt: 108 !default;
+$tertiary-b-alt: 112 !default;
+$tertiary-h-alt: 358 !default;
+$tertiary-s-alt: 70% !default;
+$tertiary-l-alt: 66% !default;
+$tertiary-hover-h-alt: 358 !default;
+$tertiary-hover-s-alt: 70% !default;
+$tertiary-hover-l-alt: 1.15 !default;
+$tertiary-ultra-light-h-alt: 358 !default;
+$tertiary-ultra-light-s-alt: 70% !default;
+$tertiary-ultra-light-l-alt: 95% !default;
+$tertiary-light-h-alt: 358 !default;
+$tertiary-light-s-alt: 70% !default;
+$tertiary-light-l-alt: 85% !default;
+$tertiary-dark-h-alt: 358 !default;
+$tertiary-dark-s-alt: 70% !default;
+$tertiary-dark-l-alt: 25% !default;
+$tertiary-ultra-dark-h-alt: 358 !default;
+$tertiary-ultra-dark-s-alt: 70% !default;
+$tertiary-ultra-dark-l-alt: 10% !default;
+// Added in 3.0
+$tertiary-semi-light-h-alt: 358 !default;
+$tertiary-semi-light-s-alt: 70% !default;
+$tertiary-semi-light-l-alt: 60% !default;
+$tertiary-semi-dark-h-alt: 358 !default;
+$tertiary-semi-dark-s-alt: 70% !default;
+$tertiary-semi-dark-l-alt: 40% !default;
+
+// Tertiary Alt Color Map
+$color-tertiary-alt:(); // Initialize Map
+@if $option-tertiary-clr-alt == on and $option-tertiary-clr == on {
+  $color-tertiary-alt: (
+    "main": (
+      "tertiary": $tertiary-alt-hex,
+      "tertiary-hover": hsl($tertiary-hover-h-alt, $tertiary-hover-s-alt, $tertiary-hover-l-alt),
+      "tertiary-ultra-light": hsl($tertiary-ultra-light-h-alt, $tertiary-ultra-light-s-alt, $tertiary-ultra-light-l-alt),
+      "tertiary-light": hsl($tertiary-light-h-alt, $tertiary-light-s-alt, $tertiary-light-l-alt),
+      "tertiary-semi-light": hsl($tertiary-semi-light-h-alt, $tertiary-semi-light-s-alt, $tertiary-semi-light-l-alt),
+      "tertiary-semi-dark": hsl($tertiary-semi-dark-h-alt, $tertiary-semi-dark-s-alt, $tertiary-semi-dark-l-alt),
+      "tertiary-dark": hsl($tertiary-dark-h-alt, $tertiary-dark-s-alt, $tertiary-dark-l-alt),
+      "tertiary-ultra-dark": hsl($tertiary-ultra-dark-h-alt, $tertiary-ultra-dark-s-alt, $tertiary-ultra-dark-l-alt),
+      "tertiary-comp": hsl($tertiary-h-alt + 180, $tertiary-s-alt, $tertiary-l-alt),
+    ),
+    "partials": (
+      "tertiary-hex": $tertiary-alt-hex,
+        "tertiary-hsl": $tertiary-h $tertiary-s $tertiary-l-alt,
+        "tertiary-rgb": $tertiary-r $tertiary-g $tertiary-b-alt,
+        "tertiary-r": $tertiary-r-alt,
+        "tertiary-g": $tertiary-g-alt,
+        "tertiary-b": $tertiary-b-alt,
+        "tertiary-h": $tertiary-h-alt,
+        "tertiary-s": $tertiary-s-alt,
+        "tertiary-l": $tertiary-l-alt,
+        "tertiary-hover-h": $tertiary-hover-h-alt,
+        "tertiary-hover-s": $tertiary-hover-s-alt,
+        "tertiary-hover-l": $tertiary-hover-l-alt,
+        "tertiary-ultra-light-h": $tertiary-ultra-light-h-alt,
+        "tertiary-ultra-light-s": $tertiary-ultra-light-s-alt,
+        "tertiary-ultra-light-l": $tertiary-ultra-light-l-alt,
+        "tertiary-light-h": $tertiary-light-h-alt,
+        "tertiary-light-s": $tertiary-light-s-alt,
+        "tertiary-light-l": $tertiary-light-l-alt,
+        "tertiary-semi-light-h": $tertiary-semi-light-h-alt,
+        "tertiary-semi-light-s": $tertiary-semi-light-s-alt,
+        "tertiary-semi-light-l": $tertiary-semi-light-l-alt,
+        "tertiary-semi-dark-h": $tertiary-semi-dark-h-alt,
+        "tertiary-semi-dark-s": $tertiary-semi-dark-s-alt,
+        "tertiary-semi-dark-l": $tertiary-semi-dark-l-alt,
+        "tertiary-dark-h": $tertiary-dark-h-alt,
+        "tertiary-dark-s": $tertiary-dark-s-alt,
+        "tertiary-dark-l": $tertiary-dark-l-alt,
+        "tertiary-ultra-dark-h": $tertiary-ultra-dark-h-alt,
+        "tertiary-ultra-dark-s": $tertiary-ultra-dark-s-alt,
+        "tertiary-ultra-dark-l": $tertiary-ultra-dark-l-alt,
+        "tertiary-comp-h": $tertiary-h-alt + 180,
+    ),
+  );
+}

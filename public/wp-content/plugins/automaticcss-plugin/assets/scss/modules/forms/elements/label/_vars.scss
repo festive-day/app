@@ -1,0 +1,26 @@
+// Labels
+$f-label-size-pure: 1.4 !default;
+$f-label-size-min: $text-m-min !default;
+$f-label-size-max: $text-m-max !default;
+$f-label-size: var(--text-m) !default;
+$f-label-font-weight: 400 !default;
+$f-label-line-height: 1.2 !default;
+$f-label-padding-x: 0 !default;
+$f-label-padding-y: 0 !default;
+$f-label-margin-bottom: 0.25em !default;
+$f-label-text-transform: null !default;
+$f-label-inside-position-left: 1.5em !default;
+$f-label-inside-position-top: 0 !default;
+$f-label-inside-scale: 1 !default;
+
+// Labels Light
+$f-light-label-color: var(--neutral-dark) !default;
+$f-light-label-background-color: null !default;
+$f-light-label-inside-background-color: transparent !default;
+$f-light-label-inside-background-color-focus: transparent !default;
+
+// Labels Dark
+$f-dark-label-color: var(--neutral-ultra-light) !default;
+$f-dark-label-background-color: transparent !default;
+$f-dark-label-inside-background-color: transparent !default;
+$f-dark-label-inside-background-color-focus: transparent !default;

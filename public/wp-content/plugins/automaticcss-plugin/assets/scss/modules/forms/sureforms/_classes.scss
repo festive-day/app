@@ -1,0 +1,36 @@
+@import "tokens";
+@import "vars";
+
+// Generate Light Class
+.form--light :where(.srfm-form) {
+	// Loop through global styles
+	@each $prop, $value in $form-platform-global-styles-sureforms {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	// Loop through theme styles
+	@each $prop, $value in $form-platform-theme-styles-sureforms-light {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	.srfm-submit-button.srfm-submit-button.srfm-submit-button {
+		@include btn(#{$f-light-submit-button-style});
+	}
+}
+// Generate Dark Class
+.form--dark :where(.srfm-form) {
+	// Loop through global styles
+	@each $prop, $value in $form-platform-global-styles-sureforms {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+	// Loop through theme styles
+	@each $prop, $value in $form-platform-theme-styles-sureforms-dark {
+		@if $value != null {
+			--#{$prop}: #{$value};
+		}
+	}
+}

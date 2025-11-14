@@ -1,0 +1,31 @@
+@if $option-flex == on {
+		/* Feat: Flexbox */
+    @each $direction, $value in $flexDirections {
+      .flex--#{$direction} {
+        display: flex;
+        flex-direction: #{$value};
+      }
+    }
+
+    // Flex Breakpoints
+    @each $breakpoint, $value in $breakpoints {
+      @include breakpoint($breakpoint) {
+        @each $direction, $directionValue in $flexDirections {
+          .flex--#{$direction}-#{$breakpoint} {
+            display: flex;
+            flex-direction: #{$directionValue};
+          }
+        }
+      }
+    }
+
+    .flex--wrap {
+      flex-wrap: wrap;
+    }
+
+    .flex--grow > * {
+      flex-grow: 1;
+    }
+} // End option flex is on
+
+@import "flex-alignments";

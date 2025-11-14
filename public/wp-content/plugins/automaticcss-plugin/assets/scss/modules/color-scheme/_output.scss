@@ -1,0 +1,23 @@
+@if $option-color-scheme == on {
+		/* Feat: Color Scheme */
+    // Fix for default body background color and default body text color
+    :where(#{$color-scheme-main-selectors}) {
+      background-color: var(--body-bg-color);
+      color: var(--body-color);
+    }
+    :where(.color-scheme--alt) {
+      background-color: var(--body-bg-color);
+      color: var(--body-color);
+    }
+
+    // Fix for default heading colors
+    @for $i from 1 through 6 {
+      :where(#{$color-scheme-main-selectors} h#{$i}) {
+          color: var(--h#{$i}-color, var(--heading-color));
+      }
+      :where(.color-scheme--alt h#{$i}) {
+        color: var(--h#{$i}-color, var(--heading-color));
+    }
+    }
+
+}

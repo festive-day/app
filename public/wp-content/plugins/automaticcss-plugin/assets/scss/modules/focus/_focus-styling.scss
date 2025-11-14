@@ -1,0 +1,6 @@
+@if $option-focus-styles == on {
+	/* Feat: Focus Styles */
+	@include if-builders-off {
+		@include focus-styles;
+	}
+}

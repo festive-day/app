@@ -1,0 +1,39 @@
+:where(fieldset:has(input[type="radio"])) {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr);
+	column-gap: .5ch;
+	legend {
+		grid-column: 1 / -1;
+	}
+	:where(input[type="radio"]) {
+	  --radio-size: 16px;
+	  width: var(--radio-size);
+	  height: var(--radio-size);
+	  accent-color: var(--primary);
+	  vertical-align: middle;
+	  border-radius: 50%;
+
+	  &:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	  }
+	}
+
+	:where(label) {
+	  display: inline-block; /* Treat label as a block for text alignment */
+	  vertical-align: middle; /* Align with input */
+	  cursor: pointer;
+	  margin-bottom: 8px; /* Space between pairs */
+	  font-size: 16px;
+
+	  input[type="radio"]:disabled + & {
+		color: #999;
+		cursor: not-allowed;
+	  }
+	}
+
+	/* Ensure input and label pair stays on the same line */
+	:where(input[type="radio"] + label) {
+	  margin-left: 0; /* Remove any left margin for tight pairing */
+	}
+  }

@@ -1,0 +1,32 @@
+
+@if $option-load-reset == on {
+	/* Feat: Reset */
+	// Make keyword properties like auto available for animation.
+	:root {
+		interpolate-size: allow-keywords;
+	}
+
+	// BOX SIZING
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	// BODY
+	body {
+		min-block-size: 100vh;
+	}
+
+	//INHERIT FONTS FOR INPUTS AND BUTTONS
+	input,
+	button,
+	textarea,
+	select {
+		font: inherit;
+	}
+
+	:where(dd) {
+		margin-inline-start: 0;
+	}
+}

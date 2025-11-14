@@ -1,0 +1,34 @@
+// Inputs
+$f-input-border-style: solid !default;
+$f-input-border-top-size: 0.1 !default;
+$f-input-border-right-size: 0.1 !default;
+$f-input-border-bottom-size: 0.1 !default;
+$f-input-border-left-size: 0.1 !default;
+$f-input-border-block-size: null !default;
+$f-input-border-inline-size: null !default;
+$f-input-border-radius: $btn-border-radius !default;
+$f-input-text-size-pure: 1.4 !default;
+$f-input-text-size-min: 1.6 !default;
+$f-input-text-size-max: 1.8 !default;
+$f-input-size: var(--text-m) !default;
+$f-input-font-weight: 400 !default;
+$f-input-line-height: 1.1 !default;
+$f-input-height: 50px !default;
+$f-input-padding-x: 1em !default;
+$f-input-padding-y: 1.2em !default;
+
+// Inputs Light
+$f-light-input-background: var(--neutral-white) !default;
+$f-light-input-border-color: var(--neutral-light) !default;
+$f-light-input-text-color: var(--neutral-dark) !default;
+$f-light-input-placeholder-color: var(--neutral-dark) !default;
+$f-light-input-placeholder-hsl: null !default; // gets filled by Core.php
+$f-light-input-placeholder-opacity: 0.5 !default;
+
+// Inputs Dark
+$f-dark-input-background: var(--neutral-dark) !default;
+$f-dark-input-border-color: var(--neutral-semi-dark) !default;
+$f-dark-input-text-color: var(--neutral--ultra-light) !default;
+$f-dark-input-placeholder-color: var(--neutral-ultra-light) !default;
+$f-dark-input-placeholder-hsl: null !default; // gets filled by Core.php
+$f-dark-input-placeholder-opacity: 0.5 !default;

@@ -1,0 +1,263 @@
+<?php
+/**
+ * Asset Manager.
+ *
+ * Manages the registration and enqueueing of assets.
+ *
+ * @package Automatic_CSS
+ */
+
+namespace Automatic_CSS\Framework\AssetManager;
+
+use Automatic_CSS\Framework\AssetManager\HasAssetsToEnqueueInterface;
+use Automatic_CSS\Framework\ContextManager\Context;
+use Automatic_CSS\Framework\ContextManager\ContextManager;
+use Automatic_CSS\Framework\ContextManager\DeterminesContextInterface;
+use Automatic_CSS\Framework\IntegrationManager\IntegrationsManager;
+use Automatic_CSS\Helpers\Logger;
+use Automatic_CSS\Framework\Core\Core;
+use Automatic_CSS\Framework\Dashboard\Dashboard;
+use Automatic_CSS\Framework\Integrations\Gutenberg;
+use Automatic_CSS\Helpers\Style_Queue;
+use Automatic_CSS\Model\Database_Settings;
+use Automatic_CSS\Helpers\Container;
+use Automatic_CSS\Helpers\Style_Queue_Factory;
+
+/**
+ * Class AssetManager
+ */
+class AssetManager {
+
+	/**
+	 * Asset enqueuers (integrations + core).
+	 *
+	 * @var array<string, HasAssetsToEnqueueInterface>
+	 */
+	private $asset_enqueuers = array();
+
+	/**
+	 * Integrations manager.
+	 *
+	 * @var IntegrationsManager
+	 */
+	private $integrations_manager;
+
+	/**
+	 * Context manager.
+	 *
+	 * @var ContextManager
+	 */
+	private $context_manager;
+
+	/**
+	 * Core instance.
+	 *
+	 * @var HasAssetsToEnqueueInterface
+	 */
+	private $core_instance;
+
+	/**
+	 * Gutenberg instance.
+	 *
+	 * @var HasAssetsToEnqueueInterface
+	 */
+	private $gutenberg_instance;
+
+	/**
+	 * Dashboard instance.
+	 *
+	 * @var HasAssetsToEnqueueInterface
+	 */
+	private $dashboard_instance;
+
+	/**
+	 * ACSS Settings.
+	 *
+	 * @var array
+	 */
+	private $settings;
+
+	/**
+	 * Style queue.
+	 *
+	 * @var Style_Queue
+	 */
+	private $style_queue;
+
+	/**
+	 * Constructor
+	 *
+	 * @param IntegrationsManager $integrations_manager Integrations manager.
+	 * @param ContextManager      $context_manager      Context manager.
+	 * @param array               $settings             ACSS Settings.
+	 * @param Style_Queue         $style_queue          Style queue.
+	 */
+	public function __construct( $integrations_manager, $context_manager = null, $settings = null, $style_queue = null ) {
+		$this->integrations_manager = $integrations_manager;
+		$this->core_instance = new Core();
+		$this->gutenberg_instance = new Gutenberg();
+		$this->dashboard_instance = new Dashboard( $this->integrations_manager->get_permissions(), null, null );
+		$this->context_manager = $context_manager ?? new ContextManager(
+			$this->integrations_manager->get_active_integrations(),
+			$this->core_instance,
+			$this->gutenberg_instance
+		);
+		$this->settings = $settings ?? ( Database_Settings::get_instance()->init() )->get_vars();
+
+		// Initialize style queue.
+		$this->style_queue = $style_queue ?? Style_Queue_Factory::get_instance()->get_default_queue();
+
+		// Register style queue in container.
+		Container::get_instance()->bind( 'style_queue', $this->style_queue );
+	}
+
+	/**
+	 * Initialize the context system.
+	 *
+	 * @return void
+	 */
+	public function init() {
+		// Order matters: Core goes FIRST, before all integrations in their registration order.
+		$this->asset_enqueuers = array_merge(
+			array( Core::get_name() => $this->core_instance ),
+			array( Gutenberg::get_name() => $this->gutenberg_instance ),
+			array( 'dashboard' => $this->dashboard_instance ),
+			array_filter(
+				$this->integrations_manager->get_active_integrations(),
+				function ( $integration ) {
+					return $integration instanceof HasAssetsToEnqueueInterface;
+				}
+			),
+		);
+
+		// Hook into WordPress.
+		$priority =
+			isset( $this->settings['option-load-stylesheets-last'] ) && 'on' === $this->settings['option-load-stylesheets-last']
+			? ( PHP_INT_MAX - 100 )
+			: 10;
+		if ( is_admin() ) {
+			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_assets' ), $priority );
+		} else {
+			// add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_assets' ), $priority ); // TODO: remove?
+			add_action( 'wp_head', array( $this, 'enqueue_assets' ), 1000000 ); // TODO: use $priority?
+		}
+	}
+
+	/**
+	 * Enqueue CSS files based on context.
+	 *
+	 * @return void
+	 */
+	public function enqueue_assets() {
+		// @var array<string, Context> $contexts
+		$contexts = $this->context_manager->get_context();
+		foreach ( $contexts as $context ) {
+			$is_active = $context->is_active();
+			if ( ! $is_active ) {
+				continue;
+			}
+			Logger::now(
+				sprintf(
+					"AssetManager:\n-- URL: %s\n-- context: %s\n-- is: %s\n-- as determined by %s",
+					Logger::get_redacted_uri(),
+					$context->get_context(),
+					$context->is_active() ? 'active' : 'inactive',
+					implode(
+						', ',
+						$context->get_determiners()
+					),
+				)
+			);
+			$this->enqueue_all_assets_for_context( $context );
+		}
+	}
+
+	/**
+	 * Enqueue all assets for a given context.
+	 *
+	 * @param Context $context The context to enqueue assets for.
+	 * @return void
+	 */
+	private function enqueue_all_assets_for_context( $context ) {
+		Logger::now(
+			sprintf(
+				'Enqueuing assets for context: %s, determiners: %s',
+				$context->get_context(),
+				implode(
+					', ',
+					array_map(
+						function ( $determiner ) {
+							return $determiner;
+						},
+						$context->get_determiners()
+					)
+				)
+			)
+		);
+		foreach ( $this->asset_enqueuers as $enqueuer ) {
+			$this->enqueue_enqueuers_assets_for_context( $enqueuer, $context );
+		}
+		$this->style_queue->process();
+	}
+
+	/**
+	 * Enqueue assets for a given context.
+	 *
+	 * @param HasAssetsToEnqueueInterface $enqueuer The enqueuer to enqueue assets for.
+	 * @param Context                     $context The context to enqueue assets for.
+	 * @return void
+	 */
+	private function enqueue_enqueuers_assets_for_context( $enqueuer, $context ) {
+		Logger::now( sprintf( 'Enqueuing %s\'s assets for context: %s', $enqueuer::class, $context->get_context() ) );
+		$enqueuer->enqueue_assets( $context );
+	}
+
+	/**
+	 * Get the stylesheets for a given context.
+	 *
+	 * @param Context $context The context to get stylesheets for.
+	 * @return array The stylesheets for the given context.
+	 */
+	public function get_assets_to_enqueue( $context ) {
+		$assets = array();
+		foreach ( $this->asset_enqueuers as $enqueuer ) {
+			if ( ! method_exists( $enqueuer, 'get_assets_to_enqueue' ) ) {
+				continue;
+			}
+			$assets = array_merge( $assets, $enqueuer->get_assets_to_enqueue( $context ) );
+		}
+		return $assets;
+	}
+
+	/**
+	 * Get the style queue.
+	 *
+	 * @return Style_Queue
+	 */
+	public function get_style_queue() {
+		return $this->style_queue;
+	}
+
+	/**
+	 * Check if the enqueuer is active in the given context.
+	 *
+	 * @param HasAssetsToEnqueueInterface $enqueuer The enqueuer to check.
+	 * @param Context                     $context The context to check.
+	 * @return bool True if the enqueuer is active in the given context, false otherwise.
+	 */
+	private function is_active_in_context( $enqueuer, $context ) {
+		if ( $enqueuer instanceof DeterminesContextInterface ) {
+			// This is a builder, and needs to know if we're loading in ITS context.
+			switch ( $context->get_context() ) {
+				case Context::PREVIEW:
+					return $enqueuer->is_preview_context();
+				case Context::BUILDER:
+					return $enqueuer->is_builder_context();
+					break;
+				case Context::FRONTEND:
+					return $enqueuer->is_frontend_context();
+			}
+		}
+		return false;
+	}
+}

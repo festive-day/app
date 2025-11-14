@@ -1,0 +1,69 @@
+@import "grid-mixins";
+
+// Mixin for grid-column: 1 logic
+@mixin grid-column-base($col-count) {
+  @if $col-count == "1" and $option-mobile-first == off {
+    > * {
+      grid-column: 1 !important;
+    }
+  }
+}
+
+@if $option-grid == on {
+	/* Feat: Grid */
+	// Pre-filter data
+	$standard-grids: map-get($grids, standard);
+	$premade-grids: map-get($grids, premade);
+	$all-breakpoints: map-merge(("base": null), $breakpoints);
+
+	body [class*="grid--"] {
+		display: grid;
+	}
+
+	// Single loop through all scenarios
+	@each $breakpoint, $value in $all-breakpoints {
+		@if $breakpoint == "base" {
+			// Base classes
+			@each $col-count, $col-value in $standard-grids {
+				.grid--#{$col-count} {
+					grid-template-columns: #{$col-value};
+					@include grid-column-base($col-count);
+				}
+			}
+			@each $col-count, $col-value in $premade-grids {
+				.grid--#{$col-count} {
+					grid-template-columns: #{$col-value};
+					@include grid-column-base($col-count);
+				}
+			}
+			@each $grid, $count in $gridColumns {
+				.grid-rows--#{$count} {
+					grid-template-rows: repeat(#{$count}, minmax(0, 1fr));
+				}
+			}
+		} @else {
+			// Breakpoint classes
+			@include breakpoint($breakpoint) {
+				@each $col-count, $col-value in $standard-grids {
+					.grid--#{$col-count}-#{$breakpoint} {
+						grid-template-columns: #{$col-value};
+						@include grid-column-base($col-count);
+					}
+				}
+				@each $grid, $count in $gridColumns {
+					.grid-rows--#{$count}-#{$breakpoint} {
+						grid-template-rows: repeat(#{$count}, minmax(0, 1fr));
+					}
+				}
+			}
+		}
+	}
+	// Equal height children across all rows
+	.grid--auto-rows {
+		grid-auto-rows: minmax(min-content, 1fr);
+	}
+}
+
+@import "spans-starts";
+@import "auto-alternate";
+@import "variable-grid";

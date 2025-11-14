@@ -1,0 +1,18 @@
+// Radio & Checkbox -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-option-label-font-weight: 400 !default;
+$f-option-label-font-size-min: 1.4 !default;
+$f-option-label-font-size-max: 1.6 !default;
+$f-option-label-size: fluidClamp($f-option-label-font-size-min, $f-option-label-font-size-max);
+$f-option-label-spacing: 0.5em !default; //dashboard
+
+// Radio & Checkbox Light -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-light-option-background-color: white !default;
+$f-light-option-action-color: var(--primary) !default;
+$f-light-option-border-color: var(--neutral) !default;
+$f-light-select-arrow-color: var(--neutral) !default; //dashboard
+
+// Radio & Checkbox Dark -- RADIO AND CHECKBOX NEED TO BE HANDLED SEPARATELY NOW
+$f-dark-option-background-color: white !default;
+$f-dark-option-action-color: var(--primary) !default;
+$f-dark-option-border-color: var(--neutral) !default;
+$f-dark-select-arrow-color: var(--neutral-ultra-light) !default;

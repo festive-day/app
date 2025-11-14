@@ -1,0 +1,15 @@
+// Legend
+$f-legend-text-weight: 600 !default;
+$f-legend-size-pure: 1.5 !default;
+$f-legend-size-min: 1.8 !default;
+$f-legend-size-max: 2 !default;
+$f-legend-size: var(--text-m) !default;
+$f-legend-margin-bottom: 1em !default; // Do we need to transition this to gap?
+$f-legend-border: none !default;
+$f-legend-line-height: 1.2 !default;
+
+// Legend Light
+$f-light-legend-text-color: var(--neutral-dark) !default;
+
+// Legend Dark
+$f-dark-legend-text-color: var(--neutral-ultra-light) !default;

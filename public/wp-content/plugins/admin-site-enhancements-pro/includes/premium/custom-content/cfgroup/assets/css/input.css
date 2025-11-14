@@ -1,0 +1,1102 @@
+/*---------------------------------------------------------------------------------------------
+    Container
+---------------------------------------------------------------------------------------------*/
+
+#poststuff .cfgroup_input .inside {
+    margin: 0;
+    padding: 0;
+}
+
+.cfgroup_input .field {
+    padding: 10px 12px;
+    border-top: 1px solid #fff;
+    /* border-bottom: 1px solid #dfdfdf; */
+}
+
+.cfgroup_input .row-heading:first-child .field {
+    padding: 12px 12px 10px;    
+}
+
+.cfgroup_input .row-line-break .field {
+    padding: 0 12px;
+}
+
+.cfgroup_input .field:last-child {
+    /* border-bottom: none; */
+}
+
+.cfgroup_input .field input[type="text"],
+.cfgroup_input .field textarea,
+.cfgroup_input .field select {
+    width: 99.8%;
+}
+
+.cfgroup_input .field input[type="text"][readonly],
+#addtag .field input[type="text"][readonly],
+#edittag .field input[type="text"][readonly] {
+    background: #ffffff;
+}
+
+.cfgroup_input .field label {
+    font-weight: bold;
+    padding: 0 0 0.4em 0;
+    cursor: default;
+    display: block;
+}
+
+.cfgroup_input .row-heading .field label.field-label {
+    border-bottom: 1px solid #ccc;
+    font-size: 12px;
+    text-transform: uppercase;
+}
+
+.cfgroup_input .row-heading:first-child {
+    margin-top: 0;
+}
+
+.cfgroup_input .row-heading {
+    margin-top: 1.5em;
+}
+
+.cfgroup_input .field p.notes {
+    margin: 0 0 1em 0;
+    color: #999;
+    font-size:0.9em;
+}
+
+.cfgroup_input .error {
+    padding: 7px 10px;
+    margin: 5px 0;
+    background: #ffebe8;
+    border: 1px solid #dcc6d7;
+    border-left: 4px solid #dc3232;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+}
+
+/*---------------------------------------------------------------------------------------------
+    CFG Frontend Form (.no_box)
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_input.no_box {
+    background: none;
+    border: none;
+}
+
+.cfgroup_input.no_box .hndle,
+.cfgroup_input.no_box .handlediv {
+    display: none;
+}
+
+.cfgroup_input.no_box .field > .mce-tinymce {
+    width: 99.7% !important;
+}
+
+.cfgroup_input.no_box .cfgroup-tabs {
+    margin: 0;
+    background: none;
+/*    border-top: 1px solid #d9d9d9;
+    border-right: 1px solid #d9d9d9;
+    border-left: 1px solid #d9d9d9;
+*/}
+
+.cfgroup_input.no_box .cfgroup-tab-content.active {
+    margin-bottom: 16px;
+    padding: 10px 16px 16px;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    border-left: 1px solid #ccc;
+}
+
+.cfgroup_input.no_box .fields-wrapper {
+    gap: 2%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .fields-wrapper {
+    gap: 0;
+}
+
+.cfgroup_input.no_box .field {
+    padding: 10px 0;
+    border: none;
+}
+
+.cfgroup_input.no_box .field-group-title label {
+    border-bottom: 1px solid #ccc;
+}
+
+.cfgroup_input.no_box .cfgroup_hyperlink .field-column-quarter,
+.cfgroup_input.no_box .field-column-quarter {
+    width: 23.5%;
+}
+
+.cfgroup_input.no_box .field-column-third {
+    width: 32%;
+}
+
+.cfgroup_input.no_box .cfgroup_hyperlink .field-column-half,
+.cfgroup_input.no_box .field-column-half {
+    width: 49%;
+}
+
+.cfgroup_input.no_box .field-column-two-thirds {
+    width: 66%;
+}
+
+.cfgroup_input.no_box .field-column-three-quarters {
+    width: 70.5%;
+}
+
+.cfgroup_input.no_box .field-column-full {
+    width: 100%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-quarter {
+    width: 25%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-third {
+    width: 33.3333%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-half {
+    width: 50%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-two-thirds {
+    width: 66.6666%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-three-quarters {
+    width: 75%;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .field-column-full {
+    width: 100%;
+}
+
+.cfgroup_input.no_box .cfgroup_hyperlink .field-column-quarter > div,
+.cfgroup_input.no_box .cfgroup_hyperlink .field-column-half > div {
+    padding: 0;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .cfgroup_hyperlink .field-column-half > div.cfgroup-hyperlink-url {
+    padding: 0 11px 0 0;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .cfgroup_hyperlink .field-column-quarter > div.cfgroup-hyperlink-text {
+    padding: 0 6px 0 12px;
+}
+
+.cfgroup_input.no_box .cfgroup_repeater .cfgroup_hyperlink .field-column-quarter > div.cfgroup-hyperlink-target {
+    padding: 0 0 0 18px;
+}
+
+.cfgroup_input.no_box .row-heading:first-child .field {
+    padding: 12px 0 10px;
+}
+
+.cfgroup_input.no_box .row-heading .field label.field-label {
+    font-size: 13px;
+}
+
+.cfgroup_input.no_box .field label,
+.cfgroup_input.no_box .field-label {
+    font-size: 1em;
+    font-weight: 600;
+    width: auto;
+}
+
+.cfgroup_input.no_box .field.post-title label,
+.cfgroup_input.no_box .field.post-content-title label,
+.cfgroup_input.no_box .field.field-group-title label {
+    font-weight: 700;
+}
+
+.cfgroup_input.no_box input[type=text], 
+.cfgroup_input.no_box input[type=number], 
+.cfgroup_input.no_box select, 
+.cfgroup_input.no_box textarea,
+.mce-tinymce.mce-container.mce-panel {
+    border: solid 1px #ccc;
+    border-radius: 3px;
+    min-height: 30px;
+    padding: 0 8px;
+    background: #fff;
+}
+
+.cfgroup_input.no_box input[type=submit] {
+    margin-top: 0.75em;    
+}
+
+.mce-tinymce.mce-container.mce-panel {
+    padding: 0;
+}
+
+.cfgroup_input.no_box input[type=text].select2-input {
+    border: 0;
+    background: none;
+}
+
+.cfgroup_input.no_box input[type="button"],
+.cfgroup_input.no_box .button:not(.hidden) {
+    display: inline-block;
+    text-decoration: none;
+    font-size: 13px;
+    line-height: 2.15384615;
+    min-height: 30px;
+    margin: 0;
+    padding: 0 10px;
+    cursor: pointer;
+    border-width: 1px;
+    border-style: solid;
+    -webkit-appearance: none;
+    border-radius: 3px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    color: #333;
+    border-color: #ccc;
+    background: #f5f5f5;
+    vertical-align: top;
+}
+
+.cfgroup_input.no_box input[type="button"]:hover,
+.cfgroup_input.no_box .button:hover {
+    color: #111;
+    background: #e9e9e9;
+    border-color: #999;
+}
+
+.cfgroup_input.no_box input[type="button"].disabled {
+    cursor: default;
+    color: #999;
+    border-color: #ddd;
+}
+
+.cfgroup_input.no_box input[type="button"].disabled:hover {
+    color: #999;
+    background: #f5f5f5;
+    border-color: #ddd;    
+}
+
+.cfgroup_input.no_box .cfgroup_repeater_head > a {
+    text-decoration: none;
+} 
+
+.cfgroup_input.no_box .cfgroup_wysiwyg iframe {
+    max-height: 150px;
+}
+
+.cfgroup_input.no_box .wp-core-ui.wp-editor-wrap.tmce-active,
+.form-field.form-field-cfg.tax-term-add .wp-core-ui.wp-editor-wrap.tmce-active,
+.form-field.form-field-cfg.tax-term-edit .wp-core-ui.wp-editor-wrap.tmce-active {
+    display: none;
+}
+
+.form-field.form-field-cfg.tax-term-add .cfgroup_wysiwyg .wp-media-buttons,
+.form-field.form-field-cfg.tax-term-edit .cfgroup_wysiwyg .wp-media-buttons {
+    display: none;
+}
+
+.cfgroup_input.no_box .cf-turnstile-br {
+    display: none;
+}
+
+/* Post Content in CFG form */
+#wp-asenha-post-content-wrap {
+    display: none;
+}
+
+.mce-tinymce.mce-container.mce-panel {
+    overflow: hidden;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Field Column Width
+---------------------------------------------------------------------------------------------*/
+
+.fields-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 8px;
+}
+
+.cfgroup_repeater_body .fields-wrapper {
+    padding-bottom: 0;
+}
+
+.field-column-quarter {
+    width: 25%;
+}
+
+.field-column-third {
+    width: 33.3333%;
+}
+
+.field-column-half {
+    width: 50%;
+}
+
+.field-column-two-thirds {
+    width: 66.6666%;
+}
+
+.field-column-three-quarters {
+    width: 75%;
+}
+
+.field-column-full {
+    width: 100%;
+}
+
+.row-line-break {
+    width: 100%;
+}
+
+/* Styling for taxonomy term add/edit screens */
+h3.form-field-cfg-title {
+    font-size: 1em;
+    font-weight: normal;
+    margin-top: 2em;
+    margin-bottom: 4px;
+}
+
+.form-field.form-field-cfg {
+    margin: 0;
+}
+
+.form-wrap label,
+h3.form-field-cfg-title {
+    font-weight: 600;
+}
+
+.form-field.form-field-cfg.tax-term-add > .fields-wrapper,
+.form-field.form-field-cfg.tax-term-edit td > .fields-wrapper {
+    box-sizing: border-box;
+    width: 95%;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    gap: 1.5em;
+}
+
+.form-field.form-field-cfg.tax-term-add > .fields-wrapper,
+.form-field.form-field-cfg.tax-term-edit td > .fields-wrapper {
+    background: #fbfbfb;
+    padding: 12px 16px;    
+}
+
+.form-field.form-field-cfg.tax-term-add > .fields-wrapper .field-label {
+    display: block;
+    margin-bottom: 4px;    
+}
+
+.form-field.form-field-cfg.tax-term-edit td > .fields-wrapper .field-label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.form-field.form-field-cfg.tax-term-add {
+    margin-bottom: 2em;   
+}
+
+.form-field.form-field-cfg input[type="text"],
+.form-field.form-field-cfg input[type="number"] {
+    width: 100%;
+}
+
+.form-field.form-field-cfg iframe {
+    height: 280px;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Select
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_select select {
+    line-height:1;
+    height:auto;
+}
+
+.cfgroup_select select.multiple {
+    height: 86px !important;
+    padding: 8px;
+}
+
+.cfgroup_select .select2 {
+    width: 99.95%;
+}
+
+input[type="text"].select2-input {
+    min-height: 20px;
+}
+
+.select2-container-multi .select2-choices {
+    padding: 3px 0 2px;
+}
+
+.select2-container-multi .select2-choices .select2-search-field input {
+    padding: 0;    
+}
+
+/*---------------------------------------------------------------------------------------------
+    True / false
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_input .field .cfgroup_true_false label {
+    font-weight: normal;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Checkbox
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_checkbox .checkbox.horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cfgroup_checkbox .checkbox.vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;    
+}
+
+.cfgroup_input .field .cfgroup_checkbox label {
+    font-weight: normal;   
+}
+
+/*---------------------------------------------------------------------------------------------
+    Radio
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_radio .radio.horizontal {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.cfgroup_radio .radio.vertical {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;    
+}
+
+.cfgroup_input .field .cfgroup_radio label {
+    font-weight: normal;   
+}
+
+/*---------------------------------------------------------------------------------------------
+    Date
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_input .cfgroup_date input.date {
+    width: 100%;
+    background: #fff url(../images/icon-calendar.png) right 4px center no-repeat;
+}
+
+
+/*---------------------------------------------------------------------------------------------
+    Color
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_color {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+}
+
+.cfgroup_input .cfgroup_color input.color {
+    height: ;
+/*    width: 100%;*/
+}
+
+.cfgroup-color-preview {
+    box-sizing: border-box;
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    min-height: 30px;
+    border: 1px solid #8c8f94;
+    border-radius: 4px;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Hyperlink
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_input .field[data-type="hyperlink"] {
+    /* padding: 0 12px; */
+}
+
+.cfgroup-hyperlink-url {
+    padding: 0 12px 0 0;
+}
+
+.cfgroup-hyperlink-text {
+    padding: 0 12px;
+}
+
+.cfgroup-hyperlink-target {
+    padding: 0 0 0 12px;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Number
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_input .cfgroup_number input.number {
+    width: 100%;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Wysiwyg
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_wysiwyg table.mceLayout {
+    background: #fff;
+}
+
+.cfgroup_wysiwyg textarea {
+    height: 200px;
+}
+
+.cfgroup_wysiwyg .wp-media-buttons {
+    padding: 5px 0;
+}
+
+.cfgroup_wysiwyg iframe {
+    min-height: 150px;
+    max-height: 150px;
+}
+
+.cfgroup_wysiwyg.ready iframe {
+    max-height: unset;
+}
+
+/*---------------------------------------------------------------------------------------------
+    File
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_file .file_url.image {
+    width: 86px;
+    height: auto;
+}
+
+.cfgroup_file .file_url.image:empty {
+    width: 0;
+}
+
+.cfgroup_file .file_url img {
+    padding: 0;
+    background: #fff url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAIUlEQVQYV2NkYGCQBGJ08BxdgHGIKMTiF0wPgjwz2BUCADTeBYguWvyCAAAAAElFTkSuQmCC);
+    vertical-align: bottom;
+    box-shadow: 0 1px 2px #ddd;
+    max-width: 100%;
+    height: auto;
+}
+
+.cfgroup_file .media.button.hidden {
+    display: none;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Gallery
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_gallery .gallery-preview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.cfgroup_gallery .preview-image {
+    width: 70px;
+    height: 70px;
+}
+
+.cfgroup_gallery .preview-image img {
+    width: 100%;
+    height: auto;
+}
+
+.cfgroup_gallery .gallery-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;    
+}
+
+.cfg-clear-gallery {
+    color: #b32d2e;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Relationship, User
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_relationship .post_list,
+.cfgroup_term .post_list,
+.cfgroup_user .post_list {
+    float: left;
+    overflow-y: scroll;
+    background: #f5f5f5;
+    border: 1px solid #dfdfdf;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    height: 205px;
+    width: 49%;
+    -webkit-border-radius: 1px 1px 1px 1px;
+    border-radius: 1px 1px 1px 1px;
+}
+
+.cfgroup_relationship .post_list.selected_posts,
+.cfgroup_term .post_list.selected_posts,
+.cfgroup_user .post_list.selected_posts {
+    float: right;
+}
+
+.cfgroup_relationship .post_list div,
+.cfgroup_term .post_list div,
+.cfgroup_user .post_list div {
+    padding: 4px 6px;
+    border-bottom: 1px solid #eee;
+    cursor: pointer;
+}
+
+.cfgroup_relationship .post_list.available_posts > div,
+.cfgroup_term .post_list.available_posts > div,
+.cfgroup_user .post_list.available_posts > div {
+    position: relative;
+    padding-right: 3em;
+}
+
+.cfgroup_relationship .post_list.available_posts > div:after,
+.cfgroup_term .post_list.available_posts > div:after,
+.cfgroup_user .post_list.available_posts > div:after {
+    position: absolute;
+    right: 1px;
+    top: 3px;
+    content: '\f139';
+    font-size: 19px;
+}
+
+.cfgroup_relationship .post_list div:last-child,
+.cfgroup_term .post_list div:last-child,
+.cfgroup_user .post_list div:last-child {
+    border-bottom: none;
+}
+
+.cfgroup_relationship .post_list div:hover,
+.cfgroup_term .post_list div:hover,
+.cfgroup_user .post_list div:hover {
+    background: #eee;
+}
+
+.cfgroup_relationship .available_posts div.used,
+.cfgroup_term .available_posts div.used,
+.cfgroup_user .available_posts div.used{
+    display: none;
+}
+
+.cfgroup_relationship .selected_posts div,
+.cfgroup_term .selected_posts div,
+.cfgroup_user .selected_posts div {
+    cursor: move;
+}
+
+.cfgroup_relationship .selected_posts div span.remove,
+.cfgroup_term .selected_posts div span.remove,
+.cfgroup_user .selected_posts div span.remove {
+    float: right;
+    width: 20px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.cfgroup_relationship .filter_posts,
+.cfgroup_term .filter_posts,
+.cfgroup_user .filter_posts {
+    margin-bottom: 10px;
+}
+
+.cfgroup_input .field .cfgroup_relationship .cfgroup_filter_input,
+.cfgroup_input .field .cfgroup_term .cfgroup_filter_input,
+.cfgroup_input .field .cfgroup_user .cfgroup_filter_input{
+    width: 220px;
+    margin: 0;
+}
+
+.cfgroup_relationship .cfgroup_filter_help,
+.cfgroup_term .cfgroup_filter_help,
+.cfgroup_user .cfgroup_filter_help {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-top: 4px;
+    vertical-align: top;
+}
+
+.cfgroup_relationship .cfgroup_filter_help:before,
+.cfgroup_term .cfgroup_filter_help:before,
+.cfgroup_user .cfgroup_filter_help:before {
+    content: '\f348';
+}
+
+.available_posts h4 {
+    margin: 0;
+    padding: 4px 6px;
+    border-bottom: 1px solid #dfdfdf;
+    background: #e9e9e9;
+    font-size: 1em;
+}
+
+.single-post-post-type-label,
+.single-taxonomy-label {
+    border: 1px solid #999;
+    background: #e9e9e9;
+    padding: 0 5px;
+    border-radius: 4px;
+    margin-right: 5px;
+    font-weight: 500;
+}
+
+.available_posts .single-post-post-type-label,
+.available_posts .single-taxonomy-label {
+    display: none;
+}
+
+.user-info-faded {
+    color: #999;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Repeater
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_delete_field {
+    float: right;
+    width: 21px;
+    height: 18px;
+    text-decoration: none;
+    margin-right: -1px;
+}
+
+.cfgroup_toggle_field {
+    float: right;
+    width: 21px;
+    height: 18px;
+    text-decoration: none;
+}
+
+.cfgroup_toggle_field:before {
+    content: '\f140';
+    position: relative;
+    top: -1px;
+}
+
+.open .cfgroup_toggle_field:before {
+    content: '\f142';
+}
+
+.cfgroup_insert_field {
+    float: right;
+    width: 21px;
+    height: 18px;
+    text-decoration: none;
+}
+
+.repeater_wrapper:hover .cfgroup_insert_field:before {
+    content: '\f132';
+    position: relative;
+    top: 0px;
+}
+
+.cfgroup_input .cfgroup_repeater label {
+    padding: 6px 0 0 0;
+}
+
+.cfgroup_input .field .cfgroup_file,
+.cfgroup_input .cfgroup_repeater .field.cfgroup_file {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.cfgroup_input .cfgroup_repeater .field {
+    border: none;
+    padding: 10px 0;
+}
+
+.cfgroup_input .field .cfgroup_file .file_url:not(.image),
+.cfgroup_input .cfgroup_repeater .field .file_url:not(.image) {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cfgroup_input .field .cfgroup_file .file_url:not(.image),
+.cfgroup_repeater .field .file_url:not(.image) {
+    max-width: 320px;    
+}
+
+.field-column-half .field .cfgroup_file .file_url:not(.image) {
+    max-width: 285px;
+}
+
+.cfgroup_repeater .field-column-half .field .file_url:not(.image) {
+    max-width: 266px;
+}
+
+.field-column-third .field .cfgroup_file .file_url:not(.image) {
+    max-width: 156px;
+}
+
+.cfgroup_repeater .field-column-third .field .file_url:not(.image) {
+    max-width: 140px;
+}
+
+.field-column-quarter .field .cfgroup_file .file_url:not(.image) {
+    max-width: 91px;
+}
+
+.cfgroup_repeater .field-column-quarter .field .file_url:not(.image) {
+    max-width: 80px;
+}
+
+.cfgroup_input .field .cfgroup_file .file_url,
+.cfgroup_input .cfgroup_repeater .field .file_url {
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+
+.cfgroup_input .field .cfgroup_file .file_url:empty,
+.cfgroup_input .cfgroup_repeater .field .file_url:empty {
+    margin-bottom: 8px;
+    margin-right: 0;
+}
+
+.cfgroup_repeater_toggle {
+    float: right;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    display: inline-block;
+    text-decoration: none;
+    border-radius: 50%;
+}
+
+.cfgroup_repeater_toggle:before {
+    content: '\f177';
+}
+
+.cfgroup_repeater .repeater_wrapper {
+    border: 1px solid #dfdfdf;
+    border-radius: 1px;
+    margin-bottom: 10px;
+}
+
+@keyframes highlight {
+    0% {
+        box-shadow: 0 0 5px 1px rgba(255,255,0,0.8);
+    }
+
+    100% {
+        box-shadow: 0 0 5px 1px rgba(255,255,0,0);
+    }
+}
+
+.cfgroup_repeater .repeater_wrapper_new {
+    animation: highlight 1.5s ease-in-out;
+}
+
+.cfgroup_repeater .cfgroup_repeater_head {
+    cursor: pointer;
+    padding: 5px 5px 5px 30px;
+    position: relative;
+    background: #f5f5f5;
+}
+
+.cfgroup_repeater .cfgroup_repeater_head:before {
+    padding: 4px 0;
+    display: block;
+    position: absolute;
+    left: 5px;
+    top: 0;
+    color: #adadad;
+    content: '\f333';
+    cursor: move;
+}
+
+.cfgroup_repeater .cfgroup_repeater_head:after {
+    content: "";
+    display: block;
+    clear: both;
+}
+
+.cfgroup_repeater .notes {
+    font-size: 11px;
+    font-style: italic;
+    color: #999;
+    margin-bottom: 1.4em;
+}
+
+.cfgroup_repeater .cfgroup_repeater_body {
+    background: #f8f8f8;
+    display: none;
+}
+
+.cfgroup_repeater .cfgroup_repeater_body.open {
+    display: block;
+    background: #fbfbfb;
+    border-top: 1px solid #dfdfdf;
+}
+
+.cfgroup_repeater .cfgroup_repeater_body.open .cfgroup_repeater_body.open {
+    background: #fff;
+}
+
+.cfgroup_repeater .cfgroup_repeater_body > label:first-of-type {
+    padding-top: 0;
+}
+
+.cfgroup_repeater .cfgroup_repeater_body > .field {
+    padding: 0 0 10px;
+}
+
+.cfgroup_repeater .field-column-full,
+.cfgroup_repeater .field-column-three-quarters,
+.cfgroup_repeater .field-column-two-thirds,
+.cfgroup_repeater .field-column-half,
+.cfgroup_repeater .field-column-third,
+.cfgroup_repeater .field-column-quarter {
+    box-sizing: border-box;
+    padding: 10px 12px; 
+}
+
+.cfgroup_repeater .cfgroup-hyperlink .field-column-half,
+.cfgroup_repeater .cfgroup-hyperlink .field-column-quarter {
+    padding: 0;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Tabs
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup-tabs {
+    display: block;
+    border-bottom: 1px solid #ccc;
+    background: #FAFAFA;
+    margin: 0 0 5px;
+    padding-top: 10px;
+}
+
+.cfgroup-tab {
+    position: relative;
+    display: inline-block;
+    padding: 5px 15px;
+    margin-left: 12px;
+    margin-bottom: -1px;
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+    cursor: pointer;
+    border-radius: 0;
+}
+
+.cfgroup-tab.active {
+    background-color: #fff;
+}
+
+.cfgroup-tab.active:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    bottom: -2px;
+    left: 0;
+    border-bottom: 4px solid #fff;
+}
+
+.cfgroup-tab-content {
+    display: none;
+}
+
+.cfgroup-tab-content.active {
+    display: block;
+}
+
+.cfgroup-tab-notes {
+    padding: 10px 12px;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Icons
+---------------------------------------------------------------------------------------------*/
+
+.cfgroup_repeater_toggle,
+.cfgroup_toggle_field,
+.cfgroup_delete_field,
+.cfgroup_insert_field,
+.cfgroup_relationship .selected_posts div span.remove,
+.cfgroup_term .selected_posts div span.remove,
+.cfgroup_user .selected_posts div span.remove,
+.cfgroup_relationship .cfgroup_filter_help,
+.cfgroup_term .cfgroup_filter_help,
+.cfgroup_user .cfgroup_filter_help{
+    position: relative;
+}
+
+.cfgroup_repeater_toggle:before,
+.cfgroup_toggle_field:before,
+.cfgroup_delete_field:before,
+.cfgroup_insert_field:before,
+.cfgroup_repeater_head:before,
+.cfgroup_repeater .cfgroup_repeater_head:before,
+.cfgroup_relationship .selected_posts div span.remove:before,
+.cfgroup_term .selected_posts div span.remove:before,
+.cfgroup_user .selected_posts div span.remove:before,
+.cfgroup_relationship .cfgroup_filter_help:before,
+.cfgroup_term .cfgroup_filter_help:before,
+.cfgroup_user .cfgroup_filter_help:before,
+.cfgroup_relationship .post_list.available_posts > div:after,
+.cfgroup_term .post_list.available_posts > div:after,
+.cfgroup_user .post_list.available_posts > div:after {
+    display: block;
+    position: absolute;
+    color: #adadad;
+
+    /* dashicons */
+    font-size: 20px;
+    font-family: dashicons;
+    width: 20px;
+    height: 20px;
+    line-height: 1;
+    font-weight: 400;
+    text-decoration: inherit;
+    vertical-align: top;
+    text-align: center;
+    -webkit-font-smoothing: antialiased;
+    -mos-osx-font-smoothing: grayscale;
+}
+
+.cfgroup_delete_field:before,
+.cfgroup_relationship .selected_posts div span.remove:before,
+.cfgroup_term .selected_posts div span.remove:before,
+.cfgroup_user .selected_posts div span.remove:before {
+    content: '\f335';
+    font-size: 22px;
+    top: -2px;
+}
+
+/*---------------------------------------------------------------------------------------------
+    Media frame
+---------------------------------------------------------------------------------------------*/
+
+.media-frame-menu-heading {
+    display: none;
+}

@@ -1,0 +1,11 @@
+// Style Automatically
+// NOT FINISHED
+// @if $option-ws-form-style-automatically == on {
+// 	@each $id in $option-ws-form-style-automatically-ids {
+// 		form:where([data-wsf-style-id="#{$id}"]) {
+// 			@each $prop, $value in $form-platform-styles-ws-form {
+// 				--#{$prop}: #{$value};
+// 			}
+// 		}
+// 	}
+// }

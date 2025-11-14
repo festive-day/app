@@ -1,0 +1,43 @@
+@if $option-aspect-ratios == on {
+	/* Feat: Aspect Ratios */
+  [class*="aspect--"] {
+    aspect-ratio: var(--aspect-ratio);
+  }
+  // Support for images
+  img[class*="aspect--"] {
+    -o-object-fit: var(--object-fit, cover);
+    object-fit: var(--object-fit, cover);
+  }
+  // Support for figures
+  figure[class*="aspect--"] img {
+    inline-size: 100%;
+    block-size: 100%;
+		object-fit: var(--object-fit, cover);
+  }
+  // Support for iframe
+  [class*="aspect--"] iframe {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: var(--aspect-ratio);
+  }
+
+
+  @each $ratio, $value in $aspect-ratios {
+    .aspect--#{$ratio} {
+      --aspect-ratio: #{$value};
+    }
+  }
+
+  // Generate Breakpoint Classes
+  // Changes here need to be made for each builder as well
+
+  @each $extension, $value in $breakpoints {
+    @include breakpoint($extension) {
+      @each $ratio, $value in $aspect-ratios {
+        .aspect--#{$extension}-#{$ratio} {
+          --aspect-ratio: #{$value};
+        }
+      }
+    }
+  }
+}

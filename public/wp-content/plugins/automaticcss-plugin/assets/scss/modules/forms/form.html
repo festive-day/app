@@ -1,0 +1,165 @@
+<form class="form--light" action="/submit" method="post" enctype="multipart/form-data" aria-label="Contact Information Form">
+    <!-- Text Input -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="text">Text Input:</label>
+        <input class="form__field" type="text" id="text" name="text" placeholder="Enter text here" aria-required="true">
+    </div>
+    <!-- Password -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="password">Password:</label>
+        <input class="form__field" type="password" id="password" name="password" aria-required="true" aria-describedby="pwd-requirements">
+        <span id="pwd-requirements" class="form__help">Password must contain at least 8 characters, including uppercase, lowercase, and numbers</span>
+    </div>
+    <!-- Email -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="email">Email:</label>
+        <input class="form__field" type="email" id="email" name="email" aria-required="true">
+    </div>
+    <!-- Number -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="number">Number:</label>
+        <input class="form__field" type="number" id="number" name="number" min="0" max="100" aria-describedby="number-hint">
+        <span id="number-hint" class="form__help">Enter a number between 0 and 100</span>
+    </div>
+    <!-- Tel -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="tel">Telephone:</label>
+        <input class="form__field" type="tel" id="tel" name="tel" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" aria-describedby="tel-format">
+        <span id="tel-format" class="form__help">Format: 123-456-7890</span>
+    </div>
+    <!-- URL -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="url">URL:</label>
+        <input class="form__field" type="url" id="url" name="url">
+    </div>
+    <!-- Search -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="search">Search:</label>
+        <input class="form__field" type="search" id="search" name="search" aria-label="Search site content">
+    </div>
+    <!-- Date -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="date">Date:</label>
+        <input class="form__field" type="date" id="date" name="date">
+    </div>
+    <!-- Time -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="time">Time:</label>
+        <input class="form__field" type="time" id="time" name="time">
+    </div>
+    <!-- DateTime Local -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="datetime-local">DateTime:</label>
+        <input class="form__field" type="datetime-local" id="datetime-local" name="datetime-local">
+    </div>
+    <!-- Week -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="week">Week:</label>
+        <input class="form__field" type="week" id="week" name="week">
+    </div>
+    <!-- Month -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="month">Month:</label>
+        <input class="form__field" type="month" id="month" name="month">
+    </div>
+    <!-- Color -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="color">Color:</label>
+        <input class="form__field" type="color" id="color" name="color">
+    </div>
+    <!-- Range -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="range">Range:</label>
+        <input class="form__field" type="range" id="range" name="range" min="0" max="100" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+    </div>
+    <!-- File -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="file">File Upload:</label>
+        <input class="form__field" type="file" id="file" name="file" multiple aria-describedby="file-help">
+        <span id="file-help" class="form__help">You can select multiple files</span>
+    </div>
+    <!-- Hidden -->
+    <input class="form__field" type="hidden" id="hidden" name="hidden" value="hidden-value">
+    <!-- Radio Buttons -->
+    <fieldset>
+        <legend>Radio Buttons:</legend>
+        <div class="form__field-wrapper">
+            <input class="form__field" type="radio" id="radio1" name="radio" value="radio1">
+            <label class="form__field-label" for="radio1">Option 1</label>
+        </div>
+        <div class="form__field-wrapper">
+            <input class="form__field" type="radio" id="radio2" name="radio" value="radio2">
+            <label class="form__field-label" for="radio2">Option 2</label>
+        </div>
+    </fieldset>
+    <!-- Checkboxes -->
+    <fieldset>
+        <legend>Checkboxes:</legend>
+        <div class="form__field-wrapper">
+            <input class="form__field" type="checkbox" id="checkbox1" name="checkbox1">
+            <label class="form__field-label" for="checkbox1">Check 1</label>
+        </div>
+        <div class="form__field-wrapper">
+            <input class="form__field" type="checkbox" id="checkbox2" name="checkbox2">
+            <label class="form__field-label" for="checkbox2">Check 2</label>
+        </div>
+    </fieldset>
+    <!-- Select Dropdown -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="select">Select:</label>
+        <select class="form__field" id="select" name="select" aria-required="true">
+            <option value="">Choose an option</option>
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <optgroup label="Grouped Options">
+                <option value="3">Option 3</option>
+                <option value="4">Option 4</option>
+            </optgroup>
+        </select>
+    </div>
+    <!-- Multiple Select -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="multiple">Multiple Select:</label>
+        <select class="form__field" id="multiple" name="multiple" multiple aria-multiselectable="true">
+            <option value="1">Option 1</option>
+            <option value="2">Option 2</option>
+            <option value="3">Option 3</option>
+        </select>
+    </div>
+    <!-- Textarea -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="textarea">Textarea:</label>
+        <textarea class="form__field" id="textarea" name="textarea" rows="4" cols="50"></textarea>
+    </div>
+    <!-- Progress -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="progress">Progress:</label>
+        <progress class="form__field" id="progress" value="70" max="100">70%</progress>
+    </div>
+    <!-- Datalist -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="datalist">Datalist:</label>
+        <input class="form__field" list="browsers" id="datalist" name="datalist">
+        <datalist id="browsers">
+            <option value="Chrome">
+            <option value="Firefox">
+            <option value="Safari">
+        </datalist>
+    </div>
+    <!-- Output -->
+    <div class="form__field-wrapper">
+        <label class="form__field-label" for="a">Calculate a + b:</label>
+        <input class="form__field" type="number" id="a" value="0" aria-label="First number"> +
+        <input class="form__field" type="number" id="b" value="0" aria-label="Second number"> =
+        <output class="form__field" name="result" for="a b" aria-live="polite">0</output>
+    </div>
+    <!-- Buttons -->
+    <div class="form__field-wrapper">
+        <button class="form__field" type="submit" aria-label="Submit form">Submit</button>
+        <button class="form__field" type="reset" aria-label="Reset form">Reset</button>
+        <button class="form__field" type="button">Regular Button</button>
+        <input class="form__field" type="submit" value="Submit Input">
+        <input class="form__field" type="reset" value="Reset Input">
+        <input class="form__field" type="button" value="Button Input">
+    </div>
+</form>

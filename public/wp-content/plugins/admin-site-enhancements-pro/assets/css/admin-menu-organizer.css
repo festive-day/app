@@ -1,0 +1,349 @@
+.wrap.admin-menu-organizer {
+    margin: 10px 20px 0;
+}
+
+.admin-menu-organizer-main {
+    display: flex;
+    gap: 16px;
+}
+
+.module-description {
+    margin-top: 8px;
+    margin-bottom: 24px;
+}
+
+.admin-menu-sortables-wrapper {
+    width: 696px;
+    box-sizing: border-box;
+    margin-top: 16px;
+    padding: 32px 48px 32px;
+    background: #fff;
+}
+
+.admin-menu-actions {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.admin-menu-actions #amo-save-changes {
+    position: sticky;
+    margin-top: 16px;
+    top: 48px;
+    border-style: solid;
+    border-color: #fff;
+    border-width: 24px 40px;
+}
+
+.admin-menu-actions #amo-save-changes:focus {
+    box-shadow: none !important;
+}
+
+.asenha-saving-changes,
+.asenha-changes-saved {
+    position: sticky;
+}
+
+.asenha-saving-changes {
+    top: 76px;
+    margin-top: 44px;
+    margin-left: -31px;
+}
+
+.asenha-changes-saved {
+    top: 74px;
+    margin-top: 42px;
+    margin-left: -33px;
+}
+
+.admin-menu-organizer ul.menu {
+    margin-top: 0;
+    padding-top: 0;
+/*    overflow: auto; */
+}
+
+.admin-menu-organizer .menu-item-bar {
+    display: flex;
+    align-items: center;
+}
+
+.admin-menu-organizer .menu-item-bar .menu-item-handle {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 7px 15px 7px 7px;
+    max-width: 600px;
+    width: 600px;
+    min-height: 30px;
+}
+
+.admin-menu-organizer .title-wrapper {
+    display: flex;
+}
+
+.admin-menu-organizer .menu-item-handle .menu-item-checkbox {
+    display: inline-block;
+}
+
+.admin-menu-organizer .menu-item-handle .item-title {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    margin-right: 0;
+    line-height: 30px;
+}
+.rtl .admin-menu-organizer .menu-item-handle .item-title {
+    
+}
+
+.admin-menu-organizer .menu-item-handle .item-title .menu-item-title a {
+    color: #666;
+    text-decoration: none;
+    margin-left: 6px;
+}
+
+.admin-menu-organizer .menu-item-handle .item-title .menu-item-title a:hover {
+    color: inherit;
+}
+
+.menu-item-title input[type="text"] {
+    border: 1px solid #dcdcde;
+    margin-left: -5px;
+    padding: 0 8px 0 4px;
+    font-size: 13px;
+}
+
+.menu-item-title input[type="text"]:focus {
+    border: 1px solid #999;
+    box-shadow: none;
+    outline: none;
+}
+
+.menu-item-checkbox-label span {
+    font-weight: normal;
+}
+
+#separator1 .menu-item-title,
+#separator2 .menu-item-title,
+#separator-last .menu-item-title,
+#separator-woocommerce .menu-item-title,
+li[id^="separator"] .menu-item-title {
+    font-weight: normal;
+    color: #999;
+}
+
+.sortable-placeholder {
+    width: 600px !important;
+    max-width: 600px !important;
+    height: 46px;
+    min-height: 42px;
+    max-height: 42px;
+    background: #cdddd6;
+    border: 1px dashed #508871;
+}
+
+.form-table .asenha-subfields td:not(.datatable-td) label.menu-item-checkbox-label {
+    top: 0;
+}
+
+#custom-admin-menu .menu-item-depth-0 {
+    display: list-item !important;
+    margin-block-start: 0;
+    padding: 0;
+}
+
+#custom-admin-menu .menu-item-depth-0 .dashicons-menu {
+    padding: 5px 8px;
+    cursor: move;
+    color: #ddd;
+}
+#custom-admin-menu .menu-item-bar .menu-item-handle:hover .dashicons-menu {
+    color: #1d2327;
+}
+
+/*! <fs_premium_only> */
+#custom-admin-menu .menu-item-depth-0 .arrow-right {
+    margin: 0 6px;
+    transition: .25s;
+}
+#custom-admin-menu .menu-item-depth-0 .arrow-right.rotate-down {
+    transform: rotate(90deg);
+}
+#custom-admin-menu .parent-menu-item .menu-item-settings {
+    box-sizing: border-box;
+    max-width: 600px;
+    width: 600px;
+}
+#custom-admin-menu .submenu-wrapper .menu-item-settings {
+    box-sizing: border-box;
+    max-width: 556px;
+    width: 556px;
+}
+
+.remove-menu-item {
+    padding: 6px 6px 0;
+    position: absolute;
+    top: 0;
+    right: -38px;
+    cursor: pointer;
+    border: 1px solid #dcdcde;
+    background: #f7f7f7;
+    transition: .25s;
+}
+.remove-menu-item svg path {
+    transition: .25s;    
+}
+.remove-menu-item:hover {
+    border: 1px solid #8c8f94;
+}
+.remove-menu-item:hover svg path {
+    fill: #8c8f94;
+}
+
+/* Submenu Items Sortable */
+
+.submenu-wrapper {
+    padding-left: 44px;
+}
+.admin-menu-organizer .submenu-wrapper .menu-item-bar .menu-item-handle {
+    padding: 7px 15px 7px 7p;
+    max-width: 556px;
+    width: 556px;
+    min-height: 30px;
+}
+.submenu-sortable-placeholder {
+    margin-top: 8px;
+    width: 556px;
+    max-width: 556px;
+    height: 46px;
+    min-height: 42px;
+    max-height: 42px;
+    background: #cdddd6;
+    border: 1px dashed #508871;
+}
+.admin-menu-organizer .submenu-toggle,
+.admin-menu-organizer .options-toggle {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: normal;
+    color: #bbb;
+    cursor: pointer;
+}
+#custom-admin-menu .menu-item-bar .menu-item-handle:hover .submenu-toggle,
+#custom-admin-menu .menu-item-bar .menu-item-handle:hover .options-toggle {
+    color: var(--ase-accent);
+}
+.admin-menu-organizer .submenu-toggle:hover,
+.admin-menu-organizer .options-toggle:hover {
+    color: #135e96;
+}
+.admin-menu-organizer .submenu-toggle:hover .submenu-text,
+.admin-menu-organizer .options-toggle:hover .options-text {
+    text-decoration: underline;
+}
+.options-for-hiding {
+    display: flex;
+}
+.hide-toggle-or-always label:first-child {
+    margin-right: 16px;
+}
+.all-selected-roles-options {
+    margin: 8px 0 -8px;
+    padding: 8px 0;
+    border-top: 1px solid #ccc;
+}
+.all-selected-roles-options fieldset {
+    display: flex;
+    margin-top: 4px;
+}
+.all-selected-roles-options div {
+    margin-right: 8px;
+    display: flex;
+    align-items: flex-end;
+}
+.form-table .all-selected-roles-options input[type="radio"] {
+    margin-right: 0;
+}
+.all-selected-roles-options div:last-child {
+    margin-right: 0;
+}
+.hide-for-roles-options {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+.hide-for-roles-options label {
+    width: 32%;
+    margin: 2px 0;
+}
+.menu-required-capability {
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid #eee;
+}
+
+.admin-menu-actions-wrapper {
+    width: 600px;
+    margin-top: -4px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.admin-menu-main-actions {
+    display: flex;
+}
+
+a.admin-menu-action {
+    text-decoration: none;
+    transition: .25s;    
+}
+
+a.admin-menu-action:hover {
+    text-decoration: underline;
+}
+
+a.admin-menu-action:focus {
+    color: #2271b1;
+    box-shadow: none;
+}
+
+.reset-menu-wrapper {
+    display: flex;
+    width: 120px;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+}
+
+.reset-menu-wrapper a {
+    text-decoration: none;
+    transition: .25s;
+}
+
+.reset-menu-wrapper a:hover {
+    text-decoration: underline;
+}
+
+.reset-menu-spinner {
+    width: 20px;
+    height: 20px;
+    margin-right: 6px;
+}
+
+/* Hide radio button for Dashboard >> Hide >> All roles */
+#all-selected-roles-radio-for-menu-dashboard div:first-child {
+    display: none;
+}
+/*! </fs_premium_only> */
+
+.menu-item[data-custom-menu-item="no"] .remove-menu-item {
+    display: none;
+}

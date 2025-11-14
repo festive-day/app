@@ -1,0 +1,15 @@
+// Focus Color Light
+$f-light-focus-color: var(--primary) !default;
+$f-light-focus-color-opacity: 0.25 !default;
+$f-light-focus-hsl: null !default; // gets filled by Core.php
+
+// Focus Color Dark
+$f-dark-focus-color: var(--primary) !default;
+$f-dark-focus-color-opacity: 0.25 !default;
+$f-dark-focus-hsl: null !default; // gets filled by Core.php
+
+// Required Light
+$f-light-required-color: var(--primary) !default;
+
+// Required Dark
+$f-dark-required-color: var(--primary) !default;

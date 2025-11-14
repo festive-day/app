@@ -1,0 +1,14 @@
+{
+  "name": "Etch",
+  "slug": "etch",
+  "author": "Digital Gravy",
+  "author_profile": "https://digitalgravy.co",
+  "version": "1.0.0-alpha-8",
+  "requires": "5.9",
+  "requires_php": "8.0",
+  "sections": {
+    "description": "",
+    "changelog": "",
+    "frequently asked questions": ""
+  }
+}

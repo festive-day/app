@@ -1,0 +1,14 @@
+// Help Text
+$f-help-text-weight: 400 !default;
+$f-help-size-pure: 1.2 !default;
+$f-help-size-min: 1.2 !default;
+$f-help-size-max: 1.4 !default;
+$f-help-size: fluidClamp($f-help-size-min, $f-help-size-max);
+$f-help-line-height: 1.4 !default;
+$f-help-margin-block: 0.5em 0 !default;
+
+// Help Text Light
+$f-light-help-text-color: var(--neutral-semi-dark) !default;
+
+// Help Text Dark
+$f-dark-help-text-color: var(--neutral-semi-dark) !default;

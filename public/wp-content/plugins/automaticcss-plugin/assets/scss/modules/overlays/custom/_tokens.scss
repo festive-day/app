@@ -1,0 +1,9 @@
+:root {
+	@each $overlay, $set in $custom-overlays {
+		@each $prop, $value in $set {
+			@if $value != null {
+				--overlay-#{$overlay}-#{$prop}: #{$value};
+			}
+		}
+	}
+}

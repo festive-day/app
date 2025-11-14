@@ -1,0 +1,36 @@
+@import "options";
+
+// Changes made here must be made to
+// each builder platform as well.
+
+@if $option-height == on {
+	/* Feat: Height */
+	[class*="height--"] {
+		block-size: var(--height, initial);
+		min-block-size: var(--min-height, initial);
+		max-block-size: var(--max-height, initial);
+	}
+	// Regular Height
+	@for $i from 1 through 10 {
+		$val: $i * 10;
+		.height--#{$val} {
+			--height: #{$val}vh;
+		}
+	}
+
+	// Min Height
+	@for $i from 1 through 10 {
+		$val: $i * 10;
+		.min-height--#{$val} {
+			--min-height: #{$val}vh;
+		}
+	}
+
+	// Max Height
+	@for $i from 1 through 10 {
+		$val: $i * 10;
+		.max-height--#{$val} {
+			--max-height: #{$val}vh;
+		}
+	}
+}
