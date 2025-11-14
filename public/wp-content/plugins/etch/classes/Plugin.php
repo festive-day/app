@@ -24,6 +24,7 @@ use Etch\Cli\EtchCliLoader;
 
 // Elements.
 use Etch\Preprocessor\Preprocessor;
+use Etch\Blocks\BlocksRegistry;
 use Etch\Helpers\Flag;
 use Etch\Assets\AssetRegistry;
 use Etch\Vite\ViteManager;
@@ -143,7 +144,18 @@ class Plugin {
 		$this->setup_hooks();
 
 		// Elements.
-		new Preprocessor();
+		// Only initialize Preprocessor if custom block migration is not completed.
+		$settings = get_option( 'etch_settings', array() );
+		if ( ! is_array( $settings ) ) {
+			$settings = array();
+		}
+		$migration_completed = isset( $settings['custom_block_migration_completed'] ) && true === $settings['custom_block_migration_completed'];
+		if ( false === $migration_completed ) {
+			new Preprocessor();
+		}
+
+		// Custom Blocks
+		new BlocksRegistry();
 
 		Styles::get_instance()->init();
 
@@ -160,6 +172,8 @@ class Plugin {
 		add_action( 'template_redirect', array( $this, 'render_etch_builder_template' ) );
 		add_filter( 'template_include', array( $this, 'load_blank_template_for_frontend_context' ) );
 		add_action( 'init', array( $this, 'initialize_license' ) );
+
+		add_filter( 'block_categories_all', array( $this, 'register_custom_block_category' ), 10, 2 );
 
 		// Initialize the WP API.
 		WpApi::get_instance()->init();
@@ -457,5 +471,26 @@ class Plugin {
 	 */
 	public function get_vite_manager(): ViteManager {
 		return $this->vite_manager;
+	}
+
+	/**
+	 * Register the custom block category.
+	 *
+	 * @param array<int, array<string, string|null>> $block_categories The existing block categories.
+	 * @param object                                 $editor_context The editor context.
+	 * @return array<int, array<string, string|null>>
+	 */
+	public function register_custom_block_category( $block_categories, $editor_context ) {
+		if ( ! empty( $editor_context->post ) ) {
+			array_push(
+				$block_categories,
+				array(
+					'slug'  => 'etch',
+					'title' => __( 'Etch', 'etch' ),
+					'icon'  => null,
+				)
+			);
+		}
+		return $block_categories;
 	}
 }

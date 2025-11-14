@@ -61,6 +61,7 @@ class WpApi {
 		add_action( 'init', array( $this, 'register_etch_global_license_status' ) );
 		add_action( 'init', array( $this, 'register_etch_autocompletion_classes' ) );
 		add_action( 'init', array( $this, 'register_etch_global_stylesheets' ) );
+		add_action( 'init', array( $this, 'register_etch_global_settings' ) );
 	}
 
 
@@ -310,6 +311,30 @@ class WpApi {
 					'classAutocomplete' => $autocompletion_classes,
 				),
 			)
+		);
+	}
+
+	/**
+	 * Registers and enqueues Etch global settings
+	 *
+	 * This function retrieves the Etch settings and enqueues them for the editor.
+	 *
+	 * @return void
+	 */
+	public function register_etch_global_settings() {
+		$settings = get_option( 'etch_settings', array() );
+
+		if ( ! is_array( $settings ) ) {
+			$settings = array();
+		}
+
+		// Set default for custom_block_migration_completed if not present
+		if ( ! isset( $settings['custom_block_migration_completed'] ) ) {
+			$settings['custom_block_migration_completed'] = false;
+		}
+
+		$this->etch_global->add_to_etch_global(
+			array( 'settings' => (object) $settings )
 		);
 	}
 }

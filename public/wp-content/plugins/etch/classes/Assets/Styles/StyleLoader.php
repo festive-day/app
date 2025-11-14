@@ -30,6 +30,15 @@ class StyleLoader {
 	);
 
 	/**
+	 * Gutenberg overwrite CSS files to load.
+	 *
+	 * @var array<string>
+	 */
+	private array $gutenberg_css_files = array(
+		'etch-gutenberg-overwrites.css',
+	);
+
+	/**
 	 * Directory for CSS files.
 	 *
 	 * @var string
@@ -48,8 +57,10 @@ class StyleLoader {
 			add_action( 'wp_head', array( $this, 'inline_style' ) );
 		}
 
-		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_styles' ) );
-		add_action( 'enqueue_block_assets', array( $this, 'enqueue_styles' ) );
+		if ( is_admin() ) {
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_styles' ) );
+			add_action( 'enqueue_block_assets', array( $this, 'enqueue_gutenberg_overwrites' ) );
+		}
 	}
 
 	/**
@@ -85,6 +96,17 @@ class StyleLoader {
 	 */
 	public function enqueue_styles(): void {
 		foreach ( $this->css_files as $file ) {
+			$this->enqueue_style( $file );
+		}
+	}
+
+	/**
+	 * Enqueue Gutenberg overwrite CSS files.
+	 *
+	 * @return void
+	 */
+	public function enqueue_gutenberg_overwrites(): void {
+		foreach ( $this->gutenberg_css_files as $file ) {
 			$this->enqueue_style( $file );
 		}
 	}

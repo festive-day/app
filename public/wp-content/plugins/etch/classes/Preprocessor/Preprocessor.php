@@ -53,6 +53,7 @@ class Preprocessor {
 		register_block_type(
 			'etch/block',
 			array(
+				'api_version' => '3',
 				'render_callback' => function ( $attributes, $content ) {
 					return $content;
 				},
