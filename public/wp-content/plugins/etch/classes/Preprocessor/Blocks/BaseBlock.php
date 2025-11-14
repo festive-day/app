@@ -167,6 +167,10 @@ abstract class BaseBlock {
 			}
 		}
 
+		if ( ! isset( $this->context['archive'] ) || ! is_array( $this->context['archive'] ) ) {
+			$this->context['archive'] = $this->get_dynamic_archive_data();
+		}
+
 		ServerTiming::stop( 'add_this_post_context' );
 	}
 

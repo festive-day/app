@@ -109,6 +109,7 @@ trait DynamicDataBases {
 			),
 			'featuredImage' => get_the_post_thumbnail_url( $post, 'full' ) ? get_the_post_thumbnail_url( $post, 'full' ) : '',
 			'date'          => get_the_date( 'c', $post ),
+			'modified'      => get_the_modified_date( 'c', $post ),
 			'status'        => $post->post_status,
 			'type'          => $post->post_type,
 			'thumbnail'     => has_post_thumbnail( $post->ID ) ? get_the_post_thumbnail_url( $post->ID, 'full' ) : '',
@@ -282,5 +283,47 @@ trait DynamicDataBases {
 		}
 
 		return apply_filters( 'get_the_excerpt', $excerpt, $post );
+	}
+
+	/**
+	 * Returns an array with Archive data based on the current context.
+	 *
+	 * @return array<string, mixed> Archive data with title, description and url.
+	 */
+	public function get_dynamic_archive_data(): array {
+		$archive_data = array(
+			'title'         => get_the_archive_title(),
+			'description'   => get_the_archive_description(),
+			'url'           => '',
+		);
+
+		if ( is_tax() || is_category() || is_tag() ) {
+			$term = get_queried_object();
+			if ( $term instanceof WP_Term ) {
+				$archive_data['url'] = get_term_link( $term );
+			}
+		} elseif ( is_post_type_archive() ) {
+			$post_object = get_queried_object();
+			if ( ! is_null( $post_object ) && isset( $post_object->name ) ) {
+				$archive_data['url'] = get_post_type_archive_link( $post_object->name );
+			}
+		} else if ( is_singular() ) {
+			$post = get_post();
+
+			if ( $post ) {
+				$post_type_obj = get_post_type_object( $post->post_type );
+
+				if ( $post_type_obj && $post_type_obj->has_archive ) {
+					$archive_data['title'] = apply_filters(
+						'post_type_archive_title',
+						$post_type_obj->labels->name,
+						$post->post_type
+					);
+					$archive_data['url'] = get_post_type_archive_link( $post->post_type );
+				}
+			}
+		}
+
+		return $archive_data;
 	}
 }

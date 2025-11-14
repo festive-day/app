@@ -11,7 +11,7 @@
  * Plugin Name:       Etch
  * Plugin URI:        https://etchwp.com
  * Description:       Your unified development environment for WordPress.
- * Version:           1.0.0-alpha-8
+ * Version:           1.0.0-alpha-10
  * Requires at least: 5.9
  * Requires PHP:      8.1
  * Author:            Digital Gravy
@@ -235,6 +235,15 @@ function migrate_old_components_to_patterns() {
 	delete_option( 'etch_components' );
 }
 
+// function reset_custom_block_migration_flag() {
+// $settings = get_option( 'etch_settings', array() );
+// if ( ! is_array( $settings ) ) {
+// $settings = array();
+// }
+// $settings['custom_block_migration_completed'] = false;
+// update_option( 'etch_settings', $settings );
+// }
+// add_action( 'init', 'reset_custom_block_migration_flag', 11 );
 
 add_action( 'init', 'init_etch_loop_presets', 9 );
 add_action( 'init', 'migrate_old_components_to_patterns', 10 );

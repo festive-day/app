@@ -1,0 +1,5 @@
+/* here i am */
+
+.etch-element-with-component-props:focus:after {
+	outline-color: var(--wp-block-synced-color) !important;
+}

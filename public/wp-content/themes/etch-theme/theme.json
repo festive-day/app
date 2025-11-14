@@ -6,14 +6,7 @@
 		},
 		"spacing": {
 			"defaultSpacingSizes": false,
-			"units": [
-				"%",
-				"px",
-				"em",
-				"rem",
-				"vh",
-				"vw"
-			],
+			"units": ["%", "px", "em", "rem", "vh", "vw"],
 			"padding": false
 		},
 		"useRootPaddingAwareAlignments": false

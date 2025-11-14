@@ -31,6 +31,8 @@ use Etch\RestApi\Routes\SiteRoutes;
 use Etch\RestApi\Routes\UserRoutes;
 use Etch\RestApi\Routes\TaxonomiesRoutes;
 use Etch\RestApi\Routes\OptionPagesRoutes;
+use Etch\RestApi\Routes\SettingsRoutes;
+use Etch\RestApi\Routes\ArchiveRoutes;
 use Etch\Traits\Singleton;
 use Etch\Helpers\Flag;
 
@@ -75,5 +77,7 @@ class RoutesRegister {
 		( new PatternsRoutes() )->register_routes();
 		( new TaxonomiesRoutes() )->register_routes();
 		( new OptionPagesRoutes() )->register_routes();
+		( new SettingsRoutes() )->register_routes();
+		( new ArchiveRoutes() )->register_routes();
 	}
 }
