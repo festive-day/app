@@ -121,4 +121,75 @@ class Test_AJAX_Endpoints extends WP_UnitTestCase {
             // Expected
         }
     }
+
+    /**
+     * Test DNT detection with auto-reject
+     *
+     * T090: Test DNT detection per quickstart.md Scenario 10
+     * Verify DNT header honored (FR-012)
+     */
+    public function test_dnt_detection_auto_reject() {
+        $_REQUEST['action'] = 'ccm_check_dnt';
+        $_SERVER['HTTP_DNT'] = '1';
+
+        try {
+            ob_start();
+            do_action( 'wp_ajax_nopriv_ccm_check_dnt' );
+            $response = ob_get_clean();
+
+            $data = json_decode( $response, true );
+
+            $this->assertTrue( $data['success'], 'AJAX should return success' );
+            $this->assertTrue( $data['data']['dnt_enabled'], 'DNT should be enabled when header is 1' );
+            $this->assertTrue( $data['data']['auto_reject'], 'Auto-reject should be true when DNT is enabled' );
+        } catch ( WPAjaxDieContinueException $e ) {
+            // Expected behavior for wp_send_json
+        }
+    }
+
+    /**
+     * Test DNT detection with alternative header format
+     */
+    public function test_dnt_detection_alternative_header() {
+        $_REQUEST['action'] = 'ccm_check_dnt';
+        unset( $_SERVER['HTTP_DNT'] );
+        $_SERVER['HTTP_X_DO_NOT_TRACK'] = '1';
+
+        try {
+            ob_start();
+            do_action( 'wp_ajax_nopriv_ccm_check_dnt' );
+            $response = ob_get_clean();
+
+            $data = json_decode( $response, true );
+
+            $this->assertTrue( $data['success'], 'AJAX should return success' );
+            $this->assertTrue( $data['data']['dnt_enabled'], 'DNT should be enabled with alternative header' );
+            $this->assertTrue( $data['data']['auto_reject'], 'Auto-reject should be true when DNT is enabled' );
+        } catch ( WPAjaxDieContinueException $e ) {
+            // Expected behavior for wp_send_json
+        }
+    }
+
+    /**
+     * Test DNT detection when header is not set
+     */
+    public function test_dnt_detection_not_set() {
+        $_REQUEST['action'] = 'ccm_check_dnt';
+        unset( $_SERVER['HTTP_DNT'] );
+        unset( $_SERVER['HTTP_X_DO_NOT_TRACK'] );
+
+        try {
+            ob_start();
+            do_action( 'wp_ajax_nopriv_ccm_check_dnt' );
+            $response = ob_get_clean();
+
+            $data = json_decode( $response, true );
+
+            $this->assertTrue( $data['success'], 'AJAX should return success' );
+            $this->assertFalse( $data['data']['dnt_enabled'], 'DNT should be disabled when header is not set' );
+            $this->assertFalse( $data['data']['auto_reject'], 'Auto-reject should be false when DNT is disabled' );
+        } catch ( WPAjaxDieContinueException $e ) {
+            // Expected behavior for wp_send_json
+        }
+    }
 }

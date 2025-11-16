@@ -34,10 +34,26 @@
 
             // Load banner configuration
             this.loadConfig().then(() => {
-                this.setupEventListeners();
-                this.checkAndShowBanner();
+                try {
+                    this.setupEventListeners();
+                    this.checkAndShowBanner();
+                } catch (error) {
+                    console.error('CCM: Error during initialization:', error);
+                    if (window.CCM_DEBUG) {
+                        console.error('CCM: Initialization error details:', {
+                            message: error.message,
+                            stack: error.stack
+                        });
+                    }
+                }
             }).catch(error => {
                 console.error('CCM: Failed to initialize:', error);
+                // Show fallback banner even if config fails to load
+                try {
+                    this.showFallbackBanner();
+                } catch (fallbackError) {
+                    console.error('CCM: Failed to show fallback banner:', fallbackError);
+                }
             });
         },
 
@@ -47,18 +63,40 @@
          * @returns {Promise} Configuration data
          */
         loadConfig: function() {
-            return fetch(window.CCM_AJAX_URL + '?action=ccm_get_banner_config', {
-                method: 'GET',
-                credentials: 'same-origin'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (!data.success) {
-                    throw new Error(data.error || 'Failed to load configuration');
-                }
-                this.config = data.data;
-                return this.config;
-            });
+            try {
+                return fetch(window.CCM_AJAX_URL + '?action=ccm_get_banner_config', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data.success) {
+                        throw new Error(data.data?.message || data.error || 'Failed to load configuration');
+                    }
+                    this.config = data.data;
+                    return this.config;
+                })
+                .catch(error => {
+                    console.error('CCM: Error loading banner configuration:', error);
+                    // Log error details for debugging
+                    if (window.CCM_DEBUG) {
+                        console.error('CCM: AJAX URL:', window.CCM_AJAX_URL);
+                        console.error('CCM: Error details:', {
+                            message: error.message,
+                            stack: error.stack
+                        });
+                    }
+                    throw error;
+                });
+            } catch (error) {
+                console.error('CCM: Fatal error in loadConfig:', error);
+                return Promise.reject(error);
+            }
         },
 
         /**
@@ -580,7 +618,30 @@
 
             // Reload page to activate/deactivate scripts based on new consent
             // This ensures scripts are properly enabled/disabled
-            window.location.reload();
+            try {
+                window.location.reload();
+            } catch (error) {
+                console.error('CCM: Error reloading page:', error);
+                // Fallback: trigger script reload manually
+                const event = new CustomEvent('ccm-consent-changed', {
+                    detail: consent
+                });
+                window.dispatchEvent(event);
+            }
+        },
+
+        /**
+         * Show fallback banner when config fails to load
+         */
+        showFallbackBanner: function() {
+            const banner = document.getElementById('ccm-banner');
+            if (banner) {
+                const message = banner.querySelector('.ccm-banner__message');
+                if (message) {
+                    message.textContent = 'This site uses cookies. Please enable JavaScript to manage your preferences.';
+                }
+                this.showBanner();
+            }
         },
 
         /**
@@ -629,53 +690,95 @@
          * @param {Object} consent Consent object
          */
         recordConsentEvent: function(eventType, consent) {
-            const data = {
-                action: 'ccm_record_consent',
-                event_type: eventType,
-                accepted_categories: consent.acceptedCategories || [],
-                rejected_categories: consent.rejectedCategories || [],
-                consent_version: consent.version
-            };
+            try {
+                const data = {
+                    action: 'ccm_record_consent',
+                    event_type: eventType,
+                    accepted_categories: consent.acceptedCategories || [],
+                    rejected_categories: consent.rejectedCategories || [],
+                    consent_version: consent.version
+                };
 
-            fetch(window.CCM_AJAX_URL, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-                credentials: 'same-origin',
-                body: new URLSearchParams(data)
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    console.info('CCM: Consent recorded, event ID:', data.data.event_id);
-                } else {
-                    console.error('CCM: Failed to record consent:', data.error);
-                }
-            })
-            .catch(error => {
-                console.error('CCM: AJAX error recording consent:', error);
-            });
+                fetch(window.CCM_AJAX_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    credentials: 'same-origin',
+                    body: new URLSearchParams(data)
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        console.info('CCM: Consent recorded, event ID:', data.data.event_id);
+                    } else {
+                        console.error('CCM: Failed to record consent:', data.data?.message || data.error || 'Unknown error');
+                        // Log additional details in debug mode
+                        if (window.CCM_DEBUG) {
+                            console.error('CCM: Response data:', data);
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('CCM: AJAX error recording consent:', error);
+                    // Log error details for debugging
+                    if (window.CCM_DEBUG) {
+                        console.error('CCM: Error details:', {
+                            message: error.message,
+                            stack: error.stack,
+                            eventType: eventType,
+                            consent: consent
+                        });
+                    }
+                    // Don't throw - consent recording failure shouldn't break user experience
+                });
+            } catch (error) {
+                console.error('CCM: Fatal error in recordConsentEvent:', error);
+                // Don't throw - allow user to continue even if logging fails
+            }
         },
 
         /**
          * Check Do Not Track header
          */
         checkDoNotTrack: function() {
-            fetch(window.CCM_AJAX_URL + '?action=ccm_check_dnt', {
-                method: 'GET',
-                credentials: 'same-origin'
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success && data.data.dnt_enabled && data.data.auto_reject) {
-                    console.info('CCM: Do Not Track detected, auto-rejecting cookies');
-                    this.handleRejectAll();
-                }
-            })
-            .catch(error => {
-                console.error('CCM: Failed to check DNT:', error);
-            });
+            try {
+                fetch(window.CCM_AJAX_URL + '?action=ccm_check_dnt', {
+                    method: 'GET',
+                    credentials: 'same-origin'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok: ' + response.status);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success && data.data.dnt_enabled && data.data.auto_reject) {
+                        console.info('CCM: Do Not Track detected, auto-rejecting cookies');
+                        this.handleRejectAll();
+                    }
+                })
+                .catch(error => {
+                    console.error('CCM: Failed to check DNT:', error);
+                    // Log error details in debug mode
+                    if (window.CCM_DEBUG) {
+                        console.error('CCM: DNT check error details:', {
+                            message: error.message,
+                            stack: error.stack
+                        });
+                    }
+                    // Don't throw - DNT check failure shouldn't break user experience
+                });
+            } catch (error) {
+                console.error('CCM: Fatal error in checkDoNotTrack:', error);
+                // Don't throw - allow user to continue even if DNT check fails
+            }
         },
 
         /**

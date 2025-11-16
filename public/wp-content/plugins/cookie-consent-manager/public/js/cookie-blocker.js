@@ -18,10 +18,63 @@
     window.CookieConsentBlocker = {
 
         /**
+         * Detect Safari browser (including iOS Safari)
+         *
+         * @returns {boolean} True if Safari detected
+         */
+        isSafari: function() {
+            const ua = navigator.userAgent.toLowerCase();
+            // Safari detection: Safari but not Chrome/Edge
+            const isSafari = /safari/.test(ua) && !/chrome/.test(ua) && !/chromium/.test(ua) && !/edg/.test(ua);
+            // iOS Safari
+            const isIOS = /iphone|ipad|ipod/.test(ua);
+            return isSafari || isIOS;
+        },
+
+        /**
+         * Check if Safari ITP (Intelligent Tracking Prevention) is active
+         * ITP limits third-party cookie blocking, so we need to adjust strategy
+         *
+         * @returns {boolean} True if Safari ITP detected
+         */
+        isSafariITP: function() {
+            if (!this.isSafari()) {
+                return false;
+            }
+
+            // Safari 14+ has ITP 2.0+ which is more restrictive
+            // Check Safari version from user agent
+            const ua = navigator.userAgent;
+            const safariMatch = ua.match(/Version\/(\d+)/);
+            if (safariMatch && parseInt(safariMatch[1]) >= 14) {
+                return true;
+            }
+
+            // iOS Safari 14+ also has ITP
+            const iosMatch = ua.match(/OS (\d+)_(\d+)/);
+            if (iosMatch) {
+                const majorVersion = parseInt(iosMatch[1]);
+                if (majorVersion >= 14) {
+                    return true;
+                }
+            }
+
+            return false;
+        },
+
+        /**
          * Initialize blocker
          * Must run as early as possible
          */
         init: function() {
+            // Detect Safari ITP
+            const isITP = this.isSafariITP();
+            if (isITP) {
+                console.info('CCM: Safari ITP detected - using first-party blocking strategy');
+                // Set flag for other parts of the code
+                window.CCM_SAFARI_ITP = true;
+            }
+
             // Intercept document.cookie writes
             this.interceptCookieAPI();
 
@@ -38,9 +91,11 @@
 
         /**
          * Block scripts that require consent
+         * T086: Adjusts blocking strategy for Safari ITP
          */
         blockScripts: function() {
             const consent = window.CookieConsentStorage ? window.CookieConsentStorage.getConsent() : null;
+            const isITP = window.CCM_SAFARI_ITP || this.isSafariITP();
 
             // Get all script tags
             const scripts = document.querySelectorAll('script[data-consent-category]');
@@ -63,11 +118,49 @@
                 if (!hasConsent) {
                     // Block script by changing type
                     this.blockScript(script);
+
+                    // Safari ITP: Also remove script from DOM if it's third-party
+                    // ITP limits third-party cookie blocking, so we need more aggressive blocking
+                    if (isITP && this.isThirdPartyScript(script)) {
+                        // For Safari ITP, we block more aggressively by removing the script
+                        // This prevents ITP from allowing the script despite our blocking
+                        script.style.display = 'none';
+                        script.setAttribute('data-ccm-blocked', 'true');
+                    }
                 } else {
                     // Activate script if consent given
                     this.activateScript(script);
+                    // Restore script if it was hidden for ITP
+                    if (script.hasAttribute('data-ccm-blocked')) {
+                        script.style.display = '';
+                        script.removeAttribute('data-ccm-blocked');
+                    }
                 }
             });
+        },
+
+        /**
+         * Check if script is third-party (external domain)
+         *
+         * @param {Element} script Script element
+         * @returns {boolean} True if third-party
+         */
+        isThirdPartyScript: function(script) {
+            if (!script.src) {
+                return false; // Inline scripts are first-party
+            }
+
+            try {
+                const scriptUrl = new URL(script.src, window.location.href);
+                const currentDomain = window.location.hostname;
+                const scriptDomain = scriptUrl.hostname;
+
+                // Check if domains match (including subdomains)
+                return scriptDomain !== currentDomain && !scriptDomain.endsWith('.' + currentDomain);
+            } catch (error) {
+                // If URL parsing fails, assume first-party
+                return false;
+            }
         },
 
         /**
@@ -143,6 +236,15 @@
                 script.parentNode.replaceChild(newScript, script);
             } catch (error) {
                 console.error('CCM: Error executing inline script:', error);
+                // Log error details in debug mode
+                if (window.CCM_DEBUG) {
+                    console.error('CCM: Script execution error details:', {
+                        message: error.message,
+                        stack: error.stack,
+                        scriptSrc: script.src || 'inline',
+                        scriptCategory: script.getAttribute('data-consent-category')
+                    });
+                }
             }
         },
 
@@ -165,6 +267,11 @@
                     }
                 });
 
+                // Add error handler for script loading
+                newScript.onerror = function() {
+                    console.error('CCM: Failed to load external script:', script.src);
+                };
+
                 // Add to DOM
                 script.parentNode.insertBefore(newScript, script.nextSibling);
 
@@ -172,6 +279,15 @@
                 // script.remove();
             } catch (error) {
                 console.error('CCM: Error reloading external script:', error);
+                // Log error details in debug mode
+                if (window.CCM_DEBUG) {
+                    console.error('CCM: Script reload error details:', {
+                        message: error.message,
+                        stack: error.stack,
+                        scriptSrc: script.src,
+                        scriptCategory: script.getAttribute('data-consent-category')
+                    });
+                }
             }
         },
 
@@ -295,15 +411,24 @@
          * @returns {boolean} Is essential
          */
         isEssentialCookie: function(cookieName) {
+            if (!cookieName) {
+                return false;
+            }
+
             const essentialPrefixes = [
                 'wp-',
                 'wordpress_',
                 'wp_cookie_consent',
-                'PHPSESSID',
-                'comment_'
+                'phpsessid',
+                'comment_',
+                'etch_',
+                'etcbuilder_',
+                'builder_',
+                'acf_'
             ];
+            const normalizedName = cookieName.toLowerCase();
 
-            return essentialPrefixes.some(prefix => cookieName.startsWith(prefix));
+            return essentialPrefixes.some(prefix => normalizedName.startsWith(prefix));
         },
 
         /**

@@ -75,6 +75,11 @@ class CCM_Cookie_Manager {
         $plugin_url = plugin_dir_url( dirname( __FILE__ ) );
         $plugin_version = defined( 'CCM_VERSION' ) ? CCM_VERSION : '1.0.0';
 
+        // Avoid loading assets inside the Etch builder chrome.
+        if ( function_exists( 'ccm_is_etch_builder_request' ) && ccm_is_etch_builder_request() ) {
+            return;
+        }
+
         // Enqueue cookie blocker first (CRITICAL - must load before other scripts)
         wp_enqueue_script(
             'ccm-cookie-blocker',
@@ -126,9 +131,21 @@ class CCM_Cookie_Manager {
         wp_add_inline_script(
             'ccm-storage-manager',
             'window.CCM_AJAX_URL = "' . esc_js( admin_url( 'admin-ajax.php' ) ) . '";' .
-            'window.CCM_VERSION = "' . esc_js( $plugin_version ) . '";',
+            'window.CCM_VERSION = "' . esc_js( $plugin_version ) . '";' .
+            'window.CCM_DEBUG = ' . ( defined( 'WP_DEBUG' ) && WP_DEBUG ? 'true' : 'false' ) . ';',
             'before'
         );
+
+        // Enqueue performance monitor if debug mode or query parameter
+        if ( defined( 'WP_DEBUG' ) && WP_DEBUG || isset( $_GET['ccm_perf'] ) ) {
+            wp_enqueue_script(
+                'ccm-performance-monitor',
+                $plugin_url . 'performance-monitor.js',
+                array(),
+                $plugin_version,
+                true
+            );
+        }
 
         // Enqueue banner styles
         wp_enqueue_style(

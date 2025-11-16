@@ -15,6 +15,9 @@ defined( 'ABSPATH' ) || exit;
  * Render the consent banner
  */
 function ccm_render_banner_template() {
+    if ( function_exists( 'ccm_is_etch_builder_request' ) && ccm_is_etch_builder_request() ) {
+        return;
+    }
     ?>
     <div id="ccm-banner" class="ccm-banner ccm-banner--hidden" role="dialog" aria-modal="false" aria-labelledby="ccm-banner__heading" aria-describedby="ccm-banner__message">
         <div data-etch-element="section" class="ccm-banner__section">
@@ -103,6 +106,9 @@ function ccm_render_banner_template() {
  * Render the footer "Cookie Settings" link
  */
 function ccm_render_footer_link() {
+    if ( function_exists( 'ccm_is_etch_builder_request' ) && ccm_is_etch_builder_request() ) {
+        return;
+    }
     ?>
     <div data-etch-element="section" class="ccm-footer-link__section">
         <div data-etch-element="container" class="ccm-footer-link__container">

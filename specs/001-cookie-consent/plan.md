@@ -132,8 +132,15 @@ public/wp-content/plugins/cookie-consent-manager/
     │   ├── test-cookie-blocking.php
     │   ├── test-consent-logging.php
     │   ├── test-admin-interface.php
-    │   └── test-etch-compatibility.php
+    │   ├── test-etch-compatibility.php
+    │   ├── test-ajax-endpoints.php
+    │   ├── test-database-setup.php
+    │   └── test-storage-handler.php
     └── bootstrap.php                   # Test setup
+├── uninstall.php                      # Plugin cleanup on uninstall
+├── run-tests.sh                       # Test runner script
+├── SECURITY-REVIEW.md                 # Security hardening review (T096)
+└── VALIDATION-CHECKLIST.md            # Validation checklist completion (T093)
 ```
 
 **Structure Decision**: WordPress plugin structure (single project). Plugin installed in standard WordPress plugins directory, integrates with Etch theme via WordPress hooks and AutomaticCSS classes. No custom post types or Gutenberg blocks required - purely frontend banner + admin interface.

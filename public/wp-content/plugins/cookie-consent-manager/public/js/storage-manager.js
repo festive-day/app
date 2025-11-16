@@ -13,6 +13,17 @@
     const COOKIE_NAME = 'wp_consent_status';
     const CONSENT_DURATION_DAYS = 365;
     const CONSENT_VERSION_EXPIRY_MONTHS = 12;
+    const ESSENTIAL_COOKIE_PREFIXES = [
+        'wp-',
+        'wordpress_',
+        'wp_cookie_consent',
+        'phpsessid',
+        'comment_',
+        'etch_',
+        'etcbuilder_',
+        'builder_',
+        'acf_'
+    ];
 
     /**
      * Storage Manager object
@@ -50,6 +61,20 @@
                 return consent;
             } catch (error) {
                 console.error('CCM: Error reading consent from localStorage:', error);
+                // Log error details in debug mode
+                if (window.CCM_DEBUG) {
+                    console.error('CCM: Storage error details:', {
+                        message: error.message,
+                        stack: error.stack,
+                        storageKey: STORAGE_KEY
+                    });
+                }
+                // Clear potentially corrupted data
+                try {
+                    localStorage.removeItem(STORAGE_KEY);
+                } catch (clearError) {
+                    console.error('CCM: Failed to clear corrupted localStorage:', clearError);
+                }
                 return null;
             }
         },
@@ -71,6 +96,9 @@
                 // Validate before saving
                 if (!this.validateConsent(consent)) {
                     console.error('CCM: Invalid consent object, cannot save');
+                    if (window.CCM_DEBUG) {
+                        console.error('CCM: Invalid consent object:', consent);
+                    }
                     return false;
                 }
 
@@ -78,11 +106,24 @@
                 localStorage.setItem(STORAGE_KEY, JSON.stringify(consent));
 
                 // Save identifier cookie
-                this.setConsentCookie(consent.acceptedCategories || []);
+                try {
+                    this.setConsentCookie(consent.acceptedCategories || []);
+                } catch (cookieError) {
+                    console.error('CCM: Error setting consent cookie:', cookieError);
+                    // Continue even if cookie fails - localStorage is primary storage
+                }
 
                 return true;
             } catch (error) {
                 console.error('CCM: Error saving consent to localStorage:', error);
+                // Log error details in debug mode
+                if (window.CCM_DEBUG) {
+                    console.error('CCM: Save error details:', {
+                        message: error.message,
+                        stack: error.stack,
+                        consent: consent
+                    });
+                }
                 return false;
             }
         },
@@ -254,8 +295,7 @@
             cookies.forEach(cookie => {
                 const cookieName = cookie.split('=')[0].trim();
 
-                // Don't clear essential cookies or our consent cookie
-                if (cookieName === COOKIE_NAME || cookieName.startsWith('wordpress_') || cookieName.startsWith('wp-')) {
+                if (this.isProtectedCookie(cookieName)) {
                     return;
                 }
 
@@ -278,6 +318,26 @@
             }
 
             return consent.acceptedCategories && consent.acceptedCategories.includes(category);
+        },
+
+        /**
+         * Determine if a cookie should never be blocked/cleared
+         *
+         * @param {string} cookieName
+         * @returns {boolean}
+         */
+        isProtectedCookie: function(cookieName) {
+            if (!cookieName) {
+                return false;
+            }
+
+            const normalized = cookieName.toLowerCase();
+
+            if (normalized === COOKIE_NAME.toLowerCase()) {
+                return true;
+            }
+
+            return ESSENTIAL_COOKIE_PREFIXES.some(prefix => normalized.startsWith(prefix));
         }
     };
 

@@ -25,6 +25,31 @@ define( 'CCM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
 define( 'CCM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 define( 'CCM_PLUGIN_FILE', __FILE__ );
 
+/**
+ * Detect if current request is running inside the Etch builder UI.
+ *
+ * The builder uses a front-end request with ?etch=magic which should never load
+ * the cookie banner or blockers (they interfere with builder controls).
+ *
+ * @return bool
+ */
+function ccm_is_etch_builder_request() {
+    if ( defined( 'CCM_TEST_DISABLE_BUILDER_GUARD' ) && CCM_TEST_DISABLE_BUILDER_GUARD ) {
+        return false;
+    }
+
+    if ( isset( $_GET['etch'] ) && 'magic' === $_GET['etch'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        return true;
+    }
+
+    /**
+     * Allow overrides (e.g. future Etch flags).
+     *
+     * Developers can hook this filter if Etch introduces additional query vars.
+     */
+    return (bool) apply_filters( 'ccm_is_etch_builder_request', false );
+}
+
 // Require core class files
 require_once CCM_PLUGIN_DIR . 'includes/class-cookie-manager.php';
 require_once CCM_PLUGIN_DIR . 'includes/class-consent-logger.php';

@@ -166,4 +166,45 @@ class Test_Storage_Handler extends WP_UnitTestCase {
 
         $this->assertTrue( $has_mismatch, 'Different version should have mismatch' );
     }
+
+    /**
+     * Test consent expiration - 13 months (re-prompt scenario)
+     *
+     * T091: Test consent expiration per quickstart.md Scenario 7
+     * Simulate 13 months passing, verify consent expires and re-prompt occurs
+     */
+    public function test_consent_expiration_13_months() {
+        // Simulate consent given 13 months ago
+        $thirteen_months_ago = time() - ( 13 * 30 * 24 * 60 * 60 );
+
+        $is_expired = CCM_Storage_Handler::is_consent_expired( $thirteen_months_ago );
+
+        $this->assertTrue( $is_expired, '13-month-old consent should be expired (triggers re-prompt)' );
+    }
+
+    /**
+     * Test consent expiration - 11 months (still valid)
+     *
+     * T091: Verify consent persists for 12 months (SC-003)
+     */
+    public function test_consent_expiration_11_months() {
+        // Simulate consent given 11 months ago
+        $eleven_months_ago = time() - ( 11 * 30 * 24 * 60 * 60 );
+
+        $is_expired = CCM_Storage_Handler::is_consent_expired( $eleven_months_ago );
+
+        $this->assertFalse( $is_expired, '11-month-old consent should still be valid (within 12-month window)' );
+    }
+
+    /**
+     * Test consent expiration - exactly 12 months + 1 day (expired)
+     */
+    public function test_consent_expiration_12_months_plus_one_day() {
+        // Simulate consent given 12 months and 1 day ago
+        $twelve_months_one_day_ago = time() - ( ( 365 * 24 * 60 * 60 ) + ( 24 * 60 * 60 ) );
+
+        $is_expired = CCM_Storage_Handler::is_consent_expired( $twelve_months_one_day_ago );
+
+        $this->assertTrue( $is_expired, 'Consent older than 12 months should be expired' );
+    }
 }

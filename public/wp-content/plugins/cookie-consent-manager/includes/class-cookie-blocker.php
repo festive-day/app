@@ -26,6 +26,9 @@ class Cookie_Consent_Manager_Cookie_Blocker {
      * Initialize blocker
      */
     public static function init() {
+        if ( function_exists( 'ccm_is_etch_builder_request' ) && ccm_is_etch_builder_request() ) {
+            return;
+        }
         // Hook into script tag rendering
         add_filter( 'script_loader_tag', array( __CLASS__, 'modify_script_tag' ), 10, 3 );
 
