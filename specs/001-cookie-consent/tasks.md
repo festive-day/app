@@ -183,11 +183,11 @@
 
 **Purpose**: Improvements affecting multiple user stories, performance optimization, final validation
 
-- [ ] T080 [P] Implement WordPress transient caching for GET /ccm_get_banner_config (1 hour cache, clear on category/cookie update)
+- [x] T080 [P] Implement WordPress transient caching for GET /ccm_get_banner_config (1 hour cache, clear on category/cookie update)
 - [ ] T081 [P] Add PHPCS validation for WordPress coding standards across all PHP files
 - [ ] T082 [P] Optimize database queries with EXPLAIN analysis (categories list, cookies by category, audit log queries)
 - [ ] T083 [P] Add database indexes verification per data-model.md (idx_slug, idx_display_order, idx_category, idx_visitor, idx_timestamp)
-- [ ] T084 Implement cron cleanup for 3-year retention (DELETE FROM wp_cookie_consent_events WHERE event_timestamp < DATE_SUB(NOW(), INTERVAL 3 YEAR))
+- [x] T084 Implement cron cleanup for 3-year retention (DELETE FROM wp_cookie_consent_events WHERE event_timestamp < DATE_SUB(NOW(), INTERVAL 3 YEAR))
 - [ ] T085 Add JavaScript console errors handling (try-catch blocks, error logging for AJAX failures)
 - [ ] T086 Test Safari ITP compatibility (detect Safari, adjust blocking strategy per frontend-api.md browser compatibility notes)
 - [ ] T087 Verify AutomaticCSS classes applied correctly (all banner/modal elements use ACSS utilities)
@@ -197,8 +197,8 @@
 - [ ] T091 Test consent expiration per quickstart.md Scenario 7 (simulate 13 months, verify re-prompt)
 - [ ] T092 Run all integration tests from tests/integration/ (ensure 100% pass rate)
 - [ ] T093 Complete quickstart.md validation checklist (all 15 FR, 10 SC, constitution compliance)
-- [ ] T094 Add plugin version constant (1.0.0) and update mechanism for future schema changes
-- [ ] T095 Create uninstall.php for plugin cleanup (drop tables, delete options, clear transients)
+- [x] T094 Add plugin version constant (1.0.0) and update mechanism for future schema changes
+- [x] T095 Create uninstall.php for plugin cleanup (drop tables, delete options, clear transients)
 - [ ] T096 Security hardening review (XSS protection wp_kses, SQL injection $wpdb->prepare, nonce verification)
 - [ ] T097 Documentation: Add inline PHPDoc comments to all public methods
 - [ ] T098 Documentation: Update plan.md with final file structure if changes occurred
