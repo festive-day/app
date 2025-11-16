@@ -55,3 +55,13 @@ access_log
 **/tests/manual-verification.php
 **/tests/functionality-test.php
 **/tests/security-test.php
+
+# Local PHPUnit tooling
+/tools/bin/phpunit
+/tools/phpunit-polyfills/
+/public/wp-content/plugins/cookie-consent-manager/tests/wordpress/
+/public/wp-content/plugins/cookie-consent-manager/tests/wordpress-tests-lib/*
+!/public/wp-content/plugins/cookie-consent-manager/tests/wordpress-tests-lib/wp-tests-config.php
+
+# AutomaticCSS generated assets
+/public/wp-content/uploads/automatic-css/

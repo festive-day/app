@@ -17,6 +17,14 @@ if ( ! file_exists( $_tests_dir . '/includes/functions.php' ) ) {
     exit( 1 );
 }
 
+// Load PHPUnit Polyfills if available (required by WP test suite).
+$project_root = dirname( dirname( dirname( dirname( dirname( __DIR__ ) ) ) ) );
+$polyfills_autoload = $project_root . '/tools/phpunit-polyfills/src/phpunitpolyfills-autoload.php';
+
+if ( file_exists( $polyfills_autoload ) && ! defined( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH' ) ) {
+	define( 'WP_TESTS_PHPUNIT_POLYFILLS_PATH', $polyfills_autoload );
+}
+
 // Give access to tests_add_filter() function
 require_once $_tests_dir . '/includes/functions.php';
 

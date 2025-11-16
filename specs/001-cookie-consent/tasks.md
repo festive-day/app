@@ -206,6 +206,18 @@
 
 ---
 
+## Phase 8: Outstanding Test & Validation Requirements
+
+**Purpose**: Capture remaining verification work so the test matrix stays the single source of truth.
+
+- [ ] T100 Modernize PHPUnit tests under `public/wp-content/plugins/cookie-consent-manager/tests/integration/` to use PHP 8 compliant `setUp(): void` / `tearDown(): void` signatures and extend the Yoast polyfills base class.
+- [ ] T101 Execute the full PHPUnit suite via `tests/bootstrap.php` (including builder bypass scenarios) and record pass/fail output in `public/wp-content/plugins/cookie-consent-manager/TEST-RESULTS.md`.
+- [ ] T102 Complete every unchecked item in the manual **Frontend Functionality** checklist inside `TEST-RESULTS.md` (banner buttons, modal, persistence, mobile) and log evidence.
+- [ ] T103 Complete the **Security Testing** checklist from `SECURITY-AUDIT.md`, including XSS/SQL/CSRF/rate-limit/localStorage manipulations, and update the audit file with results.
+- [ ] T104 Execute the browser/device/performance matrix from `TEST-RESULTS.md` and quickstart.md (Chrome, Firefox, Safari desktop + iOS/Android, performance <1s/<50ms) and mark them as verified.
+
+---
+
 ## Dependencies & Execution Order
 
 ### Phase Dependencies
