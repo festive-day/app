@@ -35,3 +35,23 @@ composer.phar
 *.log
 error_log
 access_log
+
+# WordPress Plugin Development - Temporary Files
+# Diagnostic and debugging scripts
+**/diagnostic.php
+**/clear-cache.php
+**/fix-*.php
+**/test-console.js
+
+# Test results and summaries (generated files)
+**/TEST-RESULTS.md
+**/PHASE*-TEST-SUMMARY.md
+**/*-TEST-SUMMARY.md
+
+# Security audits (can be regenerated)
+**/SECURITY-AUDIT.md
+
+# Manual test files
+**/tests/manual-verification.php
+**/tests/functionality-test.php
+**/tests/security-test.php
