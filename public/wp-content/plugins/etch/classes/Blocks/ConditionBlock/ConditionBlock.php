@@ -56,6 +56,7 @@ class ConditionBlock {
 					'customClassName' => false,
 					'innerBlocks' => true,
 				),
+				'skip_inner_blocks' => true, // This is a *little* bit sketchy, it works but it does not seem to be documented anywhere :P (Used internally by WP though)
 				'render_callback' => array( $this, 'render_block' ),
 			)
 		);
@@ -79,7 +80,7 @@ class ConditionBlock {
 
 		// If no condition, render children (default behavior)
 		if ( null === $attrs->condition ) {
-			return $content;
+			return $this->render_inner_blocks( $block );
 		}
 
 		// Get context - this builds global context and component context (via self::$current_component_block)
@@ -92,6 +93,26 @@ class ConditionBlock {
 		}
 
 		// Condition is truthy, render children
-		return $content;
+		return $this->render_inner_blocks( $block );
+	}
+
+	/**
+	 * Render inner blocks of the given block
+	 *
+	 * @param \WP_Block|null $block WP_Block instance.
+	 * @return string Rendered inner blocks HTML.
+	 */
+	private function render_inner_blocks( $block ) {
+		if ( $block instanceof \WP_Block && isset( $block->parsed_block['innerBlocks'] ) && is_array( $block->parsed_block['innerBlocks'] ) ) {
+			$inner_blocks = $block->parsed_block['innerBlocks'];
+		} else {
+			$inner_blocks = array();
+		}
+
+		$rendered = '';
+		foreach ( $inner_blocks as $child ) {
+			$rendered .= render_block( $child );
+		}
+		return $rendered;
 	}
 }

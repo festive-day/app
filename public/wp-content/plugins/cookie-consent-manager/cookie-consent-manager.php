@@ -32,6 +32,9 @@ require_once CCM_PLUGIN_DIR . 'includes/class-cookie-blocker.php';
 require_once CCM_PLUGIN_DIR . 'includes/class-storage-handler.php';
 require_once CCM_PLUGIN_DIR . 'includes/class-admin-interface.php';
 
+// Require template files
+require_once CCM_PLUGIN_DIR . 'public/templates/banner-template.php';
+
 /**
  * Plugin activation hook
  */

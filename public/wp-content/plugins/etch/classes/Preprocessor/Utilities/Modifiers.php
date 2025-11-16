@@ -12,6 +12,8 @@ declare(strict_types=1);
 
 namespace Etch\Preprocessor\Utilities;
 
+use Etch\Helpers\Logger;
+
 /**
  * Modifiers class for handling modifier application in dynamic data.
  */
@@ -88,6 +90,21 @@ class Modifiers {
 		return preg_match( '/^\w+\(.*\)$/', $part ) === 1;
 	}
 
+
+	/**
+	 * Rtrim a character once from the end of a string
+	 *
+	 * @param string $string The input string.
+	 * @param string $char The character to trim.
+	 * @return string The modified string.
+	 */
+	public static function rtrim_once( $string, $char ) {
+		if ( substr( $string, -1 ) === $char ) {
+			return substr( $string, 0, -1 );
+		}
+		return $string;
+	}
+
 	/**
 	 * Apply the modifier
 	 *
@@ -101,7 +118,11 @@ class Modifiers {
 			return $value;
 		}
 
-		$modifier = rtrim( $modifier, ')' );
+		Logger::log(
+			'Applying modifier: ' . $modifier . ' to value: ' . print_r( $value, true )
+		);
+
+		$modifier = self::rtrim_once( $modifier, ')' );
 		[$method, $args] = explode( '(', $modifier, 2 );
 
 		$parsed_args = self::parse_modifier_arguments( $args );
@@ -574,6 +595,16 @@ class Modifiers {
 				return $false_value;
 
 			case 'equal':
+				Logger::log(
+					'Applying equal modifier' . print_r(
+						array(
+							'value' => $value,
+							'args' => $resolved_args,
+						),
+						true
+					)
+				);
+
 				if ( ! isset( $resolved_args[0] ) ) {
 					return false;
 				}

@@ -72,8 +72,71 @@ class CCM_Cookie_Manager {
      * Enqueue frontend assets
      */
     public function enqueue_frontend_assets() {
-        // Will be fully implemented in Phase 3
-        // For now, just register script handles
+        $plugin_url = plugin_dir_url( dirname( __FILE__ ) );
+        $plugin_version = defined( 'CCM_VERSION' ) ? CCM_VERSION : '1.0.0';
+
+        // Enqueue cookie blocker first (CRITICAL - must load before other scripts)
+        wp_enqueue_script(
+            'ccm-cookie-blocker',
+            $plugin_url . 'public/js/cookie-blocker.js',
+            array(), // No dependencies - must load first
+            $plugin_version,
+            false // Load in header with priority
+        );
+
+        // Set very high priority for blocker
+        add_filter( 'script_loader_tag', function( $tag, $handle ) {
+            if ( $handle === 'ccm-cookie-blocker' ) {
+                // Make it load ASAP
+                return str_replace( '<script', '<script data-ccm-blocker="true"', $tag );
+            }
+            return $tag;
+        }, -9999, 2 );
+
+        // Enqueue storage manager
+        wp_enqueue_script(
+            'ccm-storage-manager',
+            $plugin_url . 'public/js/storage-manager.js',
+            array(), // No dependencies
+            $plugin_version,
+            false // Load in header
+        );
+
+        // Enqueue consent banner (depends on storage manager)
+        wp_enqueue_script(
+            'ccm-consent-banner',
+            $plugin_url . 'public/js/consent-banner.js',
+            array( 'ccm-storage-manager' ),
+            $plugin_version,
+            true // Load in footer
+        );
+
+        // Localize script with AJAX URL and version
+        wp_localize_script(
+            'ccm-consent-banner',
+            'CCM_CONFIG',
+            array(
+                'ajax_url' => admin_url( 'admin-ajax.php' ),
+                'version'  => $plugin_version,
+                'nonce'    => wp_create_nonce( 'ccm_ajax_nonce' ),
+            )
+        );
+
+        // Make AJAX URL and version available globally
+        wp_add_inline_script(
+            'ccm-storage-manager',
+            'window.CCM_AJAX_URL = "' . esc_js( admin_url( 'admin-ajax.php' ) ) . '";' .
+            'window.CCM_VERSION = "' . esc_js( $plugin_version ) . '";',
+            'before'
+        );
+
+        // Enqueue banner styles
+        wp_enqueue_style(
+            'ccm-banner',
+            $plugin_url . 'public/css/banner.css',
+            array(),
+            $plugin_version
+        );
     }
 
     /**
@@ -81,6 +144,15 @@ class CCM_Cookie_Manager {
      */
     public function ajax_get_banner_config() {
         global $wpdb;
+
+        // Check cache first
+        $cache_key = 'ccm_banner_config';
+        $cached = get_transient( $cache_key );
+
+        if ( $cached !== false ) {
+            wp_send_json_success( $cached );
+            return;
+        }
 
         // Get all categories ordered by display_order
         $categories_table = $wpdb->prefix . 'cookie_consent_categories';
@@ -95,13 +167,12 @@ class CCM_Cookie_Manager {
         foreach ( $categories as $category ) {
             $cookies = $wpdb->get_results(
                 $wpdb->prepare(
-                    "SELECT * FROM {$cookies_table} WHERE category_id = %d",
+                    "SELECT name, provider, purpose, expiration FROM {$cookies_table} WHERE category_id = %d",
                     $category->id
                 )
             );
 
             $categories_with_cookies[] = array(
-                'id'          => $category->id,
                 'slug'        => $category->slug,
                 'name'        => $category->name,
                 'description' => $category->description,
@@ -110,43 +181,58 @@ class CCM_Cookie_Manager {
             );
         }
 
-        wp_send_json_success(
-            array(
-                'categories'       => $categories_with_cookies,
-                'consent_version'  => CCM_VERSION,
-                'banner_text'      => get_option( 'ccm_banner_text', 'We use cookies to improve your experience.' ),
-            )
+        // Build banner text structure
+        $banner_text = array(
+            'heading'           => get_option( 'ccm_banner_heading', 'We use cookies' ),
+            'message'           => get_option( 'ccm_banner_message', 'This site uses cookies to enhance your experience and analyze site usage.' ),
+            'accept_all_label'  => get_option( 'ccm_accept_all_label', 'Accept All' ),
+            'reject_all_label'  => get_option( 'ccm_reject_all_label', 'Reject All' ),
+            'manage_label'      => get_option( 'ccm_manage_label', 'Manage Preferences' ),
         );
+
+        $data = array(
+            'categories'      => $categories_with_cookies,
+            'banner_text'     => $banner_text,
+            'consent_version' => defined( 'CCM_VERSION' ) ? CCM_VERSION : '1.0.0',
+        );
+
+        // Cache for 1 hour
+        set_transient( $cache_key, $data, HOUR_IN_SECONDS );
+
+        wp_send_json_success( $data );
     }
 
     /**
      * AJAX handler for recording consent
      */
     public function ajax_record_consent() {
-        // Verify request
-        check_ajax_referer( 'ccm_ajax_nonce', 'nonce' );
-
-        // Rate limiting check
+        // Rate limiting check (10 requests per minute per visitor)
         $visitor_id = CCM_Consent_Logger::generate_visitor_id();
-        $transient_key = 'ccm_rate_limit_' . $visitor_id;
+        $transient_key = 'ccm_rate_limit_' . substr( md5( $visitor_id ), 0, 16 );
         $request_count = get_transient( $transient_key );
 
         if ( $request_count !== false && $request_count >= 10 ) {
-            wp_send_json_error( array( 'message' => 'Rate limit exceeded' ), 429 );
+            wp_send_json_error( array( 'message' => 'Rate limit exceeded. Please wait before making another request.' ), 429 );
         }
 
-        // Increment rate limit counter
+        // Increment rate limit counter (60 second window)
         set_transient( $transient_key, ( $request_count ? $request_count + 1 : 1 ), 60 );
 
         // Get POST data
-        $event_type           = isset( $_POST['event_type'] ) ? sanitize_text_field( $_POST['event_type'] ) : '';
-        $accepted_categories  = isset( $_POST['accepted_categories'] ) ? array_map( 'sanitize_text_field', $_POST['accepted_categories'] ) : array();
-        $rejected_categories  = isset( $_POST['rejected_categories'] ) ? array_map( 'sanitize_text_field', $_POST['rejected_categories'] ) : array();
+        $event_type           = isset( $_POST['event_type'] ) ? sanitize_text_field( wp_unslash( $_POST['event_type'] ) ) : '';
+        $accepted_categories  = isset( $_POST['accepted_categories'] ) ? array_map( 'sanitize_text_field', (array) $_POST['accepted_categories'] ) : array();
+        $rejected_categories  = isset( $_POST['rejected_categories'] ) ? array_map( 'sanitize_text_field', (array) $_POST['rejected_categories'] ) : array();
+        $consent_version      = isset( $_POST['consent_version'] ) ? sanitize_text_field( wp_unslash( $_POST['consent_version'] ) ) : '';
 
         // Validate event type
         $valid_types = array( 'accept_all', 'reject_all', 'accept_partial', 'modify', 'revoke' );
-        if ( ! in_array( $event_type, $valid_types ) ) {
-            wp_send_json_error( array( 'message' => 'Invalid event type' ), 400 );
+        if ( ! in_array( $event_type, $valid_types, true ) ) {
+            wp_send_json_error( array( 'message' => 'Invalid event type: ' . $event_type ), 400 );
+        }
+
+        // Validate categories are non-empty for non-revoke events
+        if ( $event_type !== 'revoke' && empty( $accepted_categories ) ) {
+            wp_send_json_error( array( 'message' => 'At least one category must be accepted' ), 400 );
         }
 
         // Record event
@@ -161,12 +247,13 @@ class CCM_Cookie_Manager {
         if ( $event_id ) {
             wp_send_json_success(
                 array(
-                    'event_id' => $event_id,
-                    'message'  => 'Consent recorded successfully',
+                    'event_id'   => $event_id,
+                    'visitor_id' => $visitor_id,
+                    'timestamp'  => current_time( 'mysql' ),
                 )
             );
         } else {
-            wp_send_json_error( array( 'message' => 'Failed to record consent' ), 500 );
+            wp_send_json_error( array( 'message' => 'Failed to record consent event' ), 500 );
         }
     }
 
@@ -177,15 +264,16 @@ class CCM_Cookie_Manager {
         $dnt_enabled = false;
 
         // Check DNT header (multiple variations)
-        if ( isset( $_SERVER['HTTP_DNT'] ) && $_SERVER['HTTP_DNT'] == '1' ) {
+        if ( isset( $_SERVER['HTTP_DNT'] ) && $_SERVER['HTTP_DNT'] === '1' ) {
             $dnt_enabled = true;
-        } elseif ( isset( $_SERVER['HTTP_X_DO_NOT_TRACK'] ) && $_SERVER['HTTP_X_DO_NOT_TRACK'] == '1' ) {
+        } elseif ( isset( $_SERVER['HTTP_X_DO_NOT_TRACK'] ) && $_SERVER['HTTP_X_DO_NOT_TRACK'] === '1' ) {
             $dnt_enabled = true;
         }
 
         wp_send_json_success(
             array(
                 'dnt_enabled' => $dnt_enabled,
+                'auto_reject' => $dnt_enabled, // Auto-reject if DNT is enabled
             )
         );
     }

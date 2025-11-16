@@ -90,6 +90,65 @@ Users must be able to change their cookie preferences at any time after making t
 - **FR-014**: System MUST support consent re-prompting when cookie list or policies change
 - **FR-015**: System MUST display consent banner as a full-width bottom banner that is noticeable without blocking page content
 
+### Banner States by Breakpoint
+
+#### Non-Consented Visitors (Banner Visible)
+
+**Desktop (≥768px)**:
+- Full-width banner fixed to bottom of viewport
+- Height: Auto-sized to content (approximately 80-120px depending on text length)
+- Layout: Horizontal - consent message left, buttons right
+- Buttons: "Accept All", "Reject All", "Manage Preferences" displayed inline
+- Button size: Standard clickable area (minimum 44x44px)
+- Z-index: High value to overlay content without blocking navigation
+- Background: Semi-transparent or solid (per site design)
+- Text: Multi-line consent message visible without scrolling
+
+**Mobile (<768px)**:
+- Full-width banner fixed to bottom of viewport
+- Height: Auto-sized to content (approximately 140-200px depending on text length)
+- Layout: Vertical - consent message stacked above buttons
+- Buttons: Full-width or 2-column grid, stacked vertically for accessibility
+- Button size: Touch-friendly (minimum 44x44px tap target)
+- Padding: Increased for touch interaction (16-24px)
+- Text: Condensed consent message, scrollable if exceeds 3-4 lines
+- Close/dismiss: Optional "X" button in top-right corner
+
+#### Consented Visitors (Banner Hidden)
+
+**Desktop (≥768px)**:
+- Banner: Completely hidden (display: none)
+- Footer link: "Cookie Settings" link visible in site footer
+- Link position: Footer navigation area or privacy links section
+- Link style: Standard text link matching footer design
+- Interaction: Click opens preference modal overlay
+
+**Mobile (<768px)**:
+- Banner: Completely hidden (display: none)
+- Footer link: "Cookie Settings" link visible in mobile footer
+- Link position: Mobile footer menu or hamburger menu
+- Link style: Touch-friendly (minimum 44x44px tap area)
+- Interaction: Tap opens full-screen or modal preference manager
+
+#### Visual State Transitions
+
+**Banner Appearance** (First visit):
+- Animation: Slide up from bottom (0.3s ease-out)
+- Initial state: Hidden below viewport
+- Final state: Fixed at bottom, fully visible
+
+**Banner Dismissal** (After consent):
+- Animation: Slide down to bottom (0.3s ease-in)
+- Initial state: Fixed at bottom, fully visible
+- Final state: Hidden below viewport, then display: none
+- Persistence: Choice saved to localStorage + cookie
+
+**Preference Manager Re-opening**:
+- Animation: Modal fade-in (0.2s) or slide-up (0.3s)
+- Trigger: Click "Cookie Settings" link in footer
+- Display: Modal overlay (desktop) or full-screen (mobile)
+- Pre-filled: Current consent choices displayed
+
 ### Key Entities
 
 - **User Consent Record**: Represents a user's consent state, including timestamp, accepted categories, rejected categories, consent version, user identifier (anonymous)

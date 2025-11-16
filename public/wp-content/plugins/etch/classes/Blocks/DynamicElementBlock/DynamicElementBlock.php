@@ -17,6 +17,7 @@ use Etch\Blocks\Global\StylesRegister;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
 use Etch\Blocks\Utilities\EtchTypeAsserter;
+use Etch\Blocks\Utilities\ShortcodeProcessor;
 use Etch\Preprocessor\Utilities\EtchParser;
 
 /**
@@ -99,6 +100,12 @@ class DynamicElementBlock {
 		// Register styles (original + dynamic) after EtchParser processing
 		StylesRegister::register_block_styles( $attrs->styles ?? array(), $attrs->attributes, $resolved_attributes );
 
+		// Process shortcodes in attribute values after dynamic data resolution
+		foreach ( $resolved_attributes as $name => $value ) {
+			$string_value = EtchTypeAsserter::to_string( $value );
+			$resolved_attributes[ $name ] = ShortcodeProcessor::process( $string_value, 'etch/dynamic-element' );
+		}
+
 		$tag = 'div';
 		if ( isset( $resolved_attributes['tag'] ) && is_string( $resolved_attributes['tag'] ) ) {
 			$tag = $resolved_attributes['tag'];
@@ -115,6 +122,18 @@ class DynamicElementBlock {
 		foreach ( $resolved_attributes as $name => $value ) {
 			$attribute_string .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( EtchTypeAsserter::to_string( $value ) ) );
 		}
+
+		if ( str_starts_with( $content, "\n" ) ) {
+			$content = substr( $content, 1 );
+		}
+		if ( str_ends_with( $content, "\n" ) ) {
+			$content = substr( $content, 0, -1 );
+		}
+
+		// Note: We don't process shortcodes in $content here because:
+		// - $content is the already-rendered output from inner blocks
+		// - Inner blocks (TextBlock, etc.) handle their own shortcode processing
+		// - Processing here would cause double-processing
 
 		return sprintf(
 			'<%1$s%2$s>%3$s</%1$s>',

@@ -13,6 +13,7 @@ namespace Etch\Blocks\TextBlock;
 use Etch\Blocks\Types\TextAttributes;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
+use Etch\Blocks\Utilities\ShortcodeProcessor;
 use Etch\Preprocessor\Utilities\EtchParser;
 
 /**
@@ -78,6 +79,9 @@ class TextBlock {
 			$text_content = EtchParser::replace_string( $text_content, $context );
 		}
 
-		return wp_strip_all_tags( $text_content, true );
+		// Process shortcodes after dynamic data resolution
+		$text_content = ShortcodeProcessor::process( $text_content, 'etch/text' );
+
+		return $text_content;
 	}
 }

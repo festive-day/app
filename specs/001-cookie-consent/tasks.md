@@ -66,27 +66,27 @@
 
 **NOTE: Write tests FIRST, ensure they FAIL before implementation**
 
-- [ ] T023 [P] [US1] Create test-cookie-blocking.php in tests/integration/ for script wrapper blocking (verify type="text/plain" before consent)
-- [ ] T024 [P] [US1] Create test-consent-logging.php in tests/integration/ for audit event recording (verify accept_all/reject_all events logged)
-- [ ] T025 [P] [US1] Create test-etch-compatibility.php in tests/integration/ for banner rendering with Etch theme
+- [X] T023 [P] [US1] Create test-cookie-blocking.php in tests/integration/ for script wrapper blocking (verify type="text/plain" before consent)
+- [X] T024 [P] [US1] Create test-consent-logging.php in tests/integration/ for audit event recording (verify accept_all/reject_all events logged)
+- [X] T025 [P] [US1] Create test-etch-compatibility.php in tests/integration/ for banner rendering with Etch theme
 
 ### Implementation for User Story 1
 
-- [ ] T026 [P] [US1] Create banner HTML template in public/templates/banner-template.php (bottom banner, Accept All, Reject All buttons)
-- [ ] T027 [P] [US1] Create banner CSS with BEM naming in public/css/banner.css (use AutomaticCSS utilities, full-width bottom position)
-- [ ] T028 [US1] Implement consent-banner.js in public/js/ (display logic, localStorage write, cookie write, AJAX consent recording)
-- [ ] T029 [US1] Implement cookie-blocker.js in public/js/ (script tag rewriting type="text/javascript" → type="text/plain", document.cookie interception)
-- [ ] T030 [US1] Implement storage-manager.js in public/js/ (localStorage read/write, cookie read/write, sync logic)
-- [ ] T031 [US1] Implement script wrapper in includes/class-cookie-blocker.php (hook wp_enqueue_scripts, script_loader_tag filter, add data-consent-category attributes)
-- [ ] T032 [US1] Implement GET /ccm_get_banner_config endpoint (return categories, cookies, banner_text, consent_version per frontend-api.md)
-- [ ] T033 [US1] Implement POST /ccm_record_consent endpoint (validate event_type, log to wp_cookie_consent_events, return event_id)
-- [ ] T034 [US1] Implement GET /ccm_check_dnt endpoint (check DNT header, return dnt_enabled boolean)
-- [ ] T035 [US1] Enqueue banner scripts/styles in wp_enqueue_scripts hook (priority -9999 for blocker.js)
-- [ ] T036 [US1] Add "Cookie Settings" link to Etch theme footer (wp_footer hook)
-- [ ] T037 [US1] Implement banner show/hide logic based on localStorage consent check (consent-banner.js)
-- [ ] T038 [US1] Implement cookie clearing for rejected categories when consent changes from accept → reject (storage-manager.js)
-- [ ] T039 [US1] Add validation for localStorage consent object (version check, timestamp expiration check 12 months)
-- [ ] T040 [US1] Add rate limiting for POST /ccm_record_consent (10 requests/minute per IP, WordPress transient cache)
+- [X] T026 [P] [US1] Create banner HTML template in public/templates/banner-template.php (bottom banner, Accept All, Reject All buttons)
+- [X] T027 [P] [US1] Create banner CSS with BEM naming in public/css/banner.css (use AutomaticCSS utilities, full-width bottom position)
+- [X] T028 [US1] Implement consent-banner.js in public/js/ (display logic, localStorage write, cookie write, AJAX consent recording)
+- [X] T029 [US1] Implement cookie-blocker.js in public/js/ (script tag rewriting type="text/javascript" → type="text/plain", document.cookie interception)
+- [X] T030 [US1] Implement storage-manager.js in public/js/ (localStorage read/write, cookie read/write, sync logic)
+- [X] T031 [US1] Implement script wrapper in includes/class-cookie-blocker.php (hook wp_enqueue_scripts, script_loader_tag filter, add data-consent-category attributes)
+- [X] T032 [US1] Implement GET /ccm_get_banner_config endpoint (return categories, cookies, banner_text, consent_version per frontend-api.md)
+- [X] T033 [US1] Implement POST /ccm_record_consent endpoint (validate event_type, log to wp_cookie_consent_events, return event_id)
+- [X] T034 [US1] Implement GET /ccm_check_dnt endpoint (check DNT header, return dnt_enabled boolean)
+- [X] T035 [US1] Enqueue banner scripts/styles in wp_enqueue_scripts hook (priority -9999 for blocker.js)
+- [X] T036 [US1] Add "Cookie Settings" link to Etch theme footer (wp_footer hook)
+- [X] T037 [US1] Implement banner show/hide logic based on localStorage consent check (consent-banner.js)
+- [X] T038 [US1] Implement cookie clearing for rejected categories when consent changes from accept → reject (storage-manager.js)
+- [X] T039 [US1] Add validation for localStorage consent object (version check, timestamp expiration check 12 months)
+- [X] T040 [US1] Add rate limiting for POST /ccm_record_consent (10 requests/minute per IP, WordPress transient cache)
 
 **Checkpoint**: User Story 1 fully functional - banner displays, cookies blocked, consent persists, audit logs working
 
@@ -100,8 +100,8 @@
 
 ### Integration Tests for User Story 2
 
-- [ ] T041 [P] [US2] Add test for category display in test-etch-compatibility.php (verify 4 categories render with descriptions)
-- [ ] T042 [P] [US2] Add test for cookie details modal in test-etch-compatibility.php (verify cookies grouped by category)
+- [X] T041 [P] [US2] Add test for category display in test-etch-compatibility.php (verify 4 categories render with descriptions)
+- [X] T042 [P] [US2] Add test for cookie details modal in test-etch-compatibility.php (verify cookies grouped by category)
 
 ### Implementation for User Story 2
 

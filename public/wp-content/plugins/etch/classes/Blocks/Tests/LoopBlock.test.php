@@ -52,6 +52,8 @@
  * ✅ Shortcode Resolution
  *    - Shortcode in inner text block content using loop item: [etch_test_hello name={item.name}]
  *    - Shortcode in inner element block attribute using loop item: data-test="[etch_test_hello name={item.name}]"
+ *    - Shortcode in inner block in FSE template (direct rendering without the_content filter)
+ *    - Shortcode in element attribute in FSE template with loop item
  */
 
 declare(strict_types=1);
@@ -1482,5 +1484,114 @@ class LoopBlockTest extends WP_UnitTestCase {
 
 		$rendered = $this->render_blocks_through_content_filter( $blocks );
 		$this->assertStringContainsString( 'data-test="Hello Charlie!"', $rendered );
+	}
+
+	/**
+	 * Test loop block with shortcode in inner block in FSE template (direct rendering)
+	 * This simulates FSE template rendering where blocks are rendered directly without the_content filter
+	 */
+	public function test_loop_block_with_shortcode_fse_template() {
+		// Create a simple JSON loop preset
+		$loop_id = 'test_shortcode_loop_fse';
+		update_option(
+			'etch_loops',
+			array(
+				$loop_id => array(
+					'name' => 'Test Shortcode Loop FSE',
+					'key' => 'test_shortcode_loop_fse',
+					'global' => false,
+					'config' => array(
+						'type' => 'json',
+						'data' => array(
+							array(
+								'name' => 'Alice',
+							),
+						),
+					),
+				),
+			)
+		);
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/text',
+				'attrs' => array(
+					'content' => 'shortcode: [etch_test_hello name={item.name}]',
+				),
+				'innerBlocks' => array(),
+				'innerHTML' => '',
+				'innerContent' => array(),
+			),
+		);
+
+		$attributes = array(
+			'target' => '',
+			'loopId' => $loop_id,
+			'itemId' => 'item',
+		);
+		$block = $this->create_mock_block( 'etch/loop', $attributes, $inner_blocks );
+
+		// Render directly (simulating FSE template rendering, not through the_content filter)
+		$result = $this->loop_block->render_block( $attributes, '', $block );
+
+		// Shortcode should be resolved even without the_content filter
+		$this->assertStringContainsString( 'shortcode: Hello Alice!', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
+	}
+
+	/**
+	 * Test loop block with shortcode in element attribute in FSE template
+	 */
+	public function test_loop_block_with_shortcode_in_element_attribute_fse_template() {
+		// Create a simple JSON loop preset
+		$loop_id = 'test_shortcode_loop_attr_fse';
+		update_option(
+			'etch_loops',
+			array(
+				$loop_id => array(
+					'name' => 'Test Shortcode Loop Attr FSE',
+					'key' => 'test_shortcode_loop_attr_fse',
+					'global' => false,
+					'config' => array(
+						'type' => 'json',
+						'data' => array(
+							array(
+								'name' => 'Bob',
+							),
+						),
+					),
+				),
+			)
+		);
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'div',
+					'attributes' => array(
+						'data-test' => '[etch_test_hello name={item.name}]',
+					),
+				),
+				'innerBlocks' => array(),
+				'innerHTML' => "\n\n",
+				'innerContent' => array( "\n\n" ),
+			),
+		);
+
+		$attributes = array(
+			'target' => '',
+			'loopId' => $loop_id,
+			'itemId' => 'item',
+		);
+		$block = $this->create_mock_block( 'etch/loop', $attributes, $inner_blocks );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->loop_block->render_block( $attributes, '', $block );
+
+		// Dynamic data should be resolved first, then shortcode processed
+		$this->assertStringContainsString( 'data-test="Hello Bob!"', $result );
+		$this->assertStringNotContainsString( '{item.name}', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
 	}
 }

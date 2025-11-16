@@ -3,7 +3,7 @@
   "slug": "etch",
   "author": "Digital Gravy",
   "author_profile": "https://digitalgravy.co",
-  "version": "1.0.0-alpha-10",
+  "version": "1.0.0-alpha-11",
   "requires": "5.9",
   "requires_php": "8.0",
   "sections": {

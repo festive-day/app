@@ -705,6 +705,15 @@ class ModifiersTest extends WP_UnitTestCase {
 		$this->assertTrue( Modifiers::apply_modifier( 5, 'equal(5)', array() ) );
 		$this->assertTrue( Modifiers::apply_modifier( 'test', 'equal("test")', array() ) );
 		$this->assertTrue( Modifiers::apply_modifier( true, 'equal(true)', array() ) );
+		$this->assertTrue(
+			Modifiers::apply_modifier(
+				'http://localhost:9000/',
+				'equal(site.home_url.concat("/"))',
+				array(
+					'site' => (object) array( 'home_url' => 'http://localhost:9000' ),
+				)
+			)
+		);
 
 		$this->assertFalse( Modifiers::apply_modifier( 5, 'equal(10)', array() ) );
 		$this->assertFalse( Modifiers::apply_modifier( 'test', 'equal("TEST")', array() ) );

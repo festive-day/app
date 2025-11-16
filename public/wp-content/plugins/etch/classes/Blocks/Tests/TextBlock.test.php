@@ -13,7 +13,6 @@
  *
  * ✅ Basic Rendering
  *    - Static content rendering
- *    - HTML tag stripping (wp_strip_all_tags)
  *    - Empty content handling
  *    - Special characters preservation
  *
@@ -49,6 +48,10 @@
  *    - Direct shortcode in content: [etch_test_hello name=John]
  *    - Shortcode using component props: [etch_test_hello name={props.text}]
  *    - Shortcodes ARE resolved in TextBlock content
+ *    - Shortcode in FSE template (direct rendering without the_content filter)
+ *    - Shortcode with dynamic data in FSE template: content="[hello_world name={user.displayName}]"
+ *    - FSE template shortcode behavior matches post content behavior
+ *    - Shortcode returning DOM element: [etch_test_dom text=TestContent] returns <div>TestContent</div> (DOM preserved, not stripped)
  *
  * 📝 Areas for Future Enhancement
  *    - Element attributes context ({attributes.*})
@@ -159,18 +162,6 @@ class TextBlockTest extends WP_UnitTestCase {
 	public function test_text_renders_static_content() {
 		$attributes = array(
 			'content' => 'Hello World',
-		);
-		$block = $this->create_mock_block( 'etch/text', $attributes );
-		$result = $this->text_block->render_callback( $attributes, '', $block );
-		$this->assertEquals( 'Hello World', $result );
-	}
-
-	/**
-	 * Test text strips HTML tags correctly
-	 */
-	public function test_text_strips_html_tags() {
-		$attributes = array(
-			'content' => '<p>Hello <strong>World</strong></p>',
 		);
 		$block = $this->create_mock_block( 'etch/text', $attributes );
 		$result = $this->text_block->render_callback( $attributes, '', $block );
@@ -669,6 +660,107 @@ class TextBlockTest extends WP_UnitTestCase {
 
 		$rendered = $this->render_blocks_through_content_filter( $blocks );
 		$this->assertStringContainsString( 'shortcode test: Hello Jane!', $rendered );
+	}
+
+	/**
+	 * Test text block with shortcode in FSE template (direct rendering)
+	 * This simulates FSE template rendering where blocks are rendered directly without the_content filter
+	 */
+	public function test_text_block_with_shortcode_fse_template() {
+		$attributes = array(
+			'content' => 'shortcode test: [etch_test_hello name=John]',
+		);
+		$block = $this->create_mock_block( 'etch/text', $attributes );
+
+		// Render directly (simulating FSE template rendering, not through the_content filter)
+		$result = $this->text_block->render_callback( $attributes, '', $block );
+
+		// Shortcode should be resolved even without the_content filter
+		$this->assertStringContainsString( 'shortcode test: Hello John!', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello name=John]', $result );
+	}
+
+	/**
+	 * Test text block with shortcode using dynamic data in FSE template
+	 * This tests the scenario: content="shortcode test: [hello_world name={user.displayName}]"
+	 */
+	public function test_text_block_with_shortcode_and_dynamic_data_fse_template() {
+		// Set up user context
+		$user_id = $this->factory()->user->create(
+			array(
+				'display_name' => 'Jane Doe',
+			)
+		);
+		wp_set_current_user( $user_id );
+
+		$attributes = array(
+			'content' => 'shortcode test: [etch_test_hello name="{user.displayName}"]',
+		);
+		$block = $this->create_mock_block( 'etch/text', $attributes );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->text_block->render_callback( $attributes, '', $block );
+
+		// Dynamic data should be resolved first, then shortcode processed
+		$this->assertStringContainsString( 'shortcode test: Hello Jane Doe!', $result );
+		$this->assertStringNotContainsString( '{user.displayName}', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
+	}
+
+	/**
+	 * Test text block with shortcode in FSE template matches post content behavior
+	 * This ensures shortcodes work identically in both contexts
+	 */
+	public function test_text_block_shortcode_fse_template_matches_post_content() {
+		$attributes = array(
+			'content' => '[etch_test_hello name=John]',
+		);
+		$block = $this->create_mock_block( 'etch/text', $attributes );
+
+		// Render directly (FSE template scenario)
+		$fse_result = $this->text_block->render_callback( $attributes, '', $block );
+
+		// Render through content filter (post content scenario)
+		$blocks = array(
+			array(
+				'blockName' => 'etch/text',
+				'attrs' => $attributes,
+				'innerBlocks' => array(),
+				'innerHTML' => '',
+				'innerContent' => array(),
+			),
+		);
+		$post_result = $this->render_blocks_through_content_filter( $blocks );
+
+		// Both should resolve shortcodes correctly
+		$this->assertStringContainsString( 'Hello John!', $fse_result );
+		$this->assertStringContainsString( 'Hello John!', $post_result );
+		// Both should not contain the literal shortcode
+		$this->assertStringNotContainsString( '[etch_test_hello', $fse_result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $post_result );
+	}
+
+	/**
+	 * Test text block with shortcode that returns DOM element
+	 * Shortcode should return DOM element and it should not be stripped
+	 */
+	public function test_text_block_with_shortcode_returning_dom_element() {
+		$attributes = array(
+			'content' => '[etch_test_dom text=TestContent]',
+		);
+		$block = $this->create_mock_block( 'etch/text', $attributes );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->text_block->render_callback( $attributes, '', $block );
+
+		// DOM element should be preserved, not stripped
+		$this->assertStringContainsString( '<div>', $result );
+		$this->assertStringContainsString( '</div>', $result );
+		$this->assertStringContainsString( 'TestContent', $result );
+		// Should contain the full DOM structure
+		$this->assertStringContainsString( '<div>TestContent</div>', $result );
+		// Should not contain the literal shortcode
+		$this->assertStringNotContainsString( '[etch_test_dom', $result );
 	}
 
 	/**

@@ -16,6 +16,7 @@ use Etch\Blocks\Global\StylesRegister;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
 use Etch\Blocks\Utilities\EtchTypeAsserter;
+use Etch\Blocks\Utilities\ShortcodeProcessor;
 use Etch\Helpers\SvgLoader;
 use Etch\Preprocessor\Utilities\EtchParser;
 
@@ -98,6 +99,12 @@ class SvgBlock {
 
 		// Register styles (original + dynamic) after EtchParser processing
 		StylesRegister::register_block_styles( $attrs->styles ?? array(), $attrs->attributes, $resolved_attributes );
+
+		// Process shortcodes in attribute values after dynamic data resolution
+		foreach ( $resolved_attributes as $name => $value ) {
+			$string_value = EtchTypeAsserter::to_string( $value );
+			$resolved_attributes[ $name ] = ShortcodeProcessor::process( $string_value, 'etch/svg' );
+		}
 
 		// Extract src from resolved attributes
 		$src = $resolved_attributes['src'] ?? '';

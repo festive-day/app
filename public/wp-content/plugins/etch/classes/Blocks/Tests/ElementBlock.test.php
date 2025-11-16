@@ -47,6 +47,9 @@
  *    - Shortcode using component props in attribute: data-test="[etch_test_hello name={props.text}]"
  *    - ElementBlock with p tag containing etch/text with only a shortcode
  *    - Shortcodes ARE resolved in ElementBlock attributes and inner TextBlock content
+ *    - Shortcode in attribute in FSE template (direct rendering without the_content filter)
+ *    - Shortcode with dynamic data in attribute in FSE template: data-test="[hello_world name={user.displayName}]"
+ *    - ElementBlock with inner TextBlock containing shortcode in FSE template
  *
  * ✅ Edge Cases
  *    - Invalid tag names sanitized
@@ -663,6 +666,85 @@ class ElementBlockTest extends WP_UnitTestCase {
 		$this->assertStringContainsString( 'Hello John!', $rendered );
 		// Check that shortcode was resolved (not present as literal)
 		$this->assertStringNotContainsString( '[etch_test_hello name=John]', $rendered );
+	}
+
+	/**
+	 * Test element block with shortcode in attribute value in FSE template (direct rendering)
+	 * This simulates FSE template rendering where blocks are rendered directly without the_content filter
+	 */
+	public function test_element_block_with_shortcode_in_attribute_fse_template() {
+		$attributes = array(
+			'tag' => 'h2',
+			'attributes' => array(
+				'data-test' => '[etch_test_hello name=John]',
+			),
+		);
+		$block = $this->create_mock_block( 'etch/element', $attributes );
+
+		// Render directly (simulating FSE template rendering, not through the_content filter)
+		$result = $this->element_block->render_block( $attributes, '', $block );
+
+		// Shortcode should be resolved even without the_content filter
+		$this->assertStringContainsString( 'data-test="Hello John!"', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello name=John]', $result );
+	}
+
+	/**
+	 * Test element block with shortcode using dynamic data in attribute in FSE template
+	 * This tests the scenario: data-test="[hello_world name={user.displayName}]"
+	 */
+	public function test_element_block_with_shortcode_and_dynamic_data_in_attribute_fse_template() {
+		// Set up user context
+		$user_id = $this->factory()->user->create(
+			array(
+				'display_name' => 'Jane Doe',
+			)
+		);
+		wp_set_current_user( $user_id );
+
+		$attributes = array(
+			'tag' => 'h2',
+			'attributes' => array(
+				'data-test' => '[etch_test_hello name="{user.displayName}"]',
+			),
+		);
+		$block = $this->create_mock_block( 'etch/element', $attributes );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->element_block->render_block( $attributes, '', $block );
+
+		// Dynamic data should be resolved first, then shortcode processed
+		$this->assertStringContainsString( 'data-test="Hello Jane Doe!"', $result );
+		$this->assertStringNotContainsString( '{user.displayName}', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
+	}
+
+	/**
+	 * Test element block with inner text block containing shortcode in FSE template
+	 * This simulates the exact scenario from the user's example
+	 */
+	public function test_element_block_with_text_block_shortcode_fse_template() {
+		// Create a text block with shortcode
+		$text_block = new \Etch\Blocks\TextBlock\TextBlock();
+		$text_attributes = array(
+			'content' => 'shortcode test: [etch_test_hello name="John"]',
+		);
+		$text_block_obj = $this->create_mock_block( 'etch/text', $text_attributes );
+		$text_content = $text_block->render_callback( $text_attributes, '', $text_block_obj );
+
+		// Now create element block with that content
+		$attributes = array(
+			'tag' => 'h2',
+			'attributes' => array(),
+		);
+		$block = $this->create_mock_block( 'etch/element', $attributes );
+
+		// Render element block with the text content as inner content
+		$result = $this->element_block->render_block( $attributes, $text_content, $block );
+
+		// Shortcode should be resolved in both the text block and element block
+		$this->assertStringContainsString( 'shortcode test: Hello John!', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
 	}
 
 	/**

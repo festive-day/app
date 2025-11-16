@@ -13,6 +13,7 @@ namespace Etch\Blocks\RawHtmlBlock;
 use Etch\Blocks\Types\RawHtmlAttributes;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
+use Etch\Blocks\Utilities\ShortcodeProcessor;
 use Etch\Preprocessor\Utilities\EtchParser;
 
 /**
@@ -85,6 +86,9 @@ class RawHtmlBlock {
 				$unsafe = in_array( $resolvedUnsafe, array( 'true', '1', 'yes', 'on' ), true );
 			}
 		}
+
+		// Process shortcodes after dynamic data resolution
+		$html_content = ShortcodeProcessor::process( $html_content, 'etch/raw-html' );
 
 		// On unsafe, return raw content
 		if ( $unsafe ) {

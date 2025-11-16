@@ -39,6 +39,22 @@ trait ShortcodeTestHelper {
 				return 'Hello ' . esc_html( $atts['name'] ) . '!';
 			}
 		);
+
+		// Register shortcode that returns DOM element
+		add_shortcode(
+			'etch_test_dom',
+			function ( $atts ) {
+				$atts = shortcode_atts(
+					array(
+						'text' => 'default',
+					),
+					$atts,
+					'etch_test_dom'
+				);
+
+				return '<div>' . esc_html( $atts['text'] ) . '</div>';
+			}
+		);
 	}
 
 	/**
@@ -48,6 +64,7 @@ trait ShortcodeTestHelper {
 	 */
 	protected function remove_test_shortcode(): void {
 		remove_shortcode( 'etch_test_hello' );
+		remove_shortcode( 'etch_test_dom' );
 	}
 
 	/**

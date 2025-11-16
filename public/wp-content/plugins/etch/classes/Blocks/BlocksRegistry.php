@@ -15,6 +15,7 @@ use Etch\Blocks\LoopBlock\LoopBlock;
 use Etch\Blocks\DynamicElementBlock\DynamicElementBlock;
 use Etch\Blocks\RawHtmlBlock\RawHtmlBlock;
 use Etch\Blocks\ElementBlock\ElementBlock;
+use Etch\Blocks\Global\ContentWrapper;
 use Etch\Blocks\SvgBlock\SvgBlock;
 use Etch\Blocks\TextBlock\TextBlock;
 use Etch\Blocks\SlotContentBlock\SlotContentBlock;
@@ -22,7 +23,6 @@ use Etch\Blocks\SlotPlaceholderBlock\SlotPlaceholderBlock;
 use Etch\Blocks\Global\StylesRegister;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
-use Etch\Helpers\Logger;
 
 /**
  * BlocksRegistry class
@@ -77,6 +77,7 @@ class BlocksRegistry {
 		new StylesRegister();
 		new ScriptRegister();
 		new ContextProvider();
+		new ContentWrapper();
 	}
 
 	/**

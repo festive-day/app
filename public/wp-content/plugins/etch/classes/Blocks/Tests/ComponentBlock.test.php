@@ -55,6 +55,8 @@
  *    - Component prop default contains shortcode: [etch_test_hello name=Jane]
  *    - Component prop instance value contains shortcode
  *    - Component prop with shortcode using dynamic prop in shortcode attribute: [etch_test_hello name={props.text}]
+ *    - Shortcode in pattern block in FSE template (direct rendering without the_content filter)
+ *    - Shortcode with dynamic props in FSE template
  *
  * 📝 Areas for Future Enhancement
  *    - Prop type casting tests (number, boolean, array)
@@ -923,6 +925,80 @@ class ComponentBlockTest extends WP_UnitTestCase {
 
 		$rendered = $this->render_blocks_through_content_filter( $blocks );
 		$this->assertStringContainsString( 'data-test="Hello asdfg!"', $rendered );
+	}
+
+	/**
+	 * Test component block with shortcode in pattern block in FSE template (direct rendering)
+	 * This simulates FSE template rendering where blocks are rendered directly without the_content filter
+	 */
+	public function test_component_block_with_shortcode_fse_template() {
+		// Create component pattern with text block containing shortcode
+		$pattern_id = $this->factory()->post->create(
+			array(
+				'post_type' => 'wp_block',
+				'post_content' => '<!-- wp:etch/text {"content":"shortcode test: [etch_test_hello name=John]"} /-->',
+			)
+		);
+
+		update_post_meta(
+			$pattern_id,
+			'etch_component_properties',
+			array()
+		);
+
+		$attributes = array(
+			'ref' => $pattern_id,
+			'attributes' => array(),
+		);
+		$block = $this->create_mock_block( 'etch/component', $attributes );
+
+		// Render directly (simulating FSE template rendering, not through the_content filter)
+		$result = $this->component_block->render_block( $attributes, '', $block );
+
+		// Shortcode should be resolved even without the_content filter
+		$this->assertStringContainsString( 'shortcode test: Hello John!', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello name=John]', $result );
+	}
+
+	/**
+	 * Test component block with shortcode using dynamic props in FSE template
+	 */
+	public function test_component_block_with_shortcode_and_dynamic_props_fse_template() {
+		// Create component pattern with element block containing shortcode in attribute using props
+		$pattern_id = $this->factory()->post->create(
+			array(
+				'post_type' => 'wp_block',
+				'post_content' => '<!-- wp:etch/element {"tag":"h2","attributes":{"data-test":"[etch_test_hello name={props.text}]"}} /-->',
+			)
+		);
+
+		update_post_meta(
+			$pattern_id,
+			'etch_component_properties',
+			array(
+				array(
+					'key' => 'text',
+					'type' => array( 'primitive' => 'string' ),
+					'default' => '',
+				),
+			)
+		);
+
+		$attributes = array(
+			'ref' => $pattern_id,
+			'attributes' => array(
+				'text' => 'Jane',
+			),
+		);
+		$block = $this->create_mock_block( 'etch/component', $attributes );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->component_block->render_block( $attributes, '', $block );
+
+		// Dynamic props should be resolved first, then shortcode processed
+		$this->assertStringContainsString( 'data-test="Hello Jane!"', $result );
+		$this->assertStringNotContainsString( '{props.text}', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
 	}
 
 	/**

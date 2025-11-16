@@ -7,7 +7,20 @@
       "Bash(.specify/scripts/bash/check-prerequisites.sh:*)",
       "Bash(git rev-parse:*)",
       "Bash(wp db query:*)",
-      "Bash(php -r:*)"
+      "Bash(php -r:*)",
+      "Bash(cd /Users/david_atlarge/Local\\ Sites/speckit-eval/app && awk:*)",
+      "SlashCommand(/mcp-check)",
+      "mcp__chrome-devtools__navigate_page",
+      "mcp__chrome-devtools__take_snapshot",
+      "mcp__chrome-devtools__take_screenshot",
+      "mcp__chrome-devtools__list_console_messages",
+      "mcp__chrome-devtools__get_console_message",
+      "mcp__chrome-devtools__evaluate_script",
+      "mcp__chrome-devtools__list_network_requests",
+      "mcp__chrome-devtools__get_network_request",
+      "Bash(mysql:*)",
+      "Bash(php fix-database.php:*)",
+      "mcp__chrome-devtools__click"
     ],
     "deny": [],
     "ask": []

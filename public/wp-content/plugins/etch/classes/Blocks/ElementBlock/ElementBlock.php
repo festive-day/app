@@ -16,6 +16,7 @@ use Etch\Blocks\Global\StylesRegister;
 use Etch\Blocks\Global\ScriptRegister;
 use Etch\Blocks\Global\ContextProvider;
 use Etch\Blocks\Utilities\EtchTypeAsserter;
+use Etch\Blocks\Utilities\ShortcodeProcessor;
 use Etch\Preprocessor\Utilities\EtchParser;
 use WP_HTML_Tag_Processor;
 
@@ -100,9 +101,23 @@ class ElementBlock {
 		// Register styles (original + dynamic) after EtchParser processing
 		StylesRegister::register_block_styles( $attrs->styles ?? array(), $attrs->attributes, $resolved_attributes );
 
+		// Process shortcodes in attribute values after dynamic data resolution
+		foreach ( $resolved_attributes as $name => $value ) {
+			$string_value = EtchTypeAsserter::to_string( $value );
+			$resolved_attributes[ $name ] = ShortcodeProcessor::process( $string_value, 'etch/element' );
+		}
+
 		$attribute_string = '';
 		foreach ( $resolved_attributes as $name => $value ) {
 			$attribute_string .= sprintf( ' %s="%s"', esc_attr( $name ), esc_attr( EtchTypeAsserter::to_string( $value ) ) );
+		}
+
+		// To store it in innerBlocks we are adding a newline at start and end, so we need to remove those here.
+		if ( str_starts_with( $content, "\n" ) ) {
+			$content = substr( $content, 1 );
+		}
+		if ( str_ends_with( $content, "\n" ) ) {
+			$content = substr( $content, 0, -1 );
 		}
 
 		return sprintf(

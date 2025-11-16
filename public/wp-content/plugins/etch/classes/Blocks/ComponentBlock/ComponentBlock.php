@@ -77,6 +77,7 @@ class ComponentBlock {
 	 * @return string Rendered block HTML.
 	 */
 	public function render_block( $attributes, $content, $block = null ) {
+		// return '<p>TESTING COMPONENT BLOCK</p>';
 		$attrs = ComponentAttributes::from_array( $attributes );
 
 		ScriptRegister::register_script( $attrs );

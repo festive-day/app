@@ -60,6 +60,8 @@
  * ✅ Shortcode Resolution
  *    - Shortcode in rendered content (truthy condition): shortcodes ARE resolved
  *    - Shortcode in rendered content (falsy condition): content not rendered, so shortcodes not processed
+ *    - Shortcode in inner block in FSE template (direct rendering without the_content filter)
+ *    - Shortcode with dynamic data in inner block in FSE template
  */
 
 declare(strict_types=1);
@@ -69,8 +71,10 @@ namespace Etch\Blocks\Tests;
 use WP_UnitTestCase;
 use WP_Block;
 use Etch\Blocks\ConditionBlock\ConditionBlock;
+use Etch\Blocks\ElementBlock\ElementBlock;
 use Etch\Blocks\Global\ContextProvider;
 use Etch\Blocks\Tests\ShortcodeTestHelper;
+use Etch\Blocks\TextBlock\TextBlock;
 
 /**
  * Class ConditionBlockTest
@@ -102,6 +106,20 @@ class ConditionBlockTest extends WP_UnitTestCase {
 	private static $condition_block_instance;
 
 	/**
+	 * TextBlock instance
+	 *
+	 * @var TextBlock
+	 */
+	private $text_block;
+
+	/**
+	 * ElementBlock instance
+	 *
+	 * @var ElementBlock
+	 */
+	private $element_block;
+
+	/**
 	 * Set up test fixtures
 	 */
 	public function setUp(): void {
@@ -112,6 +130,9 @@ class ConditionBlockTest extends WP_UnitTestCase {
 			self::$condition_block_instance = new ConditionBlock();
 		}
 		$this->condition_block = self::$condition_block_instance;
+
+		$this->text_block = new TextBlock();
+		$this->element_block = new ElementBlock();
 
 		// Trigger block registration if not already registered
 		if ( ! \WP_Block_Type_Registry::get_instance()->is_registered( 'etch/condition' ) ) {
@@ -152,10 +173,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 		$attributes = array(
 			'condition' => null,
 		);
-		$content = '<p>Content</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Content',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Content</p>', $result );
 	}
 
 	// ==================== OPERATOR TESTS ====================
@@ -171,10 +214,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"test"',
 			),
 		);
-		$content = '<p>Equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Equal</p>', $result );
 	}
 
 	/**
@@ -188,10 +253,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"other"',
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( '', $result );
+
+				$inner_blocks = array(
+					array(
+						'blockName' => 'etch/element',
+						'attrs' => array(
+							'tag' => 'p',
+						),
+						'innerBlocks' => array(
+							array(
+								'blockName' => 'etch/text',
+								'attrs' => array(
+									'content' => 'Should not show',
+								),
+								'innerBlocks' => array(),
+								'innerHTML' => '',
+								'innerContent' => array(),
+							),
+						),
+						'innerHTML' => '',
+						'innerContent' => array( null ),
+					),
+				);
+
+				$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+				$result = $this->condition_block->render_block( $attributes, '', $block );
+				$this->assertEquals( '', $result );
 	}
 
 	/**
@@ -205,10 +292,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Strict equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Strict equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Strict equal</p>', $result );
 	}
 
 	/**
@@ -222,9 +331,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -239,10 +370,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"user"',
 			),
 		);
-		$content = '<p>Not equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Not equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Not equal</p>', $result );
 	}
 
 	/**
@@ -256,10 +409,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Strict not equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Strict not equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Strict not equal</p>', $result );
 	}
 
 	/**
@@ -273,10 +448,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Greater</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Greater',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Greater</p>', $result );
 	}
 
 	/**
@@ -290,10 +486,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Less</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Less',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Less</p>', $result );
 	}
 
 	/**
@@ -307,10 +524,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Greater or equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Greater or equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Greater or equal</p>', $result );
 	}
 
 	/**
@@ -324,10 +562,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Less or equal</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Less or equal',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Less or equal</p>', $result );
 	}
 
 	/**
@@ -349,10 +608,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>AND condition</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'AND condition',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>AND condition</p>', $result );
 	}
 
 	/**
@@ -374,9 +654,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -399,10 +700,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>OR condition</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'OR condition',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>OR condition</p>', $result );
 	}
 
 	/**
@@ -424,9 +746,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -441,10 +784,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Truthy</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Truthy',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Truthy</p>', $result );
 	}
 
 	/**
@@ -458,9 +822,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -475,10 +860,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Falsy</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Falsy',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Falsy</p>', $result );
 	}
 
 	/**
@@ -492,9 +898,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -511,10 +938,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '50',
 			),
 		);
-		$content = '<p>Numeric</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Numeric',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Numeric</p>', $result );
 	}
 
 	/**
@@ -528,10 +976,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>Boolean</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Boolean',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Boolean</p>', $result );
 	}
 
 	// ==================== DYNAMIC VALUES TESTS ====================
@@ -558,10 +1027,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"Test Post"',
 			),
 		);
-		$content = '<p>Post title matches</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Post title matches',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Post title matches</p>', $result );
 	}
 
 	/**
@@ -575,10 +1065,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Site name exists</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Site name exists',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Site name exists</p>', $result );
 	}
 
 	/**
@@ -595,10 +1106,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '0',
 			),
 		);
-		$content = '<p>User logged in</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'User logged in',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>User logged in</p>', $result );
 	}
 
 	// ==================== COMPONENT PROPS TESTS ====================
@@ -647,11 +1179,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"admin"',
 			),
 		);
-		$content = '<p>Admin content</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Admin content',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
+		$this->assertEquals( '<p>Admin content</p>', $result );
 
 		// Cleanup
 		ContextProvider::set_current_component_block( null );
@@ -678,10 +1231,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"admin"',
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
 		$this->assertEquals( '', $result );
 
 		ContextProvider::set_current_component_block( null );
@@ -730,11 +1304,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"admin"',
 			),
 		);
-		$content = '<p>Nested prop</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Nested prop',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
+		$this->assertEquals( '<p>Nested prop</p>', $result );
 
 		ContextProvider::set_current_component_block( null );
 	}
@@ -768,10 +1363,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>Deeply nested</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Deeply nested',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Deeply nested</p>', $result );
 	}
 
 	/**
@@ -801,10 +1417,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				),
 			),
 		);
-		$content = '<p>Complex nested</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Complex nested',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Complex nested</p>', $result );
 	}
 
 	// ==================== CONDITIONS INSIDE COMPONENTS TESTS ====================
@@ -852,11 +1489,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Show content</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Show content',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
+		$this->assertEquals( '<p>Show content</p>', $result );
 
 		ContextProvider::set_current_component_block( null );
 	}
@@ -891,11 +1549,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"Component Post"',
 			),
 		);
-		$content = '<p>Global context works</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Global context works',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
+		$this->assertEquals( '<p>Global context works</p>', $result );
 
 		ContextProvider::set_current_component_block( null );
 	}
@@ -924,10 +1603,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"HELLO"',
 			),
 		);
-		$content = '<p>Uppercase modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Uppercase modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Uppercase modifier</p>', $result );
 	}
 
 	/**
@@ -952,10 +1652,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"hello"',
 			),
 		);
-		$content = '<p>Lowercase modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Lowercase modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Lowercase modifier</p>', $result );
 	}
 
 	/**
@@ -980,10 +1701,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Length modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Length modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Length modifier</p>', $result );
 	}
 
 	/**
@@ -998,16 +1740,37 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '10',
 			),
 		);
-		$content = '<p>ToInt modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'ToInt modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		// Set context on block
 		$block->context = array(
 			'test' => array(
 				'number' => '10',
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>ToInt modifier</p>', $result );
 	}
 
 	/**
@@ -1021,15 +1784,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '6',
 			),
 		);
-		$content = '<p>Ceil modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Ceil modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 5.3,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Ceil modifier</p>', $result );
 	}
 
 	/**
@@ -1043,15 +1827,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '5',
 			),
 		);
-		$content = '<p>Floor modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Floor modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 5.7,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Floor modifier</p>', $result );
 	}
 
 	/**
@@ -1065,15 +1870,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '6',
 			),
 		);
-		$content = '<p>Round modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Round modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 5.5,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Round modifier</p>', $result );
 	}
 
 	/**
@@ -1098,10 +1924,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>Includes modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Includes modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Includes modifier</p>', $result );
 	}
 
 	/**
@@ -1126,10 +1973,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>StartsWith modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'StartsWith modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>StartsWith modifier</p>', $result );
 	}
 
 	/**
@@ -1154,10 +2022,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>EndsWith modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'EndsWith modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>EndsWith modifier</p>', $result );
 	}
 
 	/**
@@ -1172,15 +2061,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>Equal modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Equal modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 5,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Equal modifier</p>', $result );
 	}
 
 	/**
@@ -1194,15 +2104,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>Greater modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Greater modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 10,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Greater modifier</p>', $result );
 	}
 
 	/**
@@ -1216,15 +2147,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => 'true',
 			),
 		);
-		$content = '<p>Less modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Less modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'value' => 3,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Less modifier</p>', $result );
 	}
 
 	/**
@@ -1241,15 +2193,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"' . $formatted_date . '"',
 			),
 		);
-		$content = '<p>DateFormat modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'DateFormat modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'timestamp' => $timestamp,
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>DateFormat modifier</p>', $result );
 	}
 
 	/**
@@ -1263,15 +2236,36 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"first"',
 			),
 		);
-		$content = '<p>Array access via modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Array access via modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
 		$block->context = array(
 			'test' => array(
 				'array' => array( 'first', 'second', 'third' ),
 			),
 		);
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Array access via modifier</p>', $result );
 	}
 
 	/**
@@ -1296,10 +2290,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"test post title"',
 			),
 		);
-		$content = '<p>Dynamic with modifier</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Dynamic with modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Dynamic with modifier</p>', $result );
 	}
 
 	/**
@@ -1343,11 +2358,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"HELLO WORLD"',
 			),
 		);
-		$content = '<p>Prop with modifier</p>';
-		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Prop with modifier',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$condition_block = $this->create_mock_block( 'etch/condition', $condition_attributes, $inner_blocks );
 		$condition_block->parent = $component_block;
-		$result = $this->condition_block->render_block( $condition_attributes, $content, $condition_block );
-		$this->assertEquals( $content, $result );
+		$result = $this->condition_block->render_block( $condition_attributes, '', $condition_block );
+		$this->assertEquals( '<p>Prop with modifier</p>', $result );
 
 		ContextProvider::set_current_component_block( null );
 	}
@@ -1375,11 +2411,32 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '"HELLO WORLD"',
 			),
 		);
-		$content = '<p>Multiple modifiers</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Multiple modifiers',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		// Test that it works with chained modifiers
-		$this->assertEquals( $content, $result );
+		$this->assertEquals( '<p>Multiple modifiers</p>', $result );
 	}
 
 	// ==================== EDGE CASES TESTS ====================
@@ -1395,10 +2452,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Empty string</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Empty string',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Empty string</p>', $result );
 	}
 
 	/**
@@ -1412,10 +2490,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Null value</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Null value',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Null value</p>', $result );
 	}
 
 	/**
@@ -1429,10 +2528,31 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => null,
 			),
 		);
-		$content = '<p>Missing value</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
-		$this->assertEquals( $content, $result );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Missing value',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+		$this->assertEquals( '<p>Missing value</p>', $result );
 	}
 
 	/**
@@ -1446,9 +2566,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '3',
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -1462,9 +2603,30 @@ class ConditionBlockTest extends WP_UnitTestCase {
 				'rightHand' => '3',
 			),
 		);
-		$content = '<p>Should not show</p>';
-		$block = $this->create_mock_block( 'etch/condition', $attributes );
-		$result = $this->condition_block->render_block( $attributes, $content, $block );
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/element',
+				'attrs' => array(
+					'tag' => 'p',
+				),
+				'innerBlocks' => array(
+					array(
+						'blockName' => 'etch/text',
+						'attrs' => array(
+							'content' => 'Should not show',
+						),
+						'innerBlocks' => array(),
+						'innerHTML' => '',
+						'innerContent' => array(),
+					),
+				),
+				'innerHTML' => '',
+				'innerContent' => array( null ),
+			),
+		);
+
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+		$result = $this->condition_block->render_block( $attributes, '', $block );
 		$this->assertEquals( '', $result );
 	}
 
@@ -1537,26 +2699,112 @@ class ConditionBlockTest extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Test condition block with shortcode in inner block in FSE template (direct rendering)
+	 * This simulates FSE template rendering where blocks are rendered directly without the_content filter
+	 */
+	public function test_condition_block_with_shortcode_fse_template() {
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/text',
+				'attrs' => array(
+					'content' => 'shortcode test: [etch_test_hello name=John]',
+				),
+				'innerBlocks' => array(),
+				'innerHTML' => '',
+				'innerContent' => array(),
+			),
+		);
+
+		$attributes = array(
+			'condition' => array(
+				'leftHand' => 'true',
+				'operator' => '===',
+				'rightHand' => 'true',
+			),
+		);
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+
+		// Render directly (simulating FSE template rendering, not through the_content filter)
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+
+		// Shortcode should be resolved even without the_content filter
+		$this->assertStringContainsString( 'shortcode test: Hello John!', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello name=John]', $result );
+	}
+
+	/**
+	 * Test condition block with shortcode and dynamic data in inner block in FSE template
+	 */
+	public function test_condition_block_with_shortcode_and_dynamic_data_fse_template() {
+		// Set up user context
+		$user_id = $this->factory()->user->create(
+			array(
+				'display_name' => 'Jane Doe',
+			)
+		);
+		wp_set_current_user( $user_id );
+
+		$inner_blocks = array(
+			array(
+				'blockName' => 'etch/text',
+				'attrs' => array(
+					'content' => 'shortcode test: [etch_test_hello name="{user.displayName}"]',
+				),
+				'innerBlocks' => array(),
+				'innerHTML' => '',
+				'innerContent' => array(),
+			),
+		);
+
+		$attributes = array(
+			'condition' => array(
+				'leftHand' => 'true',
+				'operator' => '===',
+				'rightHand' => 'true',
+			),
+		);
+		$block = $this->create_mock_block( 'etch/condition', $attributes, $inner_blocks );
+
+		// Render directly (simulating FSE template rendering)
+		$result = $this->condition_block->render_block( $attributes, '', $block );
+
+		// Dynamic data should be resolved first, then shortcode processed
+		$this->assertStringContainsString( 'shortcode test: Hello Jane Doe!', $result );
+		$this->assertStringNotContainsString( '{user.displayName}', $result );
+		$this->assertStringNotContainsString( '[etch_test_hello', $result );
+	}
+
+	/**
 	 * Helper method to create a mock WP_Block instance
 	 *
 	 * @param string              $block_name Block name.
 	 * @param array<string,mixed> $attributes Block attributes.
+	 * @param array<mixed>        $inner_blocks Inner blocks array.
 	 * @return WP_Block Mock block instance.
 	 */
-	private function create_mock_block( string $block_name, array $attributes ): WP_Block {
+	private function create_mock_block( string $block_name, array $attributes, array $inner_blocks = array() ): WP_Block {
 		$registry = \WP_Block_Type_Registry::get_instance();
 		$block_type = $registry->get_registered( $block_name );
 		if ( ! $block_type ) {
 			$block_type = new \WP_Block_Type( $block_name, array() );
 		}
 
+		$parsed_block = array(
+			'blockName' => $block_name,
+			'attrs' => $attributes,
+			'innerBlocks' => $inner_blocks,
+		);
+
 		$block = new WP_Block(
-			array(
-				'blockName' => $block_name,
-				'attrs' => $attributes,
-			),
+			$parsed_block,
 			array()
 		);
+
+		// Set parsed_block property via reflection for inner blocks access
+		$reflection = new \ReflectionClass( $block );
+		$property = $reflection->getProperty( 'parsed_block' );
+		$property->setAccessible( true );
+		$property->setValue( $block, $parsed_block );
 
 		return $block;
 	}
