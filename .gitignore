@@ -12,6 +12,9 @@
 /public/wp-content/advanced-cache.php
 /public/wp-content/wp-cache-config.php
 
+# Database
+/sql/local.sql
+
 # PHP
 vendor/
 *.log
