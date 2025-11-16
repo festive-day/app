@@ -202,7 +202,7 @@
 - [x] T096 Security hardening review (XSS protection wp_kses, SQL injection $wpdb->prepare, nonce verification)
 - [x] T097 Documentation: Add inline PHPDoc comments to all public methods
 - [x] T098 Documentation: Update plan.md with final file structure if changes occurred
-- [ ] T099 Git commit with message per constitution versioning (version 1.0.0 tag)
+- [x] T099 Git commit with message per constitution versioning (version 1.0.0 tag)
 
 ---
 
