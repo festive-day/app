@@ -17,39 +17,41 @@ defined( 'ABSPATH' ) || exit;
 function ccm_render_banner_template() {
     ?>
     <div id="ccm-banner" class="ccm-banner ccm-banner--hidden" role="dialog" aria-modal="false" aria-labelledby="ccm-banner__heading" aria-describedby="ccm-banner__message">
-        <div class="ccm-banner__container">
-            <div class="ccm-banner__content">
-                <h2 id="ccm-banner__heading" class="ccm-banner__heading">We use cookies</h2>
-                <p id="ccm-banner__message" class="ccm-banner__message">
-                    This site uses cookies to enhance your experience and analyze site usage.
-                    You can manage your cookie preferences at any time.
-                </p>
-            </div>
+        <div data-etch-element="section" class="ccm-banner__section">
+            <div data-etch-element="container" class="ccm-banner__container">
+                <div class="ccm-banner__content">
+                    <h2 id="ccm-banner__heading" class="ccm-banner__heading">We use cookies</h2>
+                    <p id="ccm-banner__message" class="ccm-banner__message">
+                        This site uses cookies to enhance your experience and analyze site usage.
+                        You can manage your cookie preferences at any time.
+                    </p>
+                </div>
 
-            <div class="ccm-banner__actions">
-                <button
-                    type="button"
-                    class="ccm-banner__btn ccm-banner__btn--accept"
-                    id="ccm-accept-all"
-                    aria-label="Accept all cookies">
-                    Accept All
-                </button>
+                <div class="ccm-banner__actions">
+                    <button
+                        type="button"
+                        class="ccm-banner__btn ccm-banner__btn--accept"
+                        id="ccm-accept-all"
+                        aria-label="Accept all cookies">
+                        Accept All
+                    </button>
 
-                <button
-                    type="button"
-                    class="ccm-banner__btn ccm-banner__btn--reject"
-                    id="ccm-reject-all"
-                    aria-label="Reject all non-essential cookies">
-                    Reject All
-                </button>
+                    <button
+                        type="button"
+                        class="ccm-banner__btn ccm-banner__btn--reject"
+                        id="ccm-reject-all"
+                        aria-label="Reject all non-essential cookies">
+                        Reject All
+                    </button>
 
-                <button
-                    type="button"
-                    class="ccm-banner__btn ccm-banner__btn--manage"
-                    id="ccm-manage-preferences"
-                    aria-label="Manage cookie preferences">
-                    Manage Preferences
-                </button>
+                    <button
+                        type="button"
+                        class="ccm-banner__btn ccm-banner__btn--manage"
+                        id="ccm-manage-preferences"
+                        aria-label="Manage cookie preferences">
+                        Manage Preferences
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -72,6 +74,10 @@ function ccm_render_banner_template() {
             <div class="ccm-modal__body" id="ccm-modal-body">
                 <!-- Category list will be populated by JavaScript -->
                 <p class="ccm-modal__loading">Loading cookie preferences...</p>
+                <!-- Category accordion structure (populated by JavaScript) -->
+                <div class="ccm-categories" id="ccm-categories-list" style="display: none;">
+                    <!-- Categories will be inserted here -->
+                </div>
             </div>
 
             <div class="ccm-modal__footer">
@@ -98,9 +104,13 @@ function ccm_render_banner_template() {
  */
 function ccm_render_footer_link() {
     ?>
-    <a href="#" class="ccm-open-preferences" id="ccm-footer-settings" aria-label="Open cookie settings">
-        Cookie Settings
-    </a>
+    <div data-etch-element="section" class="ccm-footer-link__section">
+        <div data-etch-element="container" class="ccm-footer-link__container">
+            <a href="#" class="ccm-open-preferences" id="ccm-footer-settings" aria-label="Open cookie settings">
+                Cookie Settings
+            </a>
+        </div>
+    </div>
     <?php
 }
 

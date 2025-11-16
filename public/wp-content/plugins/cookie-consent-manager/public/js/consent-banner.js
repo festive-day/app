@@ -246,6 +246,23 @@
         openPreferences: function() {
             const modal = document.getElementById('ccm-modal');
             if (!modal) {
+                console.error('CCM: Modal element not found');
+                return;
+            }
+
+            // Ensure config is loaded before populating
+            if (!this.config) {
+                this.loadConfig().then(() => {
+                    this.populateModal();
+                    // Show modal
+                    modal.classList.remove('ccm-modal--hidden');
+                    modal.classList.add('ccm-modal--show');
+                    // Set aria attributes
+                    modal.setAttribute('aria-modal', 'true');
+                    document.body.style.overflow = 'hidden'; // Prevent background scrolling
+                }).catch(error => {
+                    console.error('CCM: Failed to load configuration:', error);
+                });
                 return;
             }
 
@@ -255,6 +272,9 @@
             // Show modal with animation
             modal.classList.remove('ccm-modal--hidden');
             modal.classList.add('ccm-modal--show');
+            // Set aria attributes
+            modal.setAttribute('aria-modal', 'true');
+            document.body.style.overflow = 'hidden'; // Prevent background scrolling
         },
 
         /**
@@ -268,10 +288,13 @@
 
             modal.classList.add('ccm-modal--hidden');
             modal.classList.remove('ccm-modal--show');
+            // Set aria attributes
+            modal.setAttribute('aria-modal', 'false');
+            document.body.style.overflow = ''; // Restore scrolling
         },
 
         /**
-         * Populate modal with category checkboxes
+         * Populate modal with category accordion
          */
         populateModal: function() {
             if (!this.config) {
@@ -279,69 +302,197 @@
             }
 
             const modalBody = document.getElementById('ccm-modal-body');
-            if (!modalBody) {
+            const categoriesList = document.getElementById('ccm-categories-list');
+            const loadingMsg = modalBody.querySelector('.ccm-modal__loading');
+
+            if (!modalBody || !categoriesList) {
                 return;
             }
 
             // Get current consent
             const consent = window.CookieConsentStorage.getConsent();
 
-            // Build HTML
-            let html = '<div class="ccm-categories">';
+            // Build HTML with accordion structure
+            let html = '';
 
-            this.config.categories.forEach(category => {
+            this.config.categories.forEach((category, index) => {
                 const isChecked = consent && consent.acceptedCategories && consent.acceptedCategories.includes(category.slug);
                 const isRequired = category.is_required;
+                const isExpanded = index === 0; // Expand first category by default
 
-                html += '<div class="ccm-category">';
-                html += '<div class="ccm-category__header">';
-                html += '<label class="ccm-category__label">';
+                html += '<div class="ccm-category' + (isExpanded ? ' ccm-category--expanded' : '') + '" data-category-slug="' + category.slug + '">';
+                
+                // Header with checkbox and toggle
+                html += '<div class="ccm-category__header" role="button" tabindex="0" aria-expanded="' + isExpanded + '">';
+                html += '<label class="ccm-category__label" onclick="event.stopPropagation();">';
                 html += '<input type="checkbox" ';
                 html += 'name="category[]" ';
                 html += 'value="' + category.slug + '" ';
+                html += 'data-category="' + category.slug + '" ';
                 html += isChecked ? 'checked ' : '';
                 html += isRequired ? 'disabled ' : '';
                 html += 'class="ccm-category__checkbox">';
-                html += '<span class="ccm-category__name">' + category.name + '</span>';
+                html += '<span class="ccm-category__name">' + this.escapeHtml(category.name) + '</span>';
                 if (isRequired) {
                     html += ' <span class="ccm-category__required">(Required)</span>';
                 }
                 html += '</label>';
+                html += '<span class="ccm-category__toggle" aria-hidden="true">▼</span>';
                 html += '</div>';
-                html += '<p class="ccm-category__description">' + category.description + '</p>';
+
+                // Collapsible content
+                html += '<div class="ccm-category__content">';
+                html += '<div class="ccm-category__inner">';
+                html += '<p class="ccm-category__description">' + this.escapeHtml(category.description || '') + '</p>';
 
                 // Show cookies in category
                 if (category.cookies && category.cookies.length > 0) {
                     html += '<div class="ccm-category__cookies">';
-                    html += '<strong>Cookies:</strong> ';
-                    html += category.cookies.map(c => c.name).join(', ');
+                    html += '<div class="ccm-category__cookies-title">Cookies in this category</div>';
+                    html += '<ul class="ccm-cookie-list">';
+                    
+                    category.cookies.forEach(cookie => {
+                        html += '<li class="ccm-cookie-item">';
+                        html += '<div class="ccm-cookie-item__name">' + this.escapeHtml(cookie.name || '') + '</div>';
+                        html += '<div class="ccm-cookie-item__details">';
+                        
+                        if (cookie.provider) {
+                            html += '<div class="ccm-cookie-item__detail">';
+                            html += '<span class="ccm-cookie-item__detail-label">Provider:</span>';
+                            html += '<span class="ccm-cookie-item__detail-value">' + this.escapeHtml(cookie.provider) + '</span>';
+                            html += '</div>';
+                        }
+                        
+                        if (cookie.purpose) {
+                            html += '<div class="ccm-cookie-item__detail">';
+                            html += '<span class="ccm-cookie-item__detail-label">Purpose:</span>';
+                            html += '<span class="ccm-cookie-item__detail-value">' + this.escapeHtml(cookie.purpose) + '</span>';
+                            html += '</div>';
+                        }
+                        
+                        if (cookie.expiration) {
+                            html += '<div class="ccm-cookie-item__detail">';
+                            html += '<span class="ccm-cookie-item__detail-label">Expiration:</span>';
+                            html += '<span class="ccm-cookie-item__detail-value">' + this.escapeHtml(cookie.expiration) + '</span>';
+                            html += '</div>';
+                        }
+                        
+                        html += '</div>';
+                        html += '</li>';
+                    });
+                    
+                    html += '</ul>';
+                    html += '</div>';
+                } else {
+                    html += '<div class="ccm-category__cookies">';
+                    html += '<p style="color: var(--text-2, #4a4a4a); font-size: var(--text-s, 0.875rem);">No cookies registered in this category.</p>';
                     html += '</div>';
                 }
 
                 html += '</div>';
+                html += '</div>';
+                html += '</div>';
             });
 
-            html += '</div>';
+            categoriesList.innerHTML = html;
 
-            modalBody.innerHTML = html;
+            // Hide loading, show categories
+            if (loadingMsg) {
+                loadingMsg.style.display = 'none';
+            }
+            categoriesList.style.display = 'block';
+
+            // Setup accordion toggle handlers
+            this.setupAccordionHandlers();
+        },
+
+        /**
+         * Setup accordion expand/collapse handlers
+         */
+        setupAccordionHandlers: function() {
+            const categoryHeaders = document.querySelectorAll('.ccm-category__header');
+            
+            categoryHeaders.forEach(header => {
+                // Remove existing listeners (if any)
+                const newHeader = header.cloneNode(true);
+                header.parentNode.replaceChild(newHeader, header);
+
+                // Add click handler
+                newHeader.addEventListener('click', function(e) {
+                    // Don't toggle if clicking on checkbox
+                    if (e.target.type === 'checkbox' || e.target.closest('label')) {
+                        return;
+                    }
+
+                    const category = this.closest('.ccm-category');
+                    const isExpanded = category.classList.contains('ccm-category--expanded');
+
+                    if (isExpanded) {
+                        category.classList.remove('ccm-category--expanded');
+                        this.setAttribute('aria-expanded', 'false');
+                    } else {
+                        category.classList.add('ccm-category--expanded');
+                        this.setAttribute('aria-expanded', 'true');
+                    }
+                });
+
+                // Keyboard support
+                newHeader.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+        },
+
+        /**
+         * Escape HTML to prevent XSS
+         *
+         * @param {string} text Text to escape
+         * @returns {string} Escaped text
+         */
+        escapeHtml: function(text) {
+            if (!text) {
+                return '';
+            }
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         },
 
         /**
          * Handle "Save Preferences" button click
          */
         handleSavePreferences: function() {
+            if (!this.config) {
+                console.error('CCM: Configuration not loaded');
+                return;
+            }
+
             // Get selected categories
             const checkboxes = document.querySelectorAll('.ccm-category__checkbox');
             const acceptedCategories = [];
             const rejectedCategories = [];
 
             checkboxes.forEach(checkbox => {
+                // Required categories are always accepted (even if disabled checkbox)
                 if (checkbox.checked || checkbox.disabled) {
                     acceptedCategories.push(checkbox.value);
                 } else {
                     rejectedCategories.push(checkbox.value);
                 }
             });
+
+            // Ensure at least essential categories are included
+            const essentialCategory = this.config.categories.find(cat => cat.is_required);
+            if (essentialCategory && !acceptedCategories.includes(essentialCategory.slug)) {
+                acceptedCategories.push(essentialCategory.slug);
+                const index = rejectedCategories.indexOf(essentialCategory.slug);
+                if (index > -1) {
+                    rejectedCategories.splice(index, 1);
+                }
+            }
 
             // Create consent object
             const consent = {
@@ -351,15 +502,58 @@
                 version: this.config.consent_version
             };
 
-            // Determine event type
+            // Get existing consent to determine if we need to clear cookies
             const existingConsent = window.CookieConsentStorage.getConsent();
+            
+            // Determine event type
             const eventType = existingConsent ? 'modify' : 'accept_partial';
 
-            // Save consent
-            this.saveConsent(consent, eventType);
+            // If modifying consent and categories changed from accept to reject, clear those cookies
+            if (existingConsent && eventType === 'modify') {
+                const categoriesToClear = rejectedCategories.filter(slug => {
+                    return existingConsent.acceptedCategories && existingConsent.acceptedCategories.includes(slug);
+                });
+
+                if (categoriesToClear.length > 0) {
+                    // Clear cookies for categories that were previously accepted but are now rejected
+                    window.CookieConsentStorage.clearRejectedCookies(categoriesToClear);
+                }
+            }
+
+            // Save consent using storage manager
+            const saved = window.CookieConsentStorage.setConsent(consent);
+
+            if (!saved) {
+                console.error('CCM: Failed to save consent preferences');
+                alert('Failed to save preferences. Please try again.');
+                return;
+            }
+
+            // Log event to server
+            this.recordConsentEvent(eventType, consent);
+
+            // Hide banner if it's visible
+            this.hideBanner();
 
             // Close modal
             this.closeModal();
+
+            // Fire callback
+            if (eventType === 'modify' && this.callbacks.onConsentChanged) {
+                this.callbacks.onConsentChanged(consent);
+            } else if (this.callbacks.onConsentGiven) {
+                this.callbacks.onConsentGiven(consent);
+            }
+
+            // Dispatch custom event for other scripts
+            const event = new CustomEvent('ccm-consent-changed', {
+                detail: consent
+            });
+            window.dispatchEvent(event);
+
+            // Reload page to activate/deactivate scripts based on new consent
+            // This ensures scripts are properly enabled/disabled
+            window.location.reload();
         },
 
         /**

@@ -20,15 +20,15 @@
 
 **Purpose**: WordPress plugin initialization and basic structure
 
-- [X] T001 Create plugin directory structure at public/wp-content/plugins/cookie-consent-manager/ per plan.md
-- [X] T002 Create main plugin file cookie-consent-manager.php with WordPress plugin headers
-- [X] T003 [P] Create includes/ directory with class stubs (class-cookie-manager.php, class-consent-logger.php, class-cookie-blocker.php, class-storage-handler.php, class-admin-interface.php)
-- [X] T004 [P] Create admin/ directory structure (views/, css/, js/)
-- [X] T005 [P] Create public/ directory structure (js/, css/, templates/)
-- [X] T006 [P] Create database/ directory with migrations/ subdirectory
-- [X] T007 [P] Create tests/ directory with integration/ subdirectory and bootstrap.php
-- [X] T008 Setup PHPUnit configuration for WordPress test suite in tests/bootstrap.php
-- [X] T009 Register plugin activation/deactivation hooks in cookie-consent-manager.php
+- [x] T001 Create plugin directory structure at public/wp-content/plugins/cookie-consent-manager/ per plan.md
+- [x] T002 Create main plugin file cookie-consent-manager.php with WordPress plugin headers
+- [x] T003 [P] Create includes/ directory with class stubs (class-cookie-manager.php, class-consent-logger.php, class-cookie-blocker.php, class-storage-handler.php, class-admin-interface.php)
+- [x] T004 [P] Create admin/ directory structure (views/, css/, js/)
+- [x] T005 [P] Create public/ directory structure (js/, css/, templates/)
+- [x] T006 [P] Create database/ directory with migrations/ subdirectory
+- [x] T007 [P] Create tests/ directory with integration/ subdirectory and bootstrap.php
+- [x] T008 Setup PHPUnit configuration for WordPress test suite in tests/bootstrap.php
+- [x] T009 Register plugin activation/deactivation hooks in cookie-consent-manager.php
 
 ---
 
@@ -38,19 +38,19 @@
 
 **⚠️ CRITICAL**: No user story work can begin until this phase is complete
 
-- [X] T010 Create database schema SQL in database/schema.sql (all 3 tables: categories, cookies, events)
-- [X] T011 Create up migration database/migrations/001-create-tables-up.sql per data-model.md
-- [X] T012 Create down migration database/migrations/001-create-tables-down.sql per data-model.md
-- [X] T013 Implement database migration execution in plugin activation hook (run 001-create-tables-up.sql)
-- [X] T014 Insert default cookie categories (essential, functional, analytics, marketing) on plugin activation
-- [X] T015 Implement core cookie manager class includes/class-cookie-manager.php (singleton pattern, WordPress hooks registration)
-- [X] T016 [P] Implement consent logger class includes/class-consent-logger.php (record_event, generate visitor_id hash)
-- [X] T017 [P] Implement storage handler class includes/class-storage-handler.php (localStorage sync, cookie management, generate_cookie_hash)
-- [X] T018 Register WordPress AJAX actions for all frontend endpoints (ccm_get_banner_config, ccm_record_consent, ccm_check_dnt)
-- [X] T019 Register WordPress AJAX actions for all admin endpoints (ccm_list_categories through ccm_export_logs per admin-api.md)
-- [X] T020 Setup WordPress Settings API page at Settings → Cookie Consent in includes/class-admin-interface.php
-- [X] T021 Implement nonce verification and capability checks (manage_options) for all admin endpoints
-- [X] T022 Setup daily cron job for 3-year audit log retention cleanup (wp_cookie_consent_cleanup hook)
+- [x] T010 Create database schema SQL in database/schema.sql (all 3 tables: categories, cookies, events)
+- [x] T011 Create up migration database/migrations/001-create-tables-up.sql per data-model.md
+- [x] T012 Create down migration database/migrations/001-create-tables-down.sql per data-model.md
+- [x] T013 Implement database migration execution in plugin activation hook (run 001-create-tables-up.sql)
+- [x] T014 Insert default cookie categories (essential, functional, analytics, marketing) on plugin activation
+- [x] T015 Implement core cookie manager class includes/class-cookie-manager.php (singleton pattern, WordPress hooks registration)
+- [x] T016 [P] Implement consent logger class includes/class-consent-logger.php (record_event, generate visitor_id hash)
+- [x] T017 [P] Implement storage handler class includes/class-storage-handler.php (localStorage sync, cookie management, generate_cookie_hash)
+- [x] T018 Register WordPress AJAX actions for all frontend endpoints (ccm_get_banner_config, ccm_record_consent, ccm_check_dnt)
+- [x] T019 Register WordPress AJAX actions for all admin endpoints (ccm_list_categories through ccm_export_logs per admin-api.md)
+- [x] T020 Setup WordPress Settings API page at Settings → Cookie Consent in includes/class-admin-interface.php
+- [x] T021 Implement nonce verification and capability checks (manage_options) for all admin endpoints
+- [x] T022 Setup daily cron job for 3-year audit log retention cleanup (wp_cookie_consent_cleanup hook)
 
 **Checkpoint**: Foundation ready - user story implementation can now begin in parallel
 
@@ -66,27 +66,27 @@
 
 **NOTE: Write tests FIRST, ensure they FAIL before implementation**
 
-- [X] T023 [P] [US1] Create test-cookie-blocking.php in tests/integration/ for script wrapper blocking (verify type="text/plain" before consent)
-- [X] T024 [P] [US1] Create test-consent-logging.php in tests/integration/ for audit event recording (verify accept_all/reject_all events logged)
-- [X] T025 [P] [US1] Create test-etch-compatibility.php in tests/integration/ for banner rendering with Etch theme
+- [x] T023 [P] [US1] Create test-cookie-blocking.php in tests/integration/ for script wrapper blocking (verify type="text/plain" before consent)
+- [x] T024 [P] [US1] Create test-consent-logging.php in tests/integration/ for audit event recording (verify accept_all/reject_all events logged)
+- [x] T025 [P] [US1] Create test-etch-compatibility.php in tests/integration/ for banner rendering with Etch theme
 
 ### Implementation for User Story 1
 
-- [X] T026 [P] [US1] Create banner HTML template in public/templates/banner-template.php (bottom banner, Accept All, Reject All buttons)
-- [X] T027 [P] [US1] Create banner CSS with BEM naming in public/css/banner.css (use AutomaticCSS utilities, full-width bottom position)
-- [X] T028 [US1] Implement consent-banner.js in public/js/ (display logic, localStorage write, cookie write, AJAX consent recording)
-- [X] T029 [US1] Implement cookie-blocker.js in public/js/ (script tag rewriting type="text/javascript" → type="text/plain", document.cookie interception)
-- [X] T030 [US1] Implement storage-manager.js in public/js/ (localStorage read/write, cookie read/write, sync logic)
-- [X] T031 [US1] Implement script wrapper in includes/class-cookie-blocker.php (hook wp_enqueue_scripts, script_loader_tag filter, add data-consent-category attributes)
-- [X] T032 [US1] Implement GET /ccm_get_banner_config endpoint (return categories, cookies, banner_text, consent_version per frontend-api.md)
-- [X] T033 [US1] Implement POST /ccm_record_consent endpoint (validate event_type, log to wp_cookie_consent_events, return event_id)
-- [X] T034 [US1] Implement GET /ccm_check_dnt endpoint (check DNT header, return dnt_enabled boolean)
-- [X] T035 [US1] Enqueue banner scripts/styles in wp_enqueue_scripts hook (priority -9999 for blocker.js)
-- [X] T036 [US1] Add "Cookie Settings" link to Etch theme footer (wp_footer hook)
-- [X] T037 [US1] Implement banner show/hide logic based on localStorage consent check (consent-banner.js)
-- [X] T038 [US1] Implement cookie clearing for rejected categories when consent changes from accept → reject (storage-manager.js)
-- [X] T039 [US1] Add validation for localStorage consent object (version check, timestamp expiration check 12 months)
-- [X] T040 [US1] Add rate limiting for POST /ccm_record_consent (10 requests/minute per IP, WordPress transient cache)
+- [x] T026 [P] [US1] Create banner HTML template in public/templates/banner-template.php (bottom banner, Accept All, Reject All buttons)
+- [x] T027 [P] [US1] Create banner CSS with BEM naming in public/css/banner.css (use AutomaticCSS utilities, full-width bottom position)
+- [x] T028 [US1] Implement consent-banner.js in public/js/ (display logic, localStorage write, cookie write, AJAX consent recording)
+- [x] T029 [US1] Implement cookie-blocker.js in public/js/ (script tag rewriting type="text/javascript" → type="text/plain", document.cookie interception)
+- [x] T030 [US1] Implement storage-manager.js in public/js/ (localStorage read/write, cookie read/write, sync logic)
+- [x] T031 [US1] Implement script wrapper in includes/class-cookie-blocker.php (hook wp_enqueue_scripts, script_loader_tag filter, add data-consent-category attributes)
+- [x] T032 [US1] Implement GET /ccm_get_banner_config endpoint (return categories, cookies, banner_text, consent_version per frontend-api.md)
+- [x] T033 [US1] Implement POST /ccm_record_consent endpoint (validate event_type, log to wp_cookie_consent_events, return event_id)
+- [x] T034 [US1] Implement GET /ccm_check_dnt endpoint (check DNT header, return dnt_enabled boolean)
+- [x] T035 [US1] Enqueue banner scripts/styles in wp_enqueue_scripts hook (priority -9999 for blocker.js)
+- [x] T036 [US1] Add "Cookie Settings" link to Etch theme footer (wp_footer hook)
+- [x] T037 [US1] Implement banner show/hide logic based on localStorage consent check (consent-banner.js)
+- [x] T038 [US1] Implement cookie clearing for rejected categories when consent changes from accept → reject (storage-manager.js)
+- [x] T039 [US1] Add validation for localStorage consent object (version check, timestamp expiration check 12 months)
+- [x] T040 [US1] Add rate limiting for POST /ccm_record_consent (10 requests/minute per IP, WordPress transient cache)
 
 **Checkpoint**: User Story 1 fully functional - banner displays, cookies blocked, consent persists, audit logs working
 
@@ -100,19 +100,19 @@
 
 ### Integration Tests for User Story 2
 
-- [X] T041 [P] [US2] Add test for category display in test-etch-compatibility.php (verify 4 categories render with descriptions)
-- [X] T042 [P] [US2] Add test for cookie details modal in test-etch-compatibility.php (verify cookies grouped by category)
+- [x] T041 [P] [US2] Add test for category display in test-etch-compatibility.php (verify 4 categories render with descriptions)
+- [x] T042 [P] [US2] Add test for cookie details modal in test-etch-compatibility.php (verify cookies grouped by category)
 
 ### Implementation for User Story 2
 
-- [ ] T043 [P] [US2] Create cookie details modal HTML in public/templates/banner-template.php (expand banner template with modal)
-- [ ] T044 [P] [US2] Create modal CSS in public/css/banner.css (category accordion, cookie list styles, BEM naming)
-- [ ] T045 [US2] Implement "Manage Preferences" button click handler in consent-banner.js (open modal, populate categories)
-- [ ] T046 [US2] Implement category accordion in consent-banner.js (expand/collapse categories, show cookie list per category)
-- [ ] T047 [US2] Implement category-level checkboxes in modal (essential locked, functional/analytics/marketing toggleable)
-- [ ] T048 [US2] Implement "Save Preferences" button handler (collect accepted/rejected categories, call storage-manager.js)
-- [ ] T049 [US2] Update GET /ccm_get_banner_config endpoint to return cookies array per category (join wp_cookie_consent_cookies)
-- [ ] T050 [US2] Add mobile responsive styles for modal in banner.css (scrollable, touch-friendly controls, 44px min button size)
+- [x] T043 [P] [US2] Create cookie details modal HTML in public/templates/banner-template.php (expand banner template with modal)
+- [x] T044 [P] [US2] Create modal CSS in public/css/banner.css (category accordion, cookie list styles, BEM naming)
+- [x] T045 [US2] Implement "Manage Preferences" button click handler in consent-banner.js (open modal, populate categories)
+- [x] T046 [US2] Implement category accordion in consent-banner.js (expand/collapse categories, show cookie list per category)
+- [x] T047 [US2] Implement category-level checkboxes in modal (essential locked, functional/analytics/marketing toggleable)
+- [x] T048 [US2] Implement "Save Preferences" button handler (collect accepted/rejected categories, call storage-manager.js)
+- [x] T049 [US2] Update GET /ccm_get_banner_config endpoint to return cookies array per category (join wp_cookie_consent_cookies)
+- [x] T050 [US2] Add mobile responsive styles for modal in banner.css (scrollable, touch-friendly controls, 44px min button size)
 
 **Checkpoint**: User Story 2 functional - cookie details accessible, categories displayed, descriptions clear
 
@@ -345,6 +345,7 @@ All stories independently testable, minimal merge conflicts (different files).
 **Tests**: 8 integration test tasks (T023-T025, T041-T042, T051-T052, T060) per Constitution requirement
 
 **Parallel Opportunities**:
+
 - Phase 1: 5 tasks parallel
 - Phase 2: 4 tasks parallel
 - User Stories: All 3 stories can run parallel after Foundational (37 tasks across US1-US3)

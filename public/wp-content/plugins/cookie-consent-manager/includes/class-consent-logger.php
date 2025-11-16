@@ -31,15 +31,24 @@ class CCM_Consent_Logger {
             $event_data['visitor_id'] = self::generate_visitor_id();
         }
 
+        // Sanitize server variables
+        $ip_address = isset( $event_data['ip_address'] ) 
+            ? sanitize_text_field( $event_data['ip_address'] )
+            : ( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' );
+        
+        $user_agent = isset( $event_data['user_agent'] )
+            ? sanitize_text_field( $event_data['user_agent'] )
+            : ( isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_textarea_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '' );
+
         // Prepare data for insertion
         $data = array(
             'visitor_id'           => $event_data['visitor_id'],
             'event_type'           => $event_data['event_type'],
             'accepted_categories'  => isset( $event_data['accepted_categories'] ) ? wp_json_encode( $event_data['accepted_categories'] ) : null,
             'rejected_categories'  => isset( $event_data['rejected_categories'] ) ? wp_json_encode( $event_data['rejected_categories'] ) : null,
-            'consent_version'      => isset( $event_data['consent_version'] ) ? $event_data['consent_version'] : CCM_VERSION,
-            'ip_address'           => isset( $event_data['ip_address'] ) ? $event_data['ip_address'] : $_SERVER['REMOTE_ADDR'],
-            'user_agent'           => isset( $event_data['user_agent'] ) ? $event_data['user_agent'] : $_SERVER['HTTP_USER_AGENT'],
+            'consent_version'      => isset( $event_data['consent_version'] ) ? sanitize_text_field( $event_data['consent_version'] ) : CCM_VERSION,
+            'ip_address'           => $ip_address,
+            'user_agent'           => $user_agent,
         );
 
         // Insert event
@@ -74,8 +83,8 @@ class CCM_Consent_Logger {
      * @return string Hashed visitor ID
      */
     public static function generate_visitor_id() {
-        $ip        = $_SERVER['REMOTE_ADDR'];
-        $user_agent = $_SERVER['HTTP_USER_AGENT'];
+        $ip        = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '0.0.0.0';
+        $user_agent = isset( $_SERVER['HTTP_USER_AGENT'] ) ? sanitize_textarea_field( wp_unslash( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
         $salt      = defined( 'AUTH_SALT' ) ? AUTH_SALT : 'ccm_salt';
 
         return hash( 'sha256', $ip . $user_agent . $salt );

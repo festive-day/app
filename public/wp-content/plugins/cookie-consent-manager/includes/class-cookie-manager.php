@@ -165,12 +165,26 @@ class CCM_Cookie_Manager {
         // Get cookies for each category
         $categories_with_cookies = array();
         foreach ( $categories as $category ) {
-            $cookies = $wpdb->get_results(
+            $cookies_raw = $wpdb->get_results(
                 $wpdb->prepare(
                     "SELECT name, provider, purpose, expiration FROM {$cookies_table} WHERE category_id = %d",
                     $category->id
-                )
+                ),
+                ARRAY_A // Return as associative arrays for JSON encoding
             );
+
+            // Ensure cookies array is properly formatted
+            $cookies = array();
+            if ( $cookies_raw ) {
+                foreach ( $cookies_raw as $cookie ) {
+                    $cookies[] = array(
+                        'name'       => isset( $cookie['name'] ) ? $cookie['name'] : '',
+                        'provider'   => isset( $cookie['provider'] ) ? $cookie['provider'] : '',
+                        'purpose'    => isset( $cookie['purpose'] ) ? $cookie['purpose'] : '',
+                        'expiration' => isset( $cookie['expiration'] ) ? $cookie['expiration'] : '',
+                    );
+                }
+            }
 
             $categories_with_cookies[] = array(
                 'slug'        => $category->slug,
@@ -227,12 +241,33 @@ class CCM_Cookie_Manager {
         // Validate event type
         $valid_types = array( 'accept_all', 'reject_all', 'accept_partial', 'modify', 'revoke' );
         if ( ! in_array( $event_type, $valid_types, true ) ) {
-            wp_send_json_error( array( 'message' => 'Invalid event type: ' . $event_type ), 400 );
+            wp_send_json_error( array( 'message' => 'Invalid event type: ' . esc_html( $event_type ) ), 400 );
         }
 
         // Validate categories are non-empty for non-revoke events
         if ( $event_type !== 'revoke' && empty( $accepted_categories ) ) {
             wp_send_json_error( array( 'message' => 'At least one category must be accepted' ), 400 );
+        }
+
+        // Validate category slugs exist in database (prevent invalid category attacks)
+        if ( ! empty( $accepted_categories ) || ! empty( $rejected_categories ) ) {
+            $all_categories = array_merge( $accepted_categories, $rejected_categories );
+            $categories_table = $wpdb->prefix . 'cookie_consent_categories';
+            
+            // Build placeholders for prepared statement
+            $placeholders = implode( ',', array_fill( 0, count( $all_categories ), '%s' ) );
+            $query = $wpdb->prepare(
+                "SELECT slug FROM {$categories_table} WHERE slug IN ({$placeholders})",
+                ...$all_categories
+            );
+            
+            $valid_slugs = $wpdb->get_col( $query );
+
+            // Check if all provided slugs are valid
+            $invalid_slugs = array_diff( $all_categories, $valid_slugs );
+            if ( ! empty( $invalid_slugs ) ) {
+                wp_send_json_error( array( 'message' => 'Invalid category slugs provided' ), 400 );
+            }
         }
 
         // Record event
@@ -280,11 +315,14 @@ class CCM_Cookie_Manager {
 
     /**
      * Render cookie settings link in footer
+     * 
+     * NOTE: This is deprecated - footer link is now rendered in banner-template.php
+     * Keeping for backwards compatibility but not rendering to avoid duplicates
      */
     public function render_cookie_settings_link() {
-        echo '<div class="ccm-footer-link">';
-        echo '<a href="#" id="ccm-cookie-settings-link">' . esc_html__( 'Cookie Settings', 'cookie-consent-manager' ) . '</a>';
-        echo '</div>';
+        // Do not render - footer link is handled in banner-template.php
+        // This prevents duplicate links
+        return;
     }
 
     /**
