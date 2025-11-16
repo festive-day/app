@@ -20,7 +20,15 @@
       "mcp__chrome-devtools__get_network_request",
       "Bash(mysql:*)",
       "Bash(php fix-database.php:*)",
-      "mcp__chrome-devtools__click"
+      "mcp__chrome-devtools__click",
+      "Bash(git push:*)",
+      "Bash(git for-each-ref:*)",
+      "Bash(git update-ref:*)",
+      "Bash(git reflog:*)",
+      "Bash(git gc:*)",
+      "Bash(git fetch:*)",
+      "Bash(git rm:*)",
+      "Bash(git merge:*)"
     ],
     "deny": [],
     "ask": []
