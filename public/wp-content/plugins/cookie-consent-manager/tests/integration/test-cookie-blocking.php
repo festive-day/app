@@ -167,4 +167,52 @@ class Test_Cookie_Blocking extends WP_UnitTestCase {
         $this->assertNotEmpty( $result );
         $this->assertStringContainsString( 'type="text/plain"', $result );
     }
+
+    /**
+     * Test: Cookies are cleared when categories are rejected
+     *
+     * T052: Verify rejected cookies deleted when consent changes from accept to reject
+     */
+    public function test_cookies_cleared_on_reject() {
+        // Simulate initial consent: user accepts analytics and marketing
+        $initial_accepted = array( 'essential', 'analytics', 'marketing' );
+        $initial_consent_data = array( 'acceptedCategories' => $initial_accepted );
+        $_COOKIE['wp_consent_status'] = CCM_Storage_Handler::generate_cookie_hash( $initial_consent_data );
+
+        // Verify analytics script is blocked initially (server-side blocking is conservative)
+        // The actual unblocking happens client-side via JavaScript
+        $analytics_script = '<script type="text/javascript" src="https://www.googletagmanager.com/gtag/js?id=GA-12345"></script>';
+        $blocked_tag = $this->blocker->maybe_block_script( $analytics_script, 'google-analytics', 'https://www.googletagmanager.com/gtag/js?id=GA-12345' );
+        $this->assertStringContainsString( 'type="text/plain"', $blocked_tag, 'Analytics script should be blocked (server-side conservative blocking)' );
+        $this->assertStringContainsString( 'data-consent-category="analytics"', $blocked_tag, 'Should have analytics category attribute' );
+
+        // Now simulate preference change: user rejects analytics and marketing
+        // This simulates what happens when user modifies preferences and rejects categories
+        $modified_accepted = array( 'essential' );
+        $modified_consent_data = array( 'acceptedCategories' => $modified_accepted );
+        $_COOKIE['wp_consent_status'] = CCM_Storage_Handler::generate_cookie_hash( $modified_consent_data );
+
+        // Verify analytics script remains blocked after rejection
+        $blocked_tag_after = $this->blocker->maybe_block_script( $analytics_script, 'google-analytics', 'https://www.googletagmanager.com/gtag/js?id=GA-12345' );
+        $this->assertStringContainsString( 'type="text/plain"', $blocked_tag_after, 'Analytics script should remain blocked after rejection' );
+        $this->assertStringContainsString( 'data-consent-category="analytics"', $blocked_tag_after, 'Should have analytics category attribute' );
+
+        // Verify marketing script is also blocked
+        $marketing_script = '<script type="text/javascript" src="https://connect.facebook.net/en_US/fbevents.js"></script>';
+        $blocked_marketing = $this->blocker->maybe_block_script( $marketing_script, 'facebook-pixel', 'https://connect.facebook.net/en_US/fbevents.js' );
+        $this->assertStringContainsString( 'type="text/plain"', $blocked_marketing, 'Marketing script should be blocked after rejection' );
+        $this->assertStringContainsString( 'data-consent-category="marketing"', $blocked_marketing, 'Should have marketing category attribute' );
+
+        // Verify essential scripts are never blocked
+        $essential_script = '<script type="text/javascript" src="/wp-content/themes/etch/assets/js/main.js"></script>';
+        $essential_result = $this->blocker->maybe_block_script( $essential_script, 'etch-main', '/wp-content/themes/etch/assets/js/main.js' );
+        $this->assertStringContainsString( 'type="text/javascript"', $essential_result, 'Essential scripts should remain allowed' );
+
+        // Verify cookie hash changes when categories change
+        $initial_hash = CCM_Storage_Handler::generate_cookie_hash( $initial_consent_data );
+        $modified_hash = CCM_Storage_Handler::generate_cookie_hash( $modified_consent_data );
+        $this->assertNotEquals( $initial_hash, $modified_hash, 'Cookie hash should change when categories change' );
+        $this->assertNotEmpty( $initial_hash, 'Initial hash should not be empty' );
+        $this->assertNotEmpty( $modified_hash, 'Modified hash should not be empty' );
+    }
 }

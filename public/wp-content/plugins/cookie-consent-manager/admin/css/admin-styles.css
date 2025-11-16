@@ -1,10 +1,437 @@
 /**
  * Cookie Consent Manager - Admin Styles
- * Phase 6 implementation
+ *
+ * Uses AutomaticCSS utilities and WordPress admin compatible styles
+ *
+ * @package Cookie_Consent_Manager
  */
+
+/* ==========================================================================
+   Main Wrapper
+   ========================================================================== */
 
 .ccm-admin-wrapper {
     max-width: 1200px;
+    margin: 20px 0;
 }
 
-/* Placeholder - full styles in Phase 6 */
+/* ==========================================================================
+   Tabs Navigation
+   ========================================================================== */
+
+.ccm-nav-tabs {
+    border-bottom: 1px solid #c3c4c7;
+    margin: 0 0 20px 0;
+    padding: 0;
+}
+
+.ccm-nav-tabs .nav-tab {
+    margin: 0 0.5em 0 0;
+    padding: 10px 15px;
+    font-size: 14px;
+    line-height: 1.71428571;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid transparent;
+    border-bottom: none;
+    background: transparent;
+    color: #50575e;
+    cursor: pointer;
+}
+
+.ccm-nav-tabs .nav-tab:hover {
+    color: #2271b1;
+    border-color: #c3c4c7;
+}
+
+.ccm-nav-tabs .nav-tab-active {
+    color: #2271b1;
+    border-color: #c3c4c7;
+    border-bottom-color: #fff;
+    background: #fff;
+    margin-bottom: -1px;
+}
+
+/* ==========================================================================
+   Tab Content
+   ========================================================================== */
+
+.ccm-tab-content {
+    display: none;
+    padding: 20px 0;
+}
+
+.ccm-tab-content.active {
+    display: block;
+}
+
+.ccm-tab-content h2 {
+    margin-top: 0;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #c3c4c7;
+}
+
+.ccm-tab-content .description {
+    margin: 10px 0 20px 0;
+    color: #646970;
+}
+
+/* ==========================================================================
+   Section Headers
+   ========================================================================== */
+
+.ccm-section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.ccm-section-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   Tables
+   ========================================================================== */
+
+.ccm-categories-list table,
+.ccm-cookies-list table,
+.ccm-logs-list table {
+    margin-top: 10px;
+}
+
+.ccm-loading-message {
+    text-align: center;
+    padding: 20px !important;
+    color: #646970;
+}
+
+.ccm-empty-message {
+    text-align: center;
+    padding: 20px !important;
+    color: #646970;
+    font-style: italic;
+}
+
+/* ==========================================================================
+   Forms
+   ========================================================================== */
+
+.ccm-form {
+    padding: 0;
+}
+
+.ccm-form-field {
+    margin-bottom: 20px;
+}
+
+.ccm-form-field label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.ccm-form-field .required {
+    color: #d63638;
+}
+
+.ccm-form-field input[type="text"],
+.ccm-form-field input[type="number"],
+.ccm-form-field input[type="date"],
+.ccm-form-field select,
+.ccm-form-field textarea {
+    width: 100%;
+    max-width: 600px;
+}
+
+.ccm-form-field .description {
+    margin-top: 5px;
+    margin-bottom: 0;
+    font-size: 13px;
+    color: #646970;
+}
+
+.ccm-form-actions {
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #c3c4c7;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.ccm-save-message {
+    margin-left: 10px;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 13px;
+}
+
+.ccm-save-message.success {
+    background-color: #00a32a;
+    color: #fff;
+}
+
+.ccm-save-message.error {
+    background-color: #d63638;
+    color: #fff;
+}
+
+/* ==========================================================================
+   Filters
+   ========================================================================== */
+
+.ccm-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f6f7f7;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+
+.ccm-filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.ccm-filter-group label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.ccm-filter-input,
+.ccm-filter-select {
+    min-width: 150px;
+}
+
+/* ==========================================================================
+   Buttons
+   ========================================================================== */
+
+.ccm-btn-add-category,
+.ccm-btn-add-cookie,
+.ccm-btn-export-logs,
+.ccm-btn-apply-filters,
+.ccm-btn-clear-filters {
+    min-height: 30px;
+    padding: 0 10px;
+}
+
+.ccm-btn-row-actions {
+    display: flex;
+    gap: 5px;
+}
+
+.ccm-btn-edit,
+.ccm-btn-delete {
+    padding: 2px 8px;
+    font-size: 12px;
+    line-height: 1.5;
+    min-height: auto;
+}
+
+.ccm-btn-delete {
+    color: #d63638;
+    border-color: #d63638;
+}
+
+.ccm-btn-delete:hover {
+    background-color: #d63638;
+    color: #fff;
+}
+
+/* ==========================================================================
+   Modals
+   ========================================================================== */
+
+.ccm-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 100000;
+}
+
+.ccm-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+    z-index: 100001;
+    max-width: 700px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.ccm-modal-content {
+    padding: 0;
+}
+
+.ccm-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #c3c4c7;
+    background: #f6f7f7;
+}
+
+.ccm-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.ccm-modal-close {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    color: #50575e;
+    font-size: 20px;
+    line-height: 1;
+}
+
+.ccm-modal-close:hover {
+    color: #1d2327;
+}
+
+.ccm-form {
+    padding: 20px;
+}
+
+/* ==========================================================================
+   Pagination
+   ========================================================================== */
+
+.ccm-pagination {
+    margin-top: 15px;
+    padding: 10px 0;
+    border-top: 1px solid #c3c4c7;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.ccm-pagination-info {
+    color: #646970;
+    font-size: 13px;
+}
+
+.ccm-pagination-nav {
+    display: flex;
+    gap: 5px;
+}
+
+.ccm-pagination-nav button {
+    min-width: 30px;
+    padding: 5px 10px;
+}
+
+.ccm-pagination-nav button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+
+@media screen and (max-width: 782px) {
+    .ccm-section-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .ccm-filters {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .ccm-filter-group {
+        width: 100%;
+    }
+
+    .ccm-filter-input,
+    .ccm-filter-select {
+        width: 100%;
+        min-width: auto;
+    }
+
+    .ccm-modal {
+        width: 95%;
+        max-height: 95vh;
+    }
+
+    .ccm-form-field input[type="text"],
+    .ccm-form-field input[type="number"],
+    .ccm-form-field input[type="date"],
+    .ccm-form-field select,
+    .ccm-form-field textarea {
+        max-width: 100%;
+    }
+}
+
+/* ==========================================================================
+   WordPress Admin Compatibility
+   ========================================================================== */
+
+.ccm-admin-wrapper .notice {
+    margin: 15px 0;
+}
+
+.ccm-admin-wrapper .spinner {
+    float: none;
+    margin: 0 5px;
+}
+
+/* ==========================================================================
+   AutomaticCSS Utilities (if available)
+   ========================================================================== */
+
+/* These classes will work if AutomaticCSS is active */
+.ccm-admin-wrapper .flex {
+    display: flex;
+}
+
+.ccm-admin-wrapper .gap-sm {
+    gap: 10px;
+}
+
+.ccm-admin-wrapper .gap-md {
+    gap: 15px;
+}
+
+.ccm-admin-wrapper .mb-sm {
+    margin-bottom: 10px;
+}
+
+.ccm-admin-wrapper .mb-md {
+    margin-bottom: 20px;
+}
+
+.ccm-admin-wrapper .text-center {
+    text-align: center;
+}
+
+.ccm-admin-wrapper .text-muted {
+    color: #646970;
+}

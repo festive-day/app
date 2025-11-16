@@ -178,22 +178,68 @@
         /**
          * Handle consent change event
          *
+         * T057: When consent updated, activate/deactivate scripts based on new categories
+         *
          * @param {Event} event Custom event
          */
         handleConsentChange: function(event) {
             const consent = event.detail;
 
+            // If consent is null (revoked), block all non-essential scripts
             if (!consent) {
+                this.blockAllNonEssentialScripts();
                 return;
             }
 
-            // Reprocess all scripts based on new consent
-            this.blockScripts();
+            // Get all script tags with consent categories
+            const scripts = document.querySelectorAll('script[data-consent-category]');
+
+            scripts.forEach(script => {
+                const category = script.getAttribute('data-consent-category');
+
+                if (!category) {
+                    return;
+                }
+
+                // Essential scripts are always allowed
+                if (category === 'essential') {
+                    this.activateScript(script);
+                    return;
+                }
+
+                // Check if user has consented to this category
+                const hasConsent = consent.acceptedCategories && consent.acceptedCategories.includes(category);
+
+                if (hasConsent) {
+                    // Activate script - reload if needed
+                    this.activateScript(script);
+                } else {
+                    // Block script
+                    this.blockScript(script);
+                }
+            });
 
             // Clear cookies for rejected categories
             if (consent.rejectedCategories && window.CookieConsentStorage) {
                 window.CookieConsentStorage.clearRejectedCookies(consent.rejectedCategories);
             }
+        },
+
+        /**
+         * Block all non-essential scripts
+         *
+         * Used when consent is revoked
+         */
+        blockAllNonEssentialScripts: function() {
+            const scripts = document.querySelectorAll('script[data-consent-category]');
+
+            scripts.forEach(script => {
+                const category = script.getAttribute('data-consent-category');
+
+                if (category && category !== 'essential') {
+                    this.blockScript(script);
+                }
+            });
         },
 
         /**

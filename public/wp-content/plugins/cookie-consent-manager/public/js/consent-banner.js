@@ -122,6 +122,8 @@
 
         /**
          * Check if banner should be shown
+         *
+         * T058: Check consent_version mismatch, show "Policy Updated" message
          */
         checkAndShowBanner: function() {
             const consent = window.CookieConsentStorage.getConsent();
@@ -132,7 +134,7 @@
                 return;
             }
 
-            // Consent exists but version mismatch - re-prompt
+            // Consent exists but version mismatch - re-prompt with policy updated message
             if (!window.CookieConsentStorage.isVersionCurrent(consent)) {
                 console.info('CCM: Cookie policy updated, re-prompting...');
                 this.showBanner(true); // true = policy updated
@@ -146,6 +148,8 @@
         /**
          * Show banner
          *
+         * T058: Show "Policy Updated" message when cookie list changes
+         *
          * @param {boolean} policyUpdated Show "policy updated" message
          */
         showBanner: function(policyUpdated) {
@@ -158,7 +162,28 @@
             if (policyUpdated) {
                 const message = banner.querySelector('.ccm-banner__message');
                 if (message) {
+                    // T058: Show "Policy Updated" message
                     message.textContent = 'Our cookie policy has been updated. Please review your preferences.';
+                    
+                    // Add visual indicator for policy update
+                    banner.classList.add('ccm-banner--policy-updated');
+                    
+                    // Add announcement for screen readers
+                    const announcement = document.createElement('div');
+                    announcement.setAttribute('role', 'alert');
+                    announcement.setAttribute('aria-live', 'polite');
+                    announcement.className = 'ccm-banner__announcement';
+                    announcement.textContent = 'Cookie policy updated. Please review your preferences.';
+                    announcement.style.position = 'absolute';
+                    announcement.style.left = '-9999px';
+                    banner.appendChild(announcement);
+                    
+                    // Remove announcement after screen reader reads it
+                    setTimeout(() => {
+                        if (announcement.parentNode) {
+                            announcement.parentNode.removeChild(announcement);
+                        }
+                    }, 1000);
                 }
             }
 
@@ -242,6 +267,8 @@
 
         /**
          * Open preferences modal
+         *
+         * T053: Open modal, pre-fill current consent
          */
         openPreferences: function() {
             const modal = document.getElementById('ccm-modal');
@@ -673,39 +700,108 @@
         /**
          * Update existing consent
          *
-         * @param {Object} updates Partial consent object
+         * T054: Update localStorage, cookie, fire AJAX, trigger script reload
+         *
+         * @param {Object} updates Partial consent object with updates
+         * @returns {boolean} Success status
          */
         updateConsent: function(updates) {
-            const saved = window.CookieConsentStorage.updateConsent(updates);
-
-            if (saved) {
-                const consent = window.CookieConsentStorage.getConsent();
-                this.recordConsentEvent('modify', consent);
-
-                // Fire callback
-                if (this.callbacks.onConsentChanged) {
-                    this.callbacks.onConsentChanged(consent);
-                }
-
-                // Dispatch event
-                const event = new CustomEvent('ccm-consent-changed', {
-                    detail: consent
-                });
-                window.dispatchEvent(event);
+            const existingConsent = window.CookieConsentStorage.getConsent();
+            
+            if (!existingConsent) {
+                console.warn('CCM: No existing consent to update');
+                return false;
             }
+
+            // Merge updates with existing consent
+            const updatedConsent = Object.assign({}, existingConsent, updates);
+            
+            // Ensure version is set
+            if (!updatedConsent.version && this.config) {
+                updatedConsent.version = this.config.consent_version;
+            }
+
+            // Determine which categories changed from accept to reject
+            const categoriesToClear = [];
+            if (updatedConsent.rejectedCategories && existingConsent.acceptedCategories) {
+                categoriesToClear = updatedConsent.rejectedCategories.filter(slug => {
+                    return existingConsent.acceptedCategories.includes(slug);
+                });
+            }
+
+            // Clear cookies for categories that changed from accept to reject
+            if (categoriesToClear.length > 0) {
+                window.CookieConsentStorage.clearRejectedCookies(categoriesToClear);
+            }
+
+            // Save updated consent to localStorage and cookie
+            const saved = window.CookieConsentStorage.setConsent(updatedConsent);
+
+            if (!saved) {
+                console.error('CCM: Failed to update consent');
+                return false;
+            }
+
+            // Get final consent object
+            const consent = window.CookieConsentStorage.getConsent();
+
+            // Fire AJAX to record modify event
+            this.recordConsentEvent('modify', consent);
+
+            // Fire callback
+            if (this.callbacks.onConsentChanged) {
+                this.callbacks.onConsentChanged(consent);
+            }
+
+            // Dispatch custom event for script reloading
+            const event = new CustomEvent('ccm-consent-changed', {
+                detail: consent
+            });
+            window.dispatchEvent(event);
+
+            // Trigger script reload (cookie-blocker.js will handle this)
+            // Reload page to ensure scripts are properly activated/deactivated
+            window.location.reload();
+
+            return true;
         },
 
         /**
          * Revoke all consent
+         *
+         * T055: Clear localStorage, cookie, non-essential cookies
          */
         revokeConsent: function() {
             const consent = window.CookieConsentStorage.getConsent();
 
+            // Record revoke event before clearing
             if (consent) {
                 this.recordConsentEvent('revoke', consent);
             }
 
+            // Get all non-essential categories that were accepted
+            const nonEssentialCategories = consent && consent.acceptedCategories 
+                ? consent.acceptedCategories.filter(cat => cat !== 'essential')
+                : [];
+
+            // Clear non-essential cookies
+            if (nonEssentialCategories.length > 0) {
+                window.CookieConsentStorage.clearRejectedCookies(nonEssentialCategories);
+            }
+
+            // Clear consent from localStorage and cookie
             window.CookieConsentStorage.clearConsent();
+
+            // Fire callback
+            if (this.callbacks.onConsentChanged) {
+                this.callbacks.onConsentChanged(null);
+            }
+
+            // Dispatch event for script blocking
+            const event = new CustomEvent('ccm-consent-changed', {
+                detail: null
+            });
+            window.dispatchEvent(event);
 
             // Show banner again
             this.showBanner();

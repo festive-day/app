@@ -176,4 +176,70 @@ class Test_Consent_Logger extends WP_UnitTestCase {
 
         $this->assertEquals( '192.168.1.1', $event->ip_address );
     }
+
+    /**
+     * Test: Preference modification event is logged with correct categories
+     *
+     * T051: Verify modify event logged with correct categories when preferences change
+     */
+    public function test_preference_modification_logged() {
+        // First, record an initial consent (accept_all)
+        $initial_event_id = CCM_Consent_Logger::record_event(
+            array(
+                'event_type'          => 'accept_all',
+                'accepted_categories' => array( 'essential', 'functional', 'analytics', 'marketing' ),
+                'rejected_categories' => array(),
+            )
+        );
+
+        $this->assertNotFalse( $initial_event_id, 'Initial consent should be recorded' );
+
+        // Now simulate preference modification: user changes from accept_all to reject analytics and marketing
+        $modify_event_id = CCM_Consent_Logger::record_event(
+            array(
+                'event_type'          => 'modify',
+                'accepted_categories' => array( 'essential', 'functional' ),
+                'rejected_categories' => array( 'analytics', 'marketing' ),
+            )
+        );
+
+        $this->assertNotFalse( $modify_event_id, 'Modify event should be recorded' );
+        $this->assertGreaterThan( $initial_event_id, $modify_event_id, 'Modify event should have higher ID than initial event' );
+
+        global $wpdb;
+        $modify_event = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT * FROM {$wpdb->prefix}cookie_consent_events WHERE id = %d",
+                $modify_event_id
+            )
+        );
+
+        // Verify event type is 'modify'
+        $this->assertEquals( 'modify', $modify_event->event_type, 'Event type should be modify' );
+
+        // Verify accepted categories are correct
+        $accepted = json_decode( $modify_event->accepted_categories, true );
+        $this->assertIsArray( $accepted, 'Accepted categories should be an array' );
+        $this->assertCount( 2, $accepted, 'Should have 2 accepted categories' );
+        $this->assertContains( 'essential', $accepted, 'Essential should be accepted' );
+        $this->assertContains( 'functional', $accepted, 'Functional should be accepted' );
+        $this->assertNotContains( 'analytics', $accepted, 'Analytics should not be in accepted' );
+        $this->assertNotContains( 'marketing', $accepted, 'Marketing should not be in accepted' );
+
+        // Verify rejected categories are correct
+        $rejected = json_decode( $modify_event->rejected_categories, true );
+        $this->assertIsArray( $rejected, 'Rejected categories should be an array' );
+        $this->assertCount( 2, $rejected, 'Should have 2 rejected categories' );
+        $this->assertContains( 'analytics', $rejected, 'Analytics should be rejected' );
+        $this->assertContains( 'marketing', $rejected, 'Marketing should be rejected' );
+        $this->assertNotContains( 'essential', $rejected, 'Essential should not be rejected' );
+        $this->assertNotContains( 'functional', $rejected, 'Functional should not be rejected' );
+
+        // Verify consent version is set
+        $this->assertEquals( CCM_VERSION, $modify_event->consent_version, 'Consent version should match current version' );
+
+        // Verify visitor ID is set
+        $this->assertNotEmpty( $modify_event->visitor_id, 'Visitor ID should be set' );
+        $this->assertEquals( 64, strlen( $modify_event->visitor_id ), 'Visitor ID should be 64 chars (SHA256)' );
+    }
 }
