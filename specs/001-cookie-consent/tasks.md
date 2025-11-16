@@ -126,18 +126,18 @@
 
 ### Integration Tests for User Story 3
 
-- [ ] T051 [P] [US3] Add test for preference modification in test-consent-logging.php (verify modify event logged with correct categories)
-- [ ] T052 [P] [US3] Add test for cookie clearing on reject in test-cookie-blocking.php (verify rejected cookies deleted)
+- [x] T051 [P] [US3] Add test for preference modification in test-consent-logging.php (verify modify event logged with correct categories)
+- [x] T052 [P] [US3] Add test for cookie clearing on reject in test-cookie-blocking.php (verify rejected cookies deleted)
 
 ### Implementation for User Story 3
 
-- [ ] T053 [US3] Implement CookieConsentManager.openPreferences() JavaScript API in consent-banner.js (open modal, pre-fill current consent)
-- [ ] T054 [US3] Implement CookieConsentManager.updateConsent() JavaScript API in storage-manager.js (update localStorage, cookie, fire AJAX, trigger script reload)
-- [ ] T055 [US3] Implement CookieConsentManager.revokeConsent() JavaScript API in storage-manager.js (clear localStorage, cookie, non-essential cookies)
-- [ ] T056 [US3] Add event handlers for preference changes to POST /ccm_record_consent with event_type="modify"
-- [ ] T057 [US3] Implement script reloading logic in cookie-blocker.js (when consent updated, activate/deactivate scripts based on new categories)
-- [ ] T058 [US3] Implement re-consent prompt when cookie list changes (check consent_version mismatch, show "Policy Updated" message)
-- [ ] T059 [US3] Add WordPress action hooks (cookie_consent_given, cookie_consent_modified, cookie_consent_revoked) in includes/class-consent-logger.php
+- [x] T053 [US3] Implement CookieConsentManager.openPreferences() JavaScript API in consent-banner.js (open modal, pre-fill current consent)
+- [x] T054 [US3] Implement CookieConsentManager.updateConsent() JavaScript API in storage-manager.js (update localStorage, cookie, fire AJAX, trigger script reload)
+- [x] T055 [US3] Implement CookieConsentManager.revokeConsent() JavaScript API in storage-manager.js (clear localStorage, cookie, non-essential cookies)
+- [x] T056 [US3] Add event handlers for preference changes to POST /ccm_record_consent with event_type="modify"
+- [x] T057 [US3] Implement script reloading logic in cookie-blocker.js (when consent updated, activate/deactivate scripts based on new categories)
+- [x] T058 [US3] Implement re-consent prompt when cookie list changes (check consent_version mismatch, show "Policy Updated" message)
+- [x] T059 [US3] Add WordPress action hooks (cookie_consent_given, cookie_consent_modified, cookie_consent_revoked) in includes/class-consent-logger.php
 
 **Checkpoint**: User Story 3 functional - preferences changeable without reload, "Cookie Settings" link working, re-consent flow operational
 
@@ -151,29 +151,29 @@
 
 ### Integration Tests for Admin Interface
 
-- [ ] T060 [P] Create test-admin-interface.php in tests/integration/ (test CRUD operations on categories and cookies)
+- [x] T060 [P] Create test-admin-interface.php in tests/integration/ (test CRUD operations on categories and cookies)
 
 ### Implementation for Admin Interface
 
-- [ ] T061 [P] Create category management tab view in admin/views/categories-tab.php (list table, add/edit forms)
-- [ ] T062 [P] Create cookie management tab view in admin/views/cookies-tab.php (WP_List_Table for cookies, add/edit forms)
-- [ ] T063 [P] Create audit log tab view in admin/views/logs-tab.php (filterable table, export button)
-- [ ] T064 [P] Create settings tab view in admin/views/settings-tab.php (banner text, retention period)
-- [ ] T065 Create admin CSS in admin/css/admin-styles.css (AutomaticCSS utilities, WordPress admin compatible)
-- [ ] T066 Create admin JavaScript in admin/js/admin-scripts.js (AJAX handlers for CRUD, form validation)
-- [ ] T067 Implement POST /ccm_create_category endpoint per admin-api.md (validate slug/name, insert to wp_cookie_consent_categories)
-- [ ] T068 Implement POST /ccm_update_category endpoint per admin-api.md (validate id, update categories table)
-- [ ] T069 Implement POST /ccm_delete_category endpoint per admin-api.md (prevent delete if is_required=1, CASCADE delete cookies)
-- [ ] T070 Implement GET /ccm_list_categories endpoint per admin-api.md (return categories with cookie_count join)
-- [ ] T071 Implement POST /ccm_create_cookie endpoint per admin-api.md (validate category_id, insert to wp_cookie_consent_cookies)
-- [ ] T072 Implement POST /ccm_update_cookie endpoint per admin-api.md (validate id, update cookies table)
-- [ ] T073 Implement POST /ccm_delete_cookie endpoint per admin-api.md (delete from wp_cookie_consent_cookies)
-- [ ] T074 Implement GET /ccm_list_cookies endpoint per admin-api.md (pagination, category filter, return cookies with category name)
-- [ ] T075 Implement GET /ccm_view_logs endpoint per admin-api.md (date range filter, event_type filter, pagination)
-- [ ] T076 Implement GET /ccm_export_logs endpoint per admin-api.md (CSV export with all fields, date range filter)
-- [ ] T077 Add input validation for all admin endpoints (slug format, required fields, field lengths per data-model.md validation rules)
-- [ ] T078 Add rate limiting for admin endpoints (100 requests/minute per user, WordPress transient cache)
-- [ ] T079 Enqueue admin scripts/styles only on Cookie Consent settings page (admin_enqueue_scripts hook with page check)
+- [x] T061 [P] Create category management tab view in admin/views/categories-tab.php (list table, add/edit forms)
+- [x] T062 [P] Create cookie management tab view in admin/views/cookies-tab.php (WP_List_Table for cookies, add/edit forms)
+- [x] T063 [P] Create audit log tab view in admin/views/logs-tab.php (filterable table, export button)
+- [x] T064 [P] Create settings tab view in admin/views/settings-tab.php (banner text, retention period)
+- [x] T065 Create admin CSS in admin/css/admin-styles.css (AutomaticCSS utilities, WordPress admin compatible)
+- [x] T066 Create admin JavaScript in admin/js/admin-scripts.js (AJAX handlers for CRUD, form validation)
+- [x] T067 Implement POST /ccm_create_category endpoint per admin-api.md (validate slug/name, insert to wp_cookie_consent_categories)
+- [x] T068 Implement POST /ccm_update_category endpoint per admin-api.md (validate id, update categories table)
+- [x] T069 Implement POST /ccm_delete_category endpoint per admin-api.md (prevent delete if is_required=1, CASCADE delete cookies)
+- [x] T070 Implement GET /ccm_list_categories endpoint per admin-api.md (return categories with cookie_count join)
+- [x] T071 Implement POST /ccm_create_cookie endpoint per admin-api.md (validate category_id, insert to wp_cookie_consent_cookies)
+- [x] T072 Implement POST /ccm_update_cookie endpoint per admin-api.md (validate id, update cookies table)
+- [x] T073 Implement POST /ccm_delete_cookie endpoint per admin-api.md (delete from wp_cookie_consent_cookies)
+- [x] T074 Implement GET /ccm_list_cookies endpoint per admin-api.md (pagination, category filter, return cookies with category name)
+- [x] T075 Implement GET /ccm_view_logs endpoint per admin-api.md (date range filter, event_type filter, pagination)
+- [x] T076 Implement GET /ccm_export_logs endpoint per admin-api.md (CSV export with all fields, date range filter)
+- [x] T077 Add input validation for all admin endpoints (slug format, required fields, field lengths per data-model.md validation rules)
+- [x] T078 Add rate limiting for admin endpoints (100 requests/minute per user, WordPress transient cache)
+- [x] T079 Enqueue admin scripts/styles only on Cookie Consent settings page (admin_enqueue_scripts hook with page check)
 
 **Checkpoint**: Admin interface functional - categories/cookies manageable, audit logs viewable/exportable
 
